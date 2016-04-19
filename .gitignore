@@ -1,3 +1,8 @@
-/node_modules
+.DS_Store
+
+images/
+
+node_modules/
+
 bundle.js
 npm-debug.log

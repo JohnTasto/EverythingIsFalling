@@ -1,25 +1,9 @@
-# ReduxSimpleStarter
+# EverythingIsFalling
 
-Interested in learning [Redux](https://www.udemy.com/react-redux/)?
+A simple gravity simulator written with React and Redux.
 
-###Getting Started###
+### Acknowledgements
 
-There are two methods for getting started with this repo.
+Thanks to Stephen Grider, who created an [awesome course](https://www.udemy.com/react-redux/) on React and Redux.
 
-####Familiar with Git?#####
-Checkout this repo, install depdencies, then start the gulp process with the following:
-
-```
-	> git clone git@github.com:StephenGrider/ReduxSimpleStarter.git
-	> cd ReduxSimpleStarter
-	> npm install
-	> npm start
-```
-
-####Not Familiar with Git?#####
-Click [here](https://github.com/StephenGrider/ReactStarter/releases) then download the .zip file.  Extract the contents of the zip file, then open your terminal, change to the project directory, and:
-
-```
-	> npm install
-	> npm start
-```
+He also wrote the [boilerplate](https://github.com/StephenGrider/ReduxSimpleStarter) that this is based on.
