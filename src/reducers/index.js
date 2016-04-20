@@ -1,7 +1,10 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
+
+import planetarium from './planetarium-r'
+
 
 const rootReducer = combineReducers({
-  state: (state = {}) => state
-});
+  planetarium
+})
 
-export default rootReducer;
+export default rootReducer
