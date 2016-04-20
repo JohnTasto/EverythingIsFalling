@@ -11,6 +11,7 @@ class Planetarium extends Component {
     this.state = {
       lastMs: 0,
       animationFrame: new AnimationFrame(),
+      ratio: window.devicePixelRatio || 1,
       canvasStyle: {
         background: 'black',
         width: '100%',
@@ -19,14 +20,14 @@ class Planetarium extends Component {
     }
   }
 
-  componentDidMount() {
-    this.getFrame()
+  handleResize() {
+    this.props.resizeWindow(window.innerWidth, window.innerHeight)
   }
 
-  getFrame() {
-    this.setState({
-      frame: this.state.animationFrame.request(this.update.bind(this))
-    })
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize.bind(this))
+    this.setState({ context: this.canvas.getContext('2d') })
+    this.getFrame()
   }
 
   componentWillUnmount() {
@@ -40,14 +41,21 @@ class Planetarium extends Component {
 
   shouldComponentUpdate() { return false }
 
-  static contextTypes = {}
-  static propTypes = {}
-  static defaultProps = {}
+  getFrame() {
+    this.setState({
+      frame: this.state.animationFrame.request(this.update.bind(this))
+    })
+  }
 
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
+    this.state.context.save();
+    this.state.context.scale(this.state.ratio, this.state.ratio);
 
+    // draw...
+
+    this.state.context.restore();
     this.getFrame()
   }
 
