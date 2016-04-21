@@ -1,1 +1,2 @@
+export const GET_BODY_IMAGE = 'GET_BODY_IMAGE'
 export const RESIZE_WINDOW = 'RESIZE_WINDOW'

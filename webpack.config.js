@@ -17,7 +17,12 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: 'style-loader!css-loader!autoprefixer-loader'
+        loader: 'style!css!autoprefixer'
+      },
+      {
+        test: /\.json$/,
+        exclude: /node_modules/,
+        loader: 'json'
       }
     ]
   },

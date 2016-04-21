@@ -13,7 +13,8 @@ class Planetarium extends Component {
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
       canvasStyle: {
-        background: 'black',
+        background: 'url("/img/stars.jpg") center',
+        backgroundSize: 'cover',
         width: '100%',
         height: '100%'
       }
@@ -50,12 +51,15 @@ class Planetarium extends Component {
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
-    this.state.context.save();
-    this.state.context.scale(this.state.ratio, this.state.ratio);
+    let ctx = this.state.context
+    ctx.save()
+    ctx.scale(this.state.ratio, this.state.ratio)
 
     // draw...
+    ctx.fillStyle = '#29F'
+    ctx.fillRect(50, 50, 100, 100)
 
-    this.state.context.restore();
+    ctx.restore()
     this.getFrame()
   }
 
@@ -72,7 +76,7 @@ class Planetarium extends Component {
 
 function mapStateToProps(state) {
   return {
-    window: state.planetarium.window
+    window: state.window
   }
 }
 

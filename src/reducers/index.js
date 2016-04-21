@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 
-import planetarium from './planetarium-r'
+import bodies from './bodies-r'
+import windowSize from './window-r'
 
 
 const rootReducer = combineReducers({
-  planetarium
+  window: windowSize,
+  bodies
 })
 
 export default rootReducer

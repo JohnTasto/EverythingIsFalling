@@ -1,13 +1,22 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import Planetarium from './planetarium'
+import * as actions from '../actions/actions'
 
 
-export default class App extends Component {
+class App extends Component {
+
+  componentDidMount() {
+    this.props.getBodies()
+  }
+
   render() {
     return (
       <Planetarium />
-    );
+    )
   }
 }
+
+
+export default connect(null, actions)(App)
