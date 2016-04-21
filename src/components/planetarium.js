@@ -36,8 +36,8 @@ class Planetarium extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.canvas.width = props.window.width
-    this.canvas.height = props.window.height
+    this.canvas.width = props.window.width * this.state.ratio
+    this.canvas.height = props.window.height * this.state.ratio
   }
 
   shouldComponentUpdate() { return false }
@@ -54,10 +54,11 @@ class Planetarium extends Component {
     let ctx = this.state.context
     ctx.save()
     ctx.scale(this.state.ratio, this.state.ratio)
+    ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
 
-    // draw...
-    ctx.fillStyle = '#29F'
-    ctx.fillRect(50, 50, 100, 100)
+    if (this.props.bodies.templates.earth.image) {
+      ctx.drawImage(this.props.bodies.templates.earth.image, 128, 128,128,128)
+    }
 
     ctx.restore()
     this.getFrame()
@@ -76,7 +77,8 @@ class Planetarium extends Component {
 
 function mapStateToProps(state) {
   return {
-    window: state.window
+    window: state.window,
+    bodies: state.bodies
   }
 }
 
