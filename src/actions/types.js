@@ -1,2 +1,4 @@
 export const GET_BODY_IMAGE = 'GET_BODY_IMAGE'
+export const GET_RING_IMAGE = 'GET_RING_IMAGE'
+export const UPDATE_BODIES = 'UPDATE_BODIES'
 export const RESIZE_WINDOW = 'RESIZE_WINDOW'

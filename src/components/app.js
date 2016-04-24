@@ -8,7 +8,7 @@ import * as actions from '../actions/actions'
 class App extends Component {
 
   componentDidMount() {
-    this.props.getBodies()
+    this.props.getImages()
   }
 
   render() {

@@ -33,7 +33,8 @@
     "semiMajorAxis": 1.42939e12,
     "eccentricity": 0.05555,
     "mass": 5.6836e26,
-    "radius": 5.8232e7
+    "radius": 5.8232e7,
+    "rings": true
   },
   "uranus": {
     "semiMajorAxis": 2.87504e12,

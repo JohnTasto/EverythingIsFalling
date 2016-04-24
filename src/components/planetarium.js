@@ -56,12 +56,27 @@ class Planetarium extends Component {
     ctx.scale(this.state.ratio, this.state.ratio)
     ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
 
-    if (this.props.bodies.templates.earth.image) {
-      ctx.drawImage(this.props.bodies.templates.earth.image, 128, 128,128,128)
-    }
+    this.renderBody(ctx, this.props.bodies.templates.saturn, 200, 200, 64)
 
     ctx.restore()
     this.getFrame()
+  }
+
+  renderBody(ctx, body, x, y, r) {
+    if (body.bodyImage) {
+      let sX = 2 * r / body.bodyImage.naturalWidth
+      let sY = 2 * r / body.bodyImage.naturalHeight
+      ctx.save()
+      ctx.translate(x - r, y - r)
+      ctx.scale(sX, sY)
+      ctx.drawImage(body.bodyImage, 0, 0)
+      if (body.ringImage) {
+        ctx.translate((body.bodyImage.naturalWidth - body.ringImage.naturalWidth) / 2,
+                      (body.bodyImage.naturalHeight - body.ringImage.naturalHeight) / 2)
+        ctx.drawImage(body.ringImage, 0, 0)
+      }
+      ctx.restore()
+    }
   }
 
   render() {
