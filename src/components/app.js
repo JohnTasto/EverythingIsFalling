@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Planetarium from './planetarium'
-import * as actions from '../actions/actions'
+//import * as actions from '../actions/actions'
+import * as init from '../actions/init'
 
 
 class App extends Component {
 
   componentDidMount() {
-    this.props.getImages()
+    this.props.dispatch(init.getImages())
   }
 
   render() {
@@ -19,4 +20,4 @@ class App extends Component {
 }
 
 
-export default connect(null, actions)(App)
+export default connect()(App)

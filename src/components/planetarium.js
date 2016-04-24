@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
 
-import * as actions from '../actions/actions'
+//import * as actions from '../actions/actions'
+import * as screen from '../actions/screen'
 
 
 class Planetarium extends Component {
@@ -22,7 +23,7 @@ class Planetarium extends Component {
   }
 
   handleResize() {
-    this.props.resizeWindow(window.innerWidth, window.innerHeight)
+    this.props.dispatch(screen.resize(window.innerWidth, window.innerHeight))
   }
 
   componentDidMount() {
@@ -97,4 +98,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, actions)(Planetarium)
+export default connect(mapStateToProps)(Planetarium)

@@ -1,5 +1,4 @@
 import {
-  RESIZE_WINDOW,
   GET_BODY_IMAGE,
   GET_RING_IMAGE
 } from './types'
@@ -30,12 +29,5 @@ export function getImages() {
         }
       }
     }
-  }
-}
-
-export function resizeWindow(width, height) {
-  return {
-    type: RESIZE_WINDOW,
-    payload: { width, height }
   }
 }
