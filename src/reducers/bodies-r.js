@@ -1,4 +1,5 @@
 import {
+  GET_SHADOW_IMAGE,
   GET_BODY_IMAGE,
   GET_RING_IMAGE,
   UPDATE_BODIES
@@ -15,6 +16,12 @@ const INITIAL_STATE = {
 export default function(bodies = INITIAL_STATE, action) {
   let newBodies
   switch (action.type) {
+    case GET_SHADOW_IMAGE:
+      newBodies = { ...bodies }
+      for (let body in newBodies.templates) {
+        newBodies.templates[body].shadowImage = action.payload.shadowImage
+      }
+      return newBodies
     case GET_BODY_IMAGE:
       newBodies = { ...bodies }
       newBodies.templates[action.payload.body].bodyImage = action.payload.bodyImage

@@ -1,4 +1,5 @@
 import {
+  GET_SHADOW_IMAGE,
   GET_BODY_IMAGE,
   GET_RING_IMAGE
 } from './types'
@@ -8,6 +9,14 @@ import bodyTemplates from '../body-templates.json'
 
 export function getImages() {
   return function(dispatch, getState) {
+    let shadowImage = new Image()
+    shadowImage.src = '/img/shadow.png'
+    shadowImage.onload = function () {
+      dispatch({
+        type: GET_SHADOW_IMAGE,
+        payload: { shadowImage }
+      })
+    }
     for (let b in bodyTemplates) {
       let body = b
       let bodyImage = new Image()

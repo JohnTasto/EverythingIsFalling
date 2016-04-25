@@ -1,3 +1,4 @@
+export const GET_SHADOW_IMAGE = 'GET_SHADOW_IMAGE'
 export const GET_BODY_IMAGE = 'GET_BODY_IMAGE'
 export const GET_RING_IMAGE = 'GET_RING_IMAGE'
 export const UPDATE_BODIES = 'UPDATE_BODIES'

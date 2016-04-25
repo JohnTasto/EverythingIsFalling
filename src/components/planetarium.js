@@ -57,27 +57,35 @@ class Planetarium extends Component {
     ctx.scale(this.state.ratio, this.state.ratio)
     ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
 
-    this.renderBody(ctx, this.props.bodies.templates.saturn, 200, 200, 64)
+    this.renderBody(ctx, this.props.bodies.templates.neptune, currentMs / 32, currentMs / 32, 64, currentMs / 2048)
 
     ctx.restore()
     this.getFrame()
   }
 
-  renderBody(ctx, body, x, y, r) {
+  renderBody(ctx, body, x, y, r, shadowAngle) {
     if (body.bodyImage) {
       let sX = 2 * r / body.bodyImage.naturalWidth
       let sY = 2 * r / body.bodyImage.naturalHeight
       ctx.save()
-      ctx.translate(x - r, y - r)
+      ctx.translate(x, y)
       ctx.scale(sX, sY)
-      ctx.drawImage(body.bodyImage, 0, 0)
+      this.drawImageCentered(ctx, body.bodyImage)
+      if (shadowAngle !== undefined) {
+        ctx.save()
+        ctx.rotate(shadowAngle)
+        this.drawImageCentered(ctx, body.shadowImage)
+        ctx.restore()
+      }
       if (body.ringImage) {
-        ctx.translate((body.bodyImage.naturalWidth - body.ringImage.naturalWidth) / 2,
-                      (body.bodyImage.naturalHeight - body.ringImage.naturalHeight) / 2)
-        ctx.drawImage(body.ringImage, 0, 0)
+        this.drawImageCentered(ctx, body.ringImage)
       }
       ctx.restore()
     }
+  }
+
+  drawImageCentered(ctx, image) {
+    ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2)
   }
 
   render() {
