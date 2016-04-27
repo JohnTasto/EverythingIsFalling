@@ -14,7 +14,7 @@ class Planetarium extends Component {
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
       canvasStyle: {
-        background: 'url("/img/stars.jpg") center',
+        background: 'url("/img/noise.jpg") center',
         backgroundSize: 'cover',
         width: '100%',
         height: '100%'
@@ -64,24 +64,22 @@ class Planetarium extends Component {
   }
 
   renderBody(ctx, body, x, y, r, shadowAngle) {
-    if (body.bodyImage) {
-      let sX = 2 * r / body.bodyImage.naturalWidth
-      let sY = 2 * r / body.bodyImage.naturalHeight
+    let sX = 2 * r / body.bodyImage.naturalWidth
+    let sY = 2 * r / body.bodyImage.naturalHeight
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(sX, sY)
+    this.drawImageCentered(ctx, body.bodyImage)
+    if (shadowAngle !== undefined) {
       ctx.save()
-      ctx.translate(x, y)
-      ctx.scale(sX, sY)
-      this.drawImageCentered(ctx, body.bodyImage)
-      if (shadowAngle !== undefined) {
-        ctx.save()
-        ctx.rotate(shadowAngle)
-        this.drawImageCentered(ctx, body.shadowImage)
-        ctx.restore()
-      }
-      if (body.ringImage) {
-        this.drawImageCentered(ctx, body.ringImage)
-      }
+      ctx.rotate(shadowAngle)
+      this.drawImageCentered(ctx, body.shadowImage)
       ctx.restore()
     }
+    if (body.ringImage) {
+      this.drawImageCentered(ctx, body.ringImage)
+    }
+    ctx.restore()
   }
 
   drawImageCentered(ctx, image) {
@@ -91,8 +89,8 @@ class Planetarium extends Component {
   render() {
     return (
       <canvas style={this.state.canvasStyle}
-        width={this.props.window.width}
-        height={this.props.window.height}
+        width={this.props.window.width * this.state.ratio}
+        height={this.props.window.height * this.state.ratio}
         ref={(ref) => this.canvas = ref}>
       </canvas>
     )

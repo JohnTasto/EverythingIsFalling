@@ -1,35 +1,32 @@
 import {
-  GET_SHADOW_IMAGE,
-  GET_BODY_IMAGE,
-  GET_RING_IMAGE,
   UPDATE_BODIES
 } from '../actions/types'
 
 import bodyTemplates from '../body-templates.json'
 
 
-const INITIAL_STATE = {
-  templates: bodyTemplates,
-  sim: []
+function getInitialState() {
+  let shadowImage = new Image()
+  shadowImage.src = '/img/shadow.png'
+  for (let b in bodyTemplates) {
+    let body = b
+    bodyTemplates[body].shadowImage = shadowImage
+    bodyTemplates[body].bodyImage = new Image()
+    bodyTemplates[body].bodyImage.src = `/img/${body}.png`
+    if (bodyTemplates[body].rings) {
+      bodyTemplates[body].ringImage = new Image()
+      bodyTemplates[body].ringImage.src = `/img/${body}-rings.png`
+    }
+  }
+  return {
+    templates: bodyTemplates,
+    sim: []
+  }
 }
 
-export default function(bodies = INITIAL_STATE, action) {
+export default function(bodies = getInitialState(), action) {
   let newBodies
   switch (action.type) {
-    case GET_SHADOW_IMAGE:
-      newBodies = { ...bodies }
-      for (let body in newBodies.templates) {
-        newBodies.templates[body].shadowImage = action.payload.shadowImage
-      }
-      return newBodies
-    case GET_BODY_IMAGE:
-      newBodies = { ...bodies }
-      newBodies.templates[action.payload.body].bodyImage = action.payload.bodyImage
-      return newBodies
-    case GET_RING_IMAGE:
-      newBodies = { ...bodies }
-      newBodies.templates[action.payload.body].ringImage = action.payload.ringImage
-      return newBodies
     case UPDATE_BODIES:
       newBodies = { ...bodies }
       return newBodies
