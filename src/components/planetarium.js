@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
 
 import * as screen from '../actions/screen'
+import * as update from '../actions/update'
 
 
 class Planetarium extends Component {
@@ -14,7 +15,7 @@ class Planetarium extends Component {
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
       canvasStyle: {
-        background: 'url("/img/noise.jpg") center',
+        background: 'url("/img/stars.jpg") center',
         backgroundSize: 'cover',
         width: '100%',
         height: '100%'
@@ -28,7 +29,6 @@ class Planetarium extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize.bind(this))
-    this.setState({ context: this.canvas.getContext('2d') })
     this.getFrame()
   }
 
@@ -52,7 +52,9 @@ class Planetarium extends Component {
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
-    let ctx = this.state.context
+    this.props.update.update(dMs)
+
+    let ctx = this.canvas.getContext('2d')
     ctx.save()
     ctx.scale(this.state.ratio, this.state.ratio)
     ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
@@ -110,8 +112,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    screen: bindActionCreators(screen, dispatch)
+    screen: bindActionCreators(screen, dispatch),
+    update: bindActionCreators(update, dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Planetarium)
+export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Planetarium)
