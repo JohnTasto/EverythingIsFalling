@@ -1,4 +1,8 @@
 {
+  "sun": {
+    "mass": 1.98855e30,
+    "radius": 6.95700e8
+  },
   "mercury": {
     "semiMajorAxis": 5.790905e10,
     "eccentricity": 0.205630,

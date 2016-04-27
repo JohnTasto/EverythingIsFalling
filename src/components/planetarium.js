@@ -57,20 +57,23 @@ class Planetarium extends Component {
     ctx.scale(this.state.ratio, this.state.ratio)
     ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
 
-    this.renderBody(ctx, this.props.bodies.templates.neptune, currentMs / 32, currentMs / 32, 64, currentMs / 2048)
+    for (let body in this.props.bodies.sim) {
+      this.renderBody(ctx, this.props.bodies.sim[body])
+    }
 
     ctx.restore()
     this.getFrame()
   }
 
-  renderBody(ctx, body, x, y, r, shadowAngle) {
-    let sX = 2 * r / body.bodyImage.naturalWidth
-    let sY = 2 * r / body.bodyImage.naturalHeight
+  renderBody(ctx, body) {
+    body.radius = 64
+    let sX = 2 * body.radius / body.bodyImage.naturalWidth
+    let sY = 2 * body.radius / body.bodyImage.naturalHeight
     ctx.save()
-    ctx.translate(x, y)
+    ctx.translate(body.position.x, body.position.y)
     ctx.scale(sX, sY)
     this.drawImageCentered(ctx, body.bodyImage)
-    if (shadowAngle !== undefined) {
+    if (body.shadowAngle !== undefined) {
       ctx.save()
       ctx.rotate(shadowAngle)
       this.drawImageCentered(ctx, body.shadowImage)
