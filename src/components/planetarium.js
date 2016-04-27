@@ -52,15 +52,17 @@ class Planetarium extends Component {
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
-    this.props.update.update(dMs)
+    this.props.update.update(dMs * 10, this.props.bodies)
 
     let ctx = this.canvas.getContext('2d')
     ctx.save()
     ctx.scale(this.state.ratio, this.state.ratio)
     ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
 
-    for (let body in this.props.bodies.sim) {
-      this.renderBody(ctx, this.props.bodies.sim[body])
+    ctx.scale(.000005, .000005)
+
+    for (let body in this.props.bodies) {
+      this.renderBody(ctx, this.props.bodies[body])
     }
 
     ctx.restore()
@@ -68,22 +70,53 @@ class Planetarium extends Component {
   }
 
   renderBody(ctx, body) {
-    body.radius = 64
+    // let sX = 2 * (body.radius / 2e5) / body.bodyImage.naturalWidth
+    // let sY = 2 * (body.radius / 2e5) / body.bodyImage.naturalHeight
     let sX = 2 * body.radius / body.bodyImage.naturalWidth
     let sY = 2 * body.radius / body.bodyImage.naturalHeight
     ctx.save()
+    // ctx.translate(body.position.x / 2e5, body.position.y / 2e5)
     ctx.translate(body.position.x, body.position.y)
     ctx.scale(sX, sY)
+
+    // draw body
     this.drawImageCentered(ctx, body.bodyImage)
+
+    // draw shadow
     if (body.shadowAngle !== undefined) {
       ctx.save()
       ctx.rotate(shadowAngle)
       this.drawImageCentered(ctx, body.shadowImage)
       ctx.restore()
     }
+
+    // draw rings
     if (body.ringImage) {
       this.drawImageCentered(ctx, body.ringImage)
     }
+
+    // draw force and velocity vectors
+    ctx.scale(1/sX, 1/sY)
+    if (true) {
+      this.drawVector(ctx, body.force, 'red', 500000, .00000000000000001)
+      this.drawVector(ctx, body.velocity, 'green', 200000, 500)
+      for (let forceKey in body.forces) {
+        this.drawVector(ctx, body.forces[forceKey], 'blue', 300000, .00000000000000001)
+      }
+    }
+
+    ctx.restore()
+  }
+
+  drawVector(ctx, vector, color, width, scale) {
+    let v = vector.clone().scale(scale)
+    ctx.save()
+    ctx.strokeStyle = color
+    ctx.lineWidth = width
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(v.x, v.y)
+    ctx.stroke()
     ctx.restore()
   }
 
@@ -106,7 +139,7 @@ class Planetarium extends Component {
 function mapStateToProps(state) {
   return {
     window: state.window,
-    bodies: state.bodies
+    bodies: state.bodies.sim
   }
 }
 

@@ -1,7 +1,7 @@
-import Victor from 'victor'
+import Vector from '../geometry/vector'
 
 import {
-  UPDATE_POSITION
+  UPDATE_BODIES
 } from '../actions/types'
 
 import templates from '../body-templates.json'
@@ -24,20 +24,20 @@ function getInitialState() {
 
   let sim = {
     mercury: Object.assign({}, templates['mercury'], {
-      position: new Victor(200, 100),
-      velocity: new Victor(1, 0)
+      position: new Vector(9e7, 6e7),
+      velocity: new Vector(0, 0)
     }),
     venus: Object.assign({}, templates['venus'], {
-      position: new Victor(300, 200),
-      velocity: new Victor(0, 2)
+      position: new Vector(1.1e8, 8e7),
+      velocity: new Vector(0, 0)
     }),
     earth: Object.assign({}, templates['earth'], {
-      position: new Victor(100, 300),
-      velocity: new Victor(1, -1)
+      position: new Vector(7e7, 8e7),
+      velocity: new Vector(0, 0)
     }),
-    saturn: Object.assign({}, templates['saturn'], {
-      position: new Victor(400, 300),
-      velocity: new Victor(-1, 1)
+    mars: Object.assign({}, templates['mars'], {
+      position: new Vector(1e8, 1e8),
+      velocity: new Vector(0, 0)
     })
   }
 
@@ -50,11 +50,12 @@ function getInitialState() {
 export default function(bodies = getInitialState(), action) {
   let newBodies
   switch (action.type) {
-    case UPDATE_POSITION:
+    case UPDATE_BODIES:
       //  newBodies = { ...bodies }
       //  newBodies.sim[action.body].position = action.position
       //  return newBodies
-      return { ...bodies, sim: { ...bodies.sim, [action.body]: { ...bodies.sim[action.body], position: action.position }}}
+      //return { ...bodies, sim: { ...bodies.sim, [action.body]: { ...bodies.sim[action.body], position: action.position }}}
+      return { templates: bodies.templates, sim: action.bodies }
     default:
       return bodies
   }
