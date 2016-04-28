@@ -1,10 +1,20 @@
 import {
-  RESIZE_WINDOW
+  RESIZE_WINDOW,
+  ZOOM_WINDOW
 } from './types'
 
 export function resize(width, height) {
   return {
     type: RESIZE_WINDOW,
-    payload: { width, height }
+    size: { width, height }
+  }
+}
+
+export function zoom(dy) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: ZOOM_WINDOW,
+      zoom: getState().screen.zoom * (Math.pow(2, (dy / 100)))
+    })
   }
 }

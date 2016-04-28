@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
+import wheel from 'mouse-wheel'
 
 import * as screen from '../actions/screen'
 import * as update from '../actions/update'
@@ -14,6 +15,7 @@ class Planetarium extends Component {
       lastMs: 0,
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
+      zoom: .000005,
       canvasStyle: {
         background: 'url("/img/stars.jpg") center',
         backgroundSize: 'cover',
@@ -23,22 +25,34 @@ class Planetarium extends Component {
     }
   }
 
-  handleResize() {
-    this.props.screen.resize(window.innerWidth, window.innerHeight)
+  handleEvent(e) {
+    switch (e.type) {
+      case 'resize':
+        this.props.screenA.resize(window.innerWidth, window.innerHeight)
+        break
+    }
+  }
+
+  handleZoom(dx, dy, dz) {
+    this.props.screenA.zoom(dy)
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize.bind(this))
+    window.addEventListener('resize', this, false)
+    let wheelListener = wheel(this.canvas, this.handleZoom.bind(this), true)
+    this.setState({ wheelListener })
     this.getFrame()
   }
 
   componentWillUnmount() {
     this.animationFrame.cancel(this.state.frame)
+    this.canvas.removeEventListener('wheel', this.state.wheelListener)
+    window.removeEventListener('resize', this, false)
   }
 
   componentWillReceiveProps(props) {
-    this.canvas.width = props.window.width * this.state.ratio
-    this.canvas.height = props.window.height * this.state.ratio
+    this.canvas.width = props.screen.width * this.state.ratio
+    this.canvas.height = props.screen.height * this.state.ratio
   }
 
   shouldComponentUpdate() { return false }
@@ -52,14 +66,14 @@ class Planetarium extends Component {
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
-    this.props.update.update(dMs * 2000, this.props.bodies)
+    this.props.update.update(2000, this.props.bodies)
 
     let ctx = this.canvas.getContext('2d')
     ctx.save()
     ctx.scale(this.state.ratio, this.state.ratio)
-    ctx.clearRect(0, 0, this.props.window.width, this.props.window.height)
+    ctx.clearRect(0, 0, this.props.screen.width, this.props.screen.height)
 
-    ctx.scale(.000005, .000005)
+    ctx.scale(this.props.screen.zoom, this.props.screen.zoom)
 
     for (let body in this.props.bodies) {
       this.renderBody(ctx, this.props.bodies[body])
@@ -96,11 +110,11 @@ class Planetarium extends Component {
     }
 
     // draw force and velocity vectors
-    let vectors = false
+    let vectors = true
     if (vectors) {
       ctx.scale(1/sX, 1/sY)
       this.drawVector(ctx, body.force, 'red', 500000, .00000000000000001)
-      this.drawVector(ctx, body.velocity, 'green', 200000, 500)
+      this.drawVector(ctx, body.velocity, 'green', 500000, 100)
       for (let forceKey in body.forces) {
         this.drawVector(ctx, body.forces[forceKey], 'blue', 300000, .00000000000000001)
       }
@@ -128,8 +142,8 @@ class Planetarium extends Component {
   render() {
     return (
       <canvas style={this.state.canvasStyle}
-        width={this.props.window.width * this.state.ratio}
-        height={this.props.window.height * this.state.ratio}
+        width={this.props.screen.width * this.state.ratio}
+        height={this.props.screen.height * this.state.ratio}
         ref={(ref) => this.canvas = ref}>
       </canvas>
     )
@@ -139,14 +153,14 @@ class Planetarium extends Component {
 
 function mapStateToProps(state) {
   return {
-    window: state.window,
+    screen: state.screen,
     bodies: state.bodies.sim
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    screen: bindActionCreators(screen, dispatch),
+    screenA: bindActionCreators(screen, dispatch),
     update: bindActionCreators(update, dispatch)
   }
 }

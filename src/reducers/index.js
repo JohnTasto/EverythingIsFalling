@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
 
 import bodies from './bodies-r'
-import windowSize from './window-r'
+import screen from './screen-r'
 
 
 const rootReducer = combineReducers({
-  window: windowSize,
+  screen,
   bodies
 })
 

@@ -1,2 +1,3 @@
 export const UPDATE_BODIES = 'UPDATE_BODIES'
 export const RESIZE_WINDOW = 'RESIZE_WINDOW'
+export const ZOOM_WINDOW = 'ZOOM_WINDOW'
