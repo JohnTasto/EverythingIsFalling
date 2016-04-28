@@ -13,8 +13,7 @@ class Vector {
    * @param {number} y The y value.
    */
   constructor(x, y) {
-    this.x = x
-    this.y = y
+    Object.defineProperties(this, { x: { value: x }, y: { value: y } })
   }
 
   /**
@@ -138,28 +137,13 @@ class Vector {
    }
 
   /**
-   * Sets both components of this Vector.
-   * @param x {number} The new x component.
-   * @param y {number} The new y component.
-   * @return {Vector} This Vector.
-   */
-   set(x, y) {
-     this.x = x
-     this.y = y
-     return this
-   }
-
-  /**
    * Normalizes the Vector.
    * @return {Vector} This Vector at unit length.
    */
   normalize() {
     let l = this.length()
-    if (l !== 0) {
-      this.x = this.x / l
-      this.y = this.y / l
-    }
-    return this
+    if (l === 0) return this.clone()
+    return new Vector(this.x / l, this.y / l)
   }
 
   /**
@@ -169,11 +153,8 @@ class Vector {
   */
   setLength(length) {
     let l = this.length()
-    if (l !== 0) {
-      this.x = length * this.x / l
-      this.y = length * this.y / l
-    }
-    return this
+    if (l === 0) return this.clone()
+    return new Vector(length * this.x / l, length * this.y / l)
   }
 
   /**
@@ -191,7 +172,7 @@ class Vector {
    * @return {number} The length of this Vector, squared.
    */
   lengthSquared() {
-    return (this.x * this.x) + (this.y * this.y);
+    return (this.x * this.x) + (this.y * this.y)
   }
 
 
@@ -211,9 +192,7 @@ class Vector {
    */
   setAngle(theta) {
     let l = this.length()
-    this.x = l * Math.cos(theta)
-    this.y = l * Math.sin(theta)
-    return this
+    return new Vector(l * Math.cos(theta), l * Math.sin(theta))
   }
 
   /**
@@ -230,9 +209,7 @@ class Vector {
    * @return {Vector} This Vector, scaled.
    */
   scale(scalar) {
-    this.x *= scalar
-    this.y *= scalar
-    return this
+    return new Vector(scalar * this.x, scalar * this.y)
   }
 
   /**
@@ -248,7 +225,7 @@ class Vector {
    * @return {Vector} This Vector, rotated pi/2 radians
    */
   getLeftPerpendicular() {
-     return this.set(-this.y, this.x)
+     return new Vector(-this.y, this.x)
   }
 
   /**
@@ -256,7 +233,7 @@ class Vector {
    * @return {Vector} This Vector, rotated -pi/2 radians
    */
   getRightPerpendicular() {
-     return this.set(this.y, -this.x)
+     return new Vector(this.y, -this.x)
   }
 
   /**
@@ -265,9 +242,7 @@ class Vector {
    * @return {Vector} This Vector.
    */
   add(other) {
-    this.x += other.x
-    this.y += other.y
-    return this
+    return new Vector(this.x + other.x, this.y + other.y)
   }
 
   /**
@@ -276,9 +251,7 @@ class Vector {
    * @return {Vector} This Vector.
    */
   subtract(other) {
-    this.x -= other.x
-    this.y -= other.y
-    return this
+    return new Vector(this.x - other.x, this.y - other.y)
   }
 
   /**
@@ -326,11 +299,11 @@ class Vector {
    */
   transform(scaleX = 1, skewX = 0, skewY = 0, scaleY = 1, translateX = 0, translateY = 0) {
     if (scaleX instanceof Array) {
-      return this.set(scaleX[0]*x + scaleX[2]*y + scaleX[4],
-                      scaleX[1]*x + scaleX[3]*y + scaleX[5])
+      return new Vector(scaleX[0]*x + scaleX[2]*y + scaleX[4],
+                        scaleX[1]*x + scaleX[3]*y + scaleX[5])
     }
-    return this.set(scaleX[0]*x +  skewY[2]*y + translateX[4],
-                     skewX[1]*x + scaleY[3]*y + translateY[5])
+    return new Vector(scaleX[0]*x +  skewY[2]*y + translateX[4],
+                       skewX[1]*x + scaleY[3]*y + translateY[5])
   }
 
   /**
@@ -361,7 +334,7 @@ class Vector {
     if (other instanceof Vector)
       return this.x * other.y - this.y * other.x
     else
-      return this.set(other * this.y, -other * this.x)
+      return new Vector(other * this.y, -other * this.x)
   }
 
 	/**
@@ -372,11 +345,11 @@ class Vector {
 	 */
 	project(axis) {
     if (axis instanceof Vector)
-      axis = axis.clone().normalize()
+      axis = axis.normalize()
     else
       axis = Vector.getUnit(axis)
 		let dp = this.dot(axis)
-		return this.set(dp * axis.x, dp * axis.y)
+		return new Vector(dp * axis.x, dp * axis.y)
 	}
 
   /**
@@ -399,9 +372,8 @@ class Vector {
 	 * @return {Vector} This Vector with the coordinates limited.
 	 */
 	limit(minX = -Infinity, maxX = Infinity, minY = -Infinity, maxY = Infinity) {
-    this.x = Math.min(maxX, Math.max(this.x, minX))
-    this.y = Math.min(maxY, Math.max(this.y, minY))
-    return this
+    return new Vector(Math.min(maxX, Math.max(this.x, minX)),
+                      Math.min(maxY, Math.max(this.y, minY)))
 	}
 
 	/**
@@ -412,19 +384,18 @@ class Vector {
 	 */
 	limitLength(minLength, maxLength) {
 		let lengthSquared = this.lengthSquared()
-		if (lengthSquared !== 0) {
-  		if (lengthSquared > maxLength * maxLength) {
-  			let length = Math.sqrt(lengthSquared)
-        this.x = maxLength * this.x / length
-        this.y = maxLength * this.y / length
-  		}
-  		if (lengthSquared < minLength * minLength) {
-  			let length = Math.sqrt(lengthSquared)
-        this.x = minLength * this.x / length
-        this.y = minLength * this.y / length
-  		}
-    }
-		return this
+		if (lengthSquared === 0) return this.clone()
+		if (lengthSquared > maxLength * maxLength) {
+			let length = Math.sqrt(lengthSquared)
+      return new Vector(maxLength * this.x / length,
+                        maxLength * this.y / length)
+		}
+		if (lengthSquared < minLength * minLength) {
+			let length = Math.sqrt(lengthSquared)
+      return new Vector(minLength * this.x / length,
+                        minLength * this.y / length)
+		}
+		return this.clone()
 	}
 
 	/**

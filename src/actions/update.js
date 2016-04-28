@@ -22,9 +22,10 @@ export function update(dMs, bodies) {
     for (let otherBodyKey in bodies) {
       let otherBody = bodies[otherBodyKey]
       if (body !== otherBody && !body.forces[otherBodyKey]) {
+        let distanceSquared = body.position.distanceToSquared(otherBody.position)
         // f = G((m1*m2)/r^2)
-        let force = G * (body.mass * otherBody.mass) / body.position.distanceToSquared(otherBody.position)
-        let angle = otherBody.position.clone().subtract(body.position).angle()
+        let force = G * (body.mass * otherBody.mass) / distanceSquared
+        let angle = otherBody.position.subtract(body.position).angle()
         body.forces[otherBodyKey] = Vector.fromPolar(angle, force)
         otherBody.forces[bodyKey] = Vector.fromPolar(angle + Math.PI, force)
       }
@@ -33,16 +34,16 @@ export function update(dMs, bodies) {
     // sum forces
     body.force = new Vector(0, 0)
     for (let forceKey in body.forces) {
-      body.force.add(body.forces[forceKey])
+      body.force = body.force.add(body.forces[forceKey])
     }
 
     // F = ma  or  a = F/m  or  a = F(1/m)
-    let acceleration = body.force.clone().scale(1 / body.mass)
+    let acceleration = body.force.scale(1 / body.mass)
 
     // v = v0 + at
-    body.velocity.add(acceleration.scale(dMs))
+    body.velocity = body.velocity.add(acceleration.scale(dMs))
 
-    body.position.add(body.velocity)
+    body.position = body.position.add(body.velocity)
   }
 
   return {
