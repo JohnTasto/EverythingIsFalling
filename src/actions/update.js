@@ -26,8 +26,42 @@ export function update(dMs, bodies) {
         // f = G((m1*m2)/r^2)
         let force = G * (body.mass * otherBody.mass) / distanceSquared
         let angle = otherBody.position.subtract(body.position).angle()
-        body.forces[otherBodyKey] = Vector.fromPolar(angle, force)
+        body.forces[otherBodyKey] = Vector.fromPolar(angle,           force)
         otherBody.forces[bodyKey] = Vector.fromPolar(angle + Math.PI, force)
+
+        // bounce
+        let bounce = true
+        if (bounce) {
+          let overlap = (body.radius + otherBody.radius) - Math.sqrt(distanceSquared)
+          if (overlap > 0) {
+            let x1 = body.position
+            let x2 = otherBody.position
+            let v1 = body.velocity
+            let v2 = otherBody.velocity
+            let m1 = body.mass
+            let m2 = otherBody.mass
+            let x1sx2 = x1.subtract(x2)
+            let x2sx1 = x2.subtract(x1)
+            // https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
+            body.velocity      = v1.subtract(x1sx2.scale((2*m2 / (m1+m2)) * (v1.subtract(v2).dot(x1sx2) / x1sx2.lengthSquared())))
+            otherBody.velocity = v2.subtract(x2sx1.scale((2*m1 / (m1+m2)) * (v2.subtract(v1).dot(x2sx1) / x2sx1.lengthSquared())))
+
+            // de-overlap bodies
+            // large velocity loss
+            // body.position =      x1.add(Vector.fromPolar(angle + Math.PI, overlap * (body.radius/(body.radius + otherBody.radius))))
+            // otherBody.position = x2.add(Vector.fromPolar(angle, overlap * (otherBody.radius/(body.radius + otherBody.radius))))
+
+            // skip adding gravitational forces, replacing this update
+            // no velocity loss
+            body.bounced = true
+            otherBody.bounced = true
+
+            // add velocity seperately, as though this were an extra update
+            // small velocity loss
+            // body.position = body.position.add(body.velocity)
+            // otherBody.position = otherBody.position.add(otherBody.velocity)
+          }
+        }
       }
     }
 
@@ -37,11 +71,17 @@ export function update(dMs, bodies) {
       body.force = body.force.add(body.forces[forceKey])
     }
 
-    // F = ma  or  a = F/m  or  a = F(1/m)
-    let acceleration = body.force.scale(1 / body.mass)
+    if (!body.bounced) {
 
-    // v = v0 + at
-    body.velocity = body.velocity.add(acceleration.scale(dMs))
+      // F = ma  or  a = F/m  or  a = F(1/m)
+      let acceleration = body.force.scale(1 / body.mass)
+
+      // v = v0 + at
+      body.velocity = body.velocity.add(acceleration.scale(dMs))
+
+    } else {
+      body.bounced = false
+    }
 
     body.position = body.position.add(body.velocity)
   }

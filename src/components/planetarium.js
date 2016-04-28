@@ -52,7 +52,7 @@ class Planetarium extends Component {
   update(currentMs) {
     let dMs = currentMs - this.state.lastMs
     this.setState({ lastMs: currentMs })
-    this.props.update.update(dMs * 50, this.props.bodies)
+    this.props.update.update(dMs * 2000, this.props.bodies)
 
     let ctx = this.canvas.getContext('2d')
     ctx.save()
@@ -96,7 +96,7 @@ class Planetarium extends Component {
     }
 
     // draw force and velocity vectors
-    let vectors = true
+    let vectors = false
     if (vectors) {
       ctx.scale(1/sX, 1/sY)
       this.drawVector(ctx, body.force, 'red', 500000, .00000000000000001)
