@@ -113,10 +113,10 @@ class Planetarium extends Component {
     let vectors = true
     if (vectors) {
       ctx.scale(1/sX, 1/sY)
-      this.drawVector(ctx, body.force, 'red', 500000, .00000000000000001)
-      this.drawVector(ctx, body.velocity, 'green', 500000, 100)
+      this.drawVector(ctx, body.force, 'red', 3, .00000000000000001)
+      this.drawVector(ctx, body.velocity, 'green', 3, 100)
       for (let forceKey in body.forces) {
-        this.drawVector(ctx, body.forces[forceKey], 'blue', 300000, .00000000000000001)
+        this.drawVector(ctx, body.forces[forceKey], 'blue', 2, .00000000000000001)
       }
     }
 
@@ -124,10 +124,13 @@ class Planetarium extends Component {
   }
 
   drawVector(ctx, vector, color, width, scale) {
+    width *= 1 / this.props.screen.zoom
+    //scale *= 1 / this.props.screen.zoom
     let v = vector.clone().scale(scale)
     ctx.save()
     ctx.strokeStyle = color
     ctx.lineWidth = width
+    ctx.lineCap = 'round'
     ctx.beginPath()
     ctx.moveTo(0, 0)
     ctx.lineTo(v.x, v.y)
