@@ -23,6 +23,10 @@ function getInitialState() {
   }
 
   let sim = {
+    // sun: Object.assign({}, templates['sun'], {
+    //   position: new Vector(-1e9, -1e9),
+    //   velocity: new Vector(0, 0)
+    // }),
     mercury: Object.assign({}, templates['mercury'], {
       position: new Vector(9e7, 6e7),
       velocity: new Vector(0, 0)
@@ -38,7 +42,23 @@ function getInitialState() {
     mars: Object.assign({}, templates['mars'], {
       position: new Vector(1e8, 1e8),
       velocity: new Vector(0, 0)
-    })
+    }),
+    // jupiter: Object.assign({}, templates['jupiter'], {
+    //   position: new Vector(-1e8, -1e8),
+    //   velocity: new Vector(0, 0)
+    // }),
+    // saturn: Object.assign({}, templates['saturn'], {
+    //   position: new Vector(2e8, 2e8),
+    //   velocity: new Vector(0, 0)
+    // }),
+    // uranus: Object.assign({}, templates['uranus'], {
+    //   position: new Vector(-1e8, 2e8),
+    //   velocity: new Vector(0, 0)
+    // }),
+    // neptune: Object.assign({}, templates['neptune'], {
+    //   position: new Vector(2e8, -1e8),
+    //   velocity: new Vector(0, 0)
+    // }),
   }
 
   return {

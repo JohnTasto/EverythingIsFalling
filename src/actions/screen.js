@@ -1,6 +1,8 @@
 import {
   RESIZE_WINDOW,
-  ZOOM_WINDOW
+  ZOOM_WINDOW,
+  PAN_WINDOW_START,
+  PAN_WINDOW,
 } from './types'
 
 export function resize(width, height) {
@@ -43,4 +45,41 @@ export function zoom(dy, mX, mY) {
       zoom,
     })
   }
+}
+
+export function mouseDown(mX, mY) {
+  return (dispatch, getState) => {
+    let screen = getState().screen
+    //console.log(lerp(screen.minX, screen.maxX, mX/screen.width), lerp(screen.minY, screen.maxY, mY/screen.height))
+    dispatch({
+      type: PAN_WINDOW_START,
+      panStartX: lerp(screen.minX, screen.maxX, mX/screen.width),
+      panStartY: lerp(screen.minY, screen.maxY, mY/screen.height),
+    })
+  }
+}
+
+export function mouseMove(mX, mY) {
+  return (dispatch, getState) => {
+    let screen = getState().screen
+    let dX = screen.panStartX - lerp(screen.minX, screen.maxX, mX/screen.width)
+    let dY = screen.panStartY - lerp(screen.minY, screen.maxY, mY/screen.height)
+    dispatch({
+      type: PAN_WINDOW,
+      dimensions: {
+        minX: screen.minX + dX,
+        minY: screen.minY + dY,
+        maxX: screen.maxX + dX,
+        maxY: screen.maxY + dY,
+      },
+    })
+  }
+}
+
+export function mouseUp(mX, mY) {
+  return mouseMove(mX, mY)
+}
+
+function lerp(min, max, percent) {
+  return min * (1 - percent) + max * percent
 }

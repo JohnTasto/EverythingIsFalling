@@ -15,7 +15,6 @@ class Planetarium extends Component {
       lastMs: 0,
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
-      zoom: .000005,
       canvasStyle: {
         background: 'url("/img/stars.jpg") center',
         backgroundSize: 'cover',
@@ -36,15 +35,25 @@ class Planetarium extends Component {
         this.props.screenA.zoom(e.deltaY, e.clientX, e.clientY)
         e.preventDefault()
         break
+      case 'mousedown':
+        this.props.screenA.mouseDown(e.clientX, e.clientY)
+        window.addEventListener('mousemove', this, false)
+        window.addEventListener('mouseup', this, false)
+        break
+      case 'mousemove':
+        this.props.screenA.mouseMove(e.clientX, e.clientY)
+        break
+      case 'mouseup':
+        this.props.screenA.mouseUp(e.clientX, e.clientY)
+        window.removeEventListener('mousemove', this, false)
+        window.removeEventListener('mouseup', this, false)
+        break
     }
-  }
-
-  handleZoom(dx, dy, dz) {
-    this.props.screenA.zoom(dy)
   }
 
   componentDidMount() {
     window.addEventListener('resize', this, false)
+    this.canvas.addEventListener('mousedown', this, false)
     addWheelListener(this.canvas, this, false)
     this.getFrame()
   }
@@ -52,6 +61,7 @@ class Planetarium extends Component {
   componentWillUnmount() {
     this.animationFrame.cancel(this.state.frame)
     removeWheelListener(this.canvas, this, false)
+    this.canvas.removeEventListener('mousedown', this, false)
     window.removeEventListener('resize', this, false)
   }
 
@@ -84,6 +94,10 @@ class Planetarium extends Component {
     for (let body in this.props.bodies) {
       this.renderBody(ctx, this.props.bodies[body])
     }
+
+    // draw box in very center for debugging
+    // ctx.fillStyle = 'white'
+    // ctx.fillRect(-1000000,-1000000,2000000,2000000)
 
     ctx.restore()
     this.getFrame()
