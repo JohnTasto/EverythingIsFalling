@@ -8,6 +8,8 @@ const G = 6.67308e-11
 
 
 export function update(dMs) {
+  let bounce = true
+
   return (dispatch, getState) => {
     let bodies = { ...getState().bodies.sim }
 
@@ -31,8 +33,8 @@ export function update(dMs) {
           otherBody.forces[bodyKey] = Vector.fromPolar(angle + Math.PI, force)
 
           // bounce
-          let bounce = true
           if (bounce) {
+            // bounce off planets
             let overlap = (body.radius + otherBody.radius) - Math.sqrt(distanceSquared)
             if (overlap > 0) {
               let x1 = body.position
@@ -63,6 +65,27 @@ export function update(dMs) {
               // otherBody.position = otherBody.position.add(otherBody.velocity)
             }
           }
+        }
+      }
+
+      if (bounce) {
+        // bounce off window
+        let screen = { ...getState().screen }
+        if (body.position.x + body.radius > screen.maxX) {
+          body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
+          //body.position = new Vector(screen.maxX - body.radius, body.position.y)
+        }
+        if (body.position.x - body.radius < screen.minX) {
+          body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
+          //body.position = new Vector(screen.minX + body.radius, body.position.y)
+        }
+        if (body.position.y + body.radius > screen.maxY) {
+          body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
+          //body.position = new Vector(body.position.x, screen.maxY - body.radius)
+        }
+        if (body.position.y - body.radius < screen.minY) {
+          body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
+          //body.position = new Vector(body.position.x, screen.minY + body.radius)
         }
       }
 
