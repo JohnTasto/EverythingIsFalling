@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
-import wheel from 'mouse-wheel'
+import { addWheelListener, removeWheelListener } from 'wheel'
 
 import * as screen from '../actions/screen'
 import * as update from '../actions/update'
@@ -30,6 +30,12 @@ class Planetarium extends Component {
       case 'resize':
         this.props.screenA.resize(window.innerWidth, window.innerHeight)
         break
+      case 'wheel':
+      case 'mousewheel':
+      case 'DOMMouseScroll':
+        this.props.screenA.zoom(e.deltaY, e.clientX, e.clientY)
+        e.preventDefault()
+        break
     }
   }
 
@@ -39,14 +45,13 @@ class Planetarium extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this, false)
-    let wheelListener = wheel(this.canvas, this.handleZoom.bind(this), true)
-    this.setState({ wheelListener })
+    addWheelListener(this.canvas, this, false)
     this.getFrame()
   }
 
   componentWillUnmount() {
     this.animationFrame.cancel(this.state.frame)
-    this.canvas.removeEventListener('wheel', this.state.wheelListener)
+    removeWheelListener(this.canvas, this, false)
     window.removeEventListener('resize', this, false)
   }
 
@@ -74,6 +79,7 @@ class Planetarium extends Component {
     ctx.clearRect(0, 0, this.props.screen.width, this.props.screen.height)
 
     ctx.scale(this.props.screen.zoom, this.props.screen.zoom)
+    ctx.translate(-this.props.screen.minX, -this.props.screen.minY)
 
     for (let body in this.props.bodies) {
       this.renderBody(ctx, this.props.bodies[body])
@@ -84,13 +90,12 @@ class Planetarium extends Component {
   }
 
   renderBody(ctx, body) {
-    // let sX = 2 * (body.radius / 2e5) / body.bodyImage.naturalWidth
-    // let sY = 2 * (body.radius / 2e5) / body.bodyImage.naturalHeight
+    ctx.save()
+
+    ctx.translate(body.position.x, body.position.y)
+
     let sX = 2 * body.radius / body.bodyImage.naturalWidth
     let sY = 2 * body.radius / body.bodyImage.naturalHeight
-    ctx.save()
-    // ctx.translate(body.position.x / 2e5, body.position.y / 2e5)
-    ctx.translate(body.position.x, body.position.y)
     ctx.scale(sX, sY)
 
     // draw body
