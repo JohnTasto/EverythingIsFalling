@@ -36,7 +36,7 @@ export function update(dMs) {
           if (bounce) {
             // bounce off planets
             let overlap = (body.radius + otherBody.radius) - Math.sqrt(distanceSquared)
-            if (overlap > 0) {
+            if (overlap > 0 && Math.abs(otherBody.velocity.subtract(body.velocity).angle() - angle) > Math.PI / 2) {
               let x1 = body.position
               let x2 = otherBody.position
               let v1 = body.velocity
