@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
-import { addWheelListener, removeWheelListener } from 'wheel'
 
 import * as screen from '../actions/screen'
 import * as update from '../actions/update'
@@ -30,8 +29,6 @@ class Planetarium extends Component {
         this.props.screenA.resize(window.innerWidth, window.innerHeight)
         break
       case 'wheel':
-      case 'mousewheel':
-      case 'DOMMouseScroll':
         this.props.screenA.zoom(e.deltaY, e.clientX, e.clientY)
         e.preventDefault()
         break
@@ -54,13 +51,13 @@ class Planetarium extends Component {
   componentDidMount() {
     window.addEventListener('resize', this, false)
     this.canvas.addEventListener('mousedown', this, false)
-    addWheelListener(this.canvas, this, false)
+    this.canvas.addEventListener('wheel', this, false)
     this.getFrame()
   }
 
   componentWillUnmount() {
     this.animationFrame.cancel(this.state.frame)
-    removeWheelListener(this.canvas, this, false)
+    this.canvas.removeEventListener('wheel', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
     window.removeEventListener('resize', this, false)
   }
