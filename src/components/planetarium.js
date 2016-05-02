@@ -52,11 +52,11 @@ class Planetarium extends Component {
     window.addEventListener('resize', this, false)
     this.canvas.addEventListener('mousedown', this, false)
     this.canvas.addEventListener('wheel', this, false)
-    this.getFrame()
+    this.requestFrame()
   }
 
   componentWillUnmount() {
-    this.animationFrame.cancel(this.state.frame)
+    this.cancelFrame()
     this.canvas.removeEventListener('wheel', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
     window.removeEventListener('resize', this, false)
@@ -69,10 +69,14 @@ class Planetarium extends Component {
 
   shouldComponentUpdate() { return false }
 
-  getFrame() {
+  requestFrame() {
     this.setState({
       frame: this.state.animationFrame.request(this.update.bind(this))
     })
+  }
+
+  cancelFrame() {
+    this.animationFrame.cancel(this.state.frame)
   }
 
   update(currentMs) {
@@ -97,7 +101,7 @@ class Planetarium extends Component {
     // ctx.fillRect(-1000000,-1000000,2000000,2000000)
 
     ctx.restore()
-    this.getFrame()
+    this.requestFrame()
   }
 
   renderBody(ctx, body) {
