@@ -32,10 +32,10 @@ export function zoom(dY, cursorPos) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
     let dZoom = Math.pow(2, (dY / 100))
-    let mPercent = cursorPos.div(screen.size)
+    let mousePercent = cursorPos.div(screen.size)
     let viewportDx = viewport.size.scale(dZoom).sub(viewport.size)
-    let min = viewport.min.add(viewportDx.mult(mPercent))
-    let max = viewport.max.sub(viewportDx.mult(Vector.one().sub(mPercent)))
+    let min = viewport.min.add(viewportDx.mult(mousePercent))
+    let max = viewport.max.sub(viewportDx.mult(Vector.one().sub(mousePercent)))
     let zoom = screen.size.x / (max.x - min.x)
     dispatch({
       type: ZOOM_WINDOW,
@@ -54,10 +54,7 @@ export function mouseDown(cursorPos) {
     let { screen: { screen, viewport } } = getState()
     dispatch({
       type: PAN_WINDOW_START,
-      panStart: new Vector(
-        lerp(viewport.min.x, viewport.max.x, cursorPos.x/screen.size.x),
-        lerp(viewport.min.y, viewport.max.y, cursorPos.y/screen.size.y)
-      )
+      panStart: viewport.min.lerp(viewport.max, cursorPos.div(screen.size)),
     })
   }
 }
@@ -65,10 +62,7 @@ export function mouseDown(cursorPos) {
 export function mouseMove(cursorPos) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport, panStart } } = getState()
-    let offset = new Vector(
-      panStart.x - lerp(viewport.min.x, viewport.max.x, cursorPos.x/screen.size.x),
-      panStart.y - lerp(viewport.min.y, viewport.max.y, cursorPos.y/screen.size.y)
-    )
+    let offset = panStart.sub(viewport.min.lerp(viewport.max, cursorPos.div(screen.size)))
     dispatch({
       type: PAN_WINDOW,
       min: viewport.min.add(offset),
@@ -79,8 +73,4 @@ export function mouseMove(cursorPos) {
 
 export function mouseUp(cursorPos) {
   return mouseMove(cursorPos)
-}
-
-function lerp(min, max, percent) {
-  return min * (1 - percent) + max * percent
 }
