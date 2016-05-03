@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
 
+import Vector from '../geometry/vector'
 import * as screen from '../actions/screen'
 import * as update from '../actions/update'
 
@@ -26,22 +27,22 @@ class Planetarium extends Component {
   handleEvent(e) {
     switch (e.type) {
       case 'resize':
-        this.props.screenA.resize(window.innerWidth, window.innerHeight)
+        this.props.screenA.resize(new Vector(window.innerWidth, window.innerHeight))
         break
       case 'wheel':
-        this.props.screenA.zoom(e.deltaY, e.clientX, e.clientY)
+        this.props.screenA.zoom(e.deltaY, new Vector(e.clientX, e.clientY))
         e.preventDefault()
         break
       case 'mousedown':
-        this.props.screenA.mouseDown(e.clientX, e.clientY)
+        this.props.screenA.mouseDown(new Vector(e.clientX, e.clientY))
         window.addEventListener('mousemove', this, false)
         window.addEventListener('mouseup', this, false)
         break
       case 'mousemove':
-        this.props.screenA.mouseMove(e.clientX, e.clientY)
+        this.props.screenA.mouseMove(new Vector(e.clientX, e.clientY))
         break
       case 'mouseup':
-        this.props.screenA.mouseUp(e.clientX, e.clientY)
+        this.props.screenA.mouseUp(new Vector(e.clientX, e.clientY))
         window.removeEventListener('mousemove', this, false)
         window.removeEventListener('mouseup', this, false)
         break
@@ -63,8 +64,8 @@ class Planetarium extends Component {
   }
 
   componentWillReceiveProps(props) {
-    this.canvas.width = props.screen.width * this.state.ratio
-    this.canvas.height = props.screen.height * this.state.ratio
+    this.canvas.width = props.screen.size.x * this.state.ratio
+    this.canvas.height = props.screen.size.y * this.state.ratio
   }
 
   shouldComponentUpdate() { return false }
@@ -87,10 +88,10 @@ class Planetarium extends Component {
     let ctx = this.canvas.getContext('2d')
     ctx.save()
     ctx.scale(this.state.ratio, this.state.ratio)
-    ctx.clearRect(0, 0, this.props.screen.width, this.props.screen.height)
+    ctx.clearRect(0, 0, this.props.screen.size.x, this.props.screen.size.y)
 
-    ctx.scale(this.props.screen.zoom, this.props.screen.zoom)
-    ctx.translate(-this.props.screen.minX, -this.props.screen.minY)
+    ctx.scale(this.props.viewport.zoom, this.props.viewport.zoom)
+    ctx.translate(-this.props.viewport.min.x, -this.props.viewport.min.y)
 
     for (let body in this.props.bodies) {
       this.renderBody(ctx, this.props.bodies[body])
@@ -144,8 +145,8 @@ class Planetarium extends Component {
   }
 
   drawVector(ctx, vector, color, width, scale) {
-    width *= 1 / this.props.screen.zoom
-    //scale *= 1 / this.props.screen.zoom
+    width *= 1 / this.props.viewport.zoom
+    //scale *= 1 / this.props.viewport.zoom
     let v = vector.clone().scale(scale)
     ctx.save()
     ctx.strokeStyle = color
@@ -165,8 +166,8 @@ class Planetarium extends Component {
   render() {
     return (
       <canvas style={this.state.canvasStyle}
-        width={this.props.screen.width * this.state.ratio}
-        height={this.props.screen.height * this.state.ratio}
+        width={this.props.screen.size.x * this.state.ratio}
+        height={this.props.screen.size.y * this.state.ratio}
         ref={(ref) => this.canvas = ref}>
       </canvas>
     )
@@ -176,15 +177,16 @@ class Planetarium extends Component {
 
 function mapStateToProps(state) {
   return {
-    screen: state.screen,
-    bodies: state.bodies.sim
+    screen: state.screen.screen,
+    viewport: state.screen.viewport,
+    bodies: state.bodies.sim,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     screenA: bindActionCreators(screen, dispatch),
-    update: bindActionCreators(update, dispatch)
+    update: bindActionCreators(update, dispatch),
   }
 }
 

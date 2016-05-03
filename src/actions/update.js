@@ -70,22 +70,22 @@ export function update(dMs) {
 
       if (bounce) {
         // bounce off window
-        let screen = { ...getState().screen }
-        if (body.position.x + body.radius > screen.maxX) {
+        let viewport = { ...getState().screen.viewport }
+        if (body.position.x + body.radius > viewport.max.x) {
           body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
-          //body.position = new Vector(screen.maxX - body.radius, body.position.y)
+          //body.position = new Vector(viewport.max.x - body.radius, body.position.y)
         }
-        if (body.position.x - body.radius < screen.minX) {
+        if (body.position.x - body.radius < viewport.min.x) {
           body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
-          //body.position = new Vector(screen.minX + body.radius, body.position.y)
+          //body.position = new Vector(viewport.min.x + body.radius, body.position.y)
         }
-        if (body.position.y + body.radius > screen.maxY) {
+        if (body.position.y + body.radius > viewport.max.y) {
           body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
-          //body.position = new Vector(body.position.x, screen.maxY - body.radius)
+          //body.position = new Vector(body.position.x, viewport.max.y - body.radius)
         }
-        if (body.position.y - body.radius < screen.minY) {
+        if (body.position.y - body.radius < viewport.min.y) {
           body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
-          //body.position = new Vector(body.position.x, screen.minY + body.radius)
+          //body.position = new Vector(body.position.x, viewport.min.y + body.radius)
         }
       }
 

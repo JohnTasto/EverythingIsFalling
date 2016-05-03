@@ -1,3 +1,4 @@
+import Vector from '../geometry/vector'
 import {
   RESIZE_WINDOW,
   ZOOM_WINDOW,
@@ -6,25 +7,27 @@ import {
 } from '../actions/types'
 
 const INITIAL_STATE = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-  minX: -window.innerWidth * 2500000,
-  minY: -window.innerHeight * 2500000,
-  maxX: window.innerWidth * 2500000,
-  maxY: window.innerHeight * 2500000,
-  zoom: 1 / 5000000,
+  screen: {
+    size: new Vector (window.innerWidth, window.innerHeight),
+  },
+  viewport: {
+    min: new Vector(-window.innerWidth * 2500000, -window.innerHeight * 2500000),
+    max: new Vector( window.innerWidth * 2500000,  window.innerHeight * 2500000),
+    size: new Vector( window.innerWidth * 5000000,  window.innerHeight * 5000000),
+    zoom: 1 / 5000000,
+  }
 }
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case RESIZE_WINDOW:
-      return { ...state, ...action.size, ...action.dimensions, zoom: action.zoom }
+      return { ...state, screen: action.screen, viewport: action.viewport }
     case ZOOM_WINDOW:
-      return { ...state, ...action.dimensions, zoom: action.zoom }
+      return { ...state, viewport: action.viewport }
     case PAN_WINDOW_START:
-      return { ...state, panStartX: action.panStartX, panStartY: action.panStartY }
+      return { ...state, panStart: action.panStart }
     case PAN_WINDOW:
-      return { ...state, ...action.dimensions }
+      return { ...state, viewport: { ...state.viewport, min: action.min, max: action.max } }
   default:
     return state
   }

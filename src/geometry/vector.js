@@ -17,6 +17,15 @@ class Vector {
   }
 
   /**
+   * Creates a copy of another Vector.
+   * @param {Vector} other The other Vector to copy.
+   * @return {Vector} A new Vector.
+   */
+  static fromComponents(x, y) {
+    return new Vector(x, y)
+  }
+
+  /**
    * Creates a Vector from a coordinate array.
    * @param {Array} coords The coordinate array, [0] = x, [1] = y.
    * @return {Vector} A new Vector.
@@ -30,9 +39,57 @@ class Vector {
    * @param {Vector} other The other Vector to copy.
    * @return {Vector} A new Vector.
    */
-   static fromVector(other) {
-     return new Vector(other.x, other.y)
-   }
+  static fromVector(other) {
+    return new Vector(other.x, other.y)
+  }
+
+  /**
+   * Creates a new Vector with components (0, 0).
+   * @return {Vector} A new Vector.
+   */
+  static zero() {
+    return new Vector(0, 0)
+  }
+
+  /**
+   * Creates a new Vector with components (1, 1).
+   * @return {Vector} A new Vector.
+   */
+  static one() {
+    return new Vector(1, 1)
+  }
+
+  /**
+   * Creates a new Vector with components (-1, 0).
+   * @return {Vector} A new Vector.
+   */
+  static left() {
+    return new Vector(-1, 0)
+  }
+
+  /**
+   * Creates a new Vector with components (1, 0).
+   * @return {Vector} A new Vector.
+   */
+  static right() {
+    return new Vector(1, 0)
+  }
+
+  /**
+   * Creates a new Vector with components (0, 1).
+   * @return {Vector} A new Vector.
+   */
+  static up() {
+    return new Vector(0, 1)
+  }
+
+  /**
+   * Creates a new Vector with components (0, -1).
+   * @return {Vector} A new Vector.
+   */
+  static down() {
+    return new Vector(0, -1)
+  }
 
   /**
    * Creates a new unit Vector at a given angle.
@@ -250,8 +307,35 @@ class Vector {
    * @param {Vector} other The Vector to subtract.
    * @return {Vector} This Vector.
    */
-  subtract(other) {
+  sub(other) {
     return new Vector(this.x - other.x, this.y - other.y)
+  }
+  subtract(other) {
+    return this.sub(other)
+  }
+
+  /**
+   * Multiplies a Vector to this Vector.
+   * @param {Vector} other The Vector to multiply.
+   * @return {Vector} This Vector.
+   */
+  mult(other) {
+    return new Vector(this.x * other.x, this.y * other.y)
+  }
+  multiply(other) {
+    return this.mult(other)
+  }
+
+  /**
+   * Divides a Vector from this Vector.
+   * @param {Vector} other The Vector to use as a denominator.
+   * @return {Vector} This Vector.
+   */
+  div(other) {
+    return new Vector(this.x / other.x, this.y / other.y)
+  }
+  divide(other) {
+    return this.div(other)
   }
 
   /**
