@@ -9,6 +9,7 @@ import {
 export function resize(size) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
+    // 1/2 * viewport.size * ((size - screen.size) / screen.size)
     let viewportDx = size.sub(screen.size).div(screen.size).mult(viewport.size).scale(0.5)
     let min = viewport.min.sub(viewportDx)
     let max = viewport.max.add(viewportDx)
@@ -33,6 +34,7 @@ export function zoom(dY, cursorPos) {
     let { screen: { screen, viewport } } = getState()
     let dZoom = Math.pow(2, (dY / 100))
     let mousePercent = cursorPos.div(screen.size)
+    // (dZoom * viewport.size) - viewport.size
     let viewportDx = viewport.size.scale(dZoom).sub(viewport.size)
     let min = viewport.min.add(viewportDx.mult(mousePercent))
     let max = viewport.max.sub(viewportDx.mult(Vector.one().sub(mousePercent)))
