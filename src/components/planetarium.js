@@ -8,20 +8,23 @@ import * as screen from '../actions/screen'
 import * as update from '../actions/update'
 
 
+const FRAMERATE_INDEPENDENT_TIME = false
+
+
 class Planetarium extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      lastMs: 0,
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
       canvasStyle: {
         background: 'url("/img/stars.jpg") center',
         backgroundSize: 'cover',
         width: '100%',
-        height: '100%'
-      }
+        height: '100%',
+      },
     }
+    if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
   }
 
   handleEvent(e) {
@@ -81,38 +84,52 @@ class Planetarium extends Component {
   }
 
   update(currentMs) {
-    let dMs = currentMs - this.state.lastMs
-    this.setState({ lastMs: currentMs })
-    this.props.update.update(2000, this.props.bodies)
+    if (FRAMERATE_INDEPENDENT_TIME) {
+      this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
+      this.props.update.update(this.state.dMs, this.props.bodies)
+    } else {
+      this.props.update.update(2000, this.props.bodies)
+    }
 
     let ctx = this.canvas.getContext('2d')
     ctx.save()
+
+    // scale for hi DPI screens
     ctx.scale(this.state.ratio, this.state.ratio)
+
+    // clear the canvas
     ctx.clearRect(0, 0, this.props.screen.size.x, this.props.screen.size.y)
 
+    // convert to viewport coordinates
     ctx.scale(this.props.viewport.zoom, this.props.viewport.zoom)
     ctx.translate(-this.props.viewport.min.x, -this.props.viewport.min.y)
 
-    for (let body in this.props.bodies) {
-      this.renderBody(ctx, this.props.bodies[body])
+    for (let bodyKey in this.props.bodies) {
+      this.renderBody(ctx, bodyKey)
     }
 
-    // draw box in very center for debugging
+    // // draw box in very center for debugging
     // ctx.fillStyle = 'white'
     // ctx.fillRect(-1000000,-1000000,2000000,2000000)
 
     ctx.restore()
+
     this.requestFrame()
   }
 
-  renderBody(ctx, body) {
+  renderBody(ctx, bodyKey) {
     ctx.save()
+
+    let body = this.props.bodies[bodyKey]
 
     ctx.translate(body.position.x, body.position.y)
 
-    let sX = 2 * body.radius / body.bodyImage.naturalWidth
-    let sY = 2 * body.radius / body.bodyImage.naturalHeight
-    ctx.scale(sX, sY)
+    // scale images
+    ctx.save()
+    ctx.scale(
+      2 * body.radius / body.bodyImage.naturalWidth,
+      2 * body.radius / body.bodyImage.naturalHeight
+    )
 
     // draw body
     this.drawImageCentered(ctx, body.bodyImage)
@@ -130,10 +147,17 @@ class Planetarium extends Component {
       this.drawImageCentered(ctx, body.ringImage)
     }
 
+    // undo scale images
+    ctx.restore()
+
+    // draw selection
+    if (bodyKey === this.props.selected) {
+      this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
+    }
+
     // draw force and velocity vectors
     let vectors = true
     if (vectors) {
-      ctx.scale(1/sX, 1/sY)
       this.drawVector(ctx, body.force, 'red', 3, .00000000000000001)
       this.drawVector(ctx, body.velocity, 'green', 3, 100)
       for (let forceKey in body.forces) {
@@ -144,11 +168,37 @@ class Planetarium extends Component {
     ctx.restore()
   }
 
+  drawImageCentered(ctx, image) {
+    ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2)
+  }
+
+  drawCircle(ctx, radius, fillColor, strokeColor, strokeWidth, outer) {
+    ctx.save()
+    strokeWidth *= 1 / this.props.viewport.zoom
+    if (strokeWidth) {
+      if ( outer) radius += .5 * strokeWidth
+      if (!outer) radius -= .5 * strokeWidth
+      if (radius < strokeWidth / 2) radius = strokeWidth / 2
+    }
+    ctx.beginPath()
+    ctx.arc(0, 0, radius, 0, 2 * Math.PI, false)
+    if (fillColor) {
+      ctx.fillStyle = fillColor
+      ctx.fill()
+    }
+    if (strokeColor) {
+      ctx.lineWidth = strokeWidth
+      ctx.strokeStyle = strokeColor
+      ctx.stroke()
+    }
+    ctx.restore()
+  }
+
   drawVector(ctx, vector, color, width, scale) {
+    ctx.save()
     width *= 1 / this.props.viewport.zoom
     //scale *= 1 / this.props.viewport.zoom
-    let v = vector.clone().scale(scale)
-    ctx.save()
+    let v = vector.scale(scale)
     ctx.strokeStyle = color
     ctx.lineWidth = width
     ctx.lineCap = 'round'
@@ -157,10 +207,6 @@ class Planetarium extends Component {
     ctx.lineTo(v.x, v.y)
     ctx.stroke()
     ctx.restore()
-  }
-
-  drawImageCentered(ctx, image) {
-    ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2)
   }
 
   render() {
@@ -179,6 +225,7 @@ function mapStateToProps(state) {
   return {
     screen: state.screen.screen,
     viewport: state.screen.viewport,
+    selected: state.screen.selected,
     bodies: state.bodies,
   }
 }
