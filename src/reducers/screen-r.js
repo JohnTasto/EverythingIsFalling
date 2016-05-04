@@ -4,6 +4,7 @@ import {
   ZOOM_WINDOW,
   PAN_WINDOW,
   SELECT_BODY,
+  HOVER_BODY,
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -28,6 +29,8 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, viewport: { ...state.viewport, min: action.min, max: action.max } }
     case SELECT_BODY:
       return { ...state, selected: action.selected }
+    case HOVER_BODY:
+      return { ...state, hovered: action.selected }
   default:
     return state
   }

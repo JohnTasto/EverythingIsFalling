@@ -38,7 +38,6 @@ class Planetarium extends Component {
         break
       case 'mousedown':
         this.props.screenA.mouseDown(new Vector(e.clientX, e.clientY))
-        window.addEventListener('mousemove', this, false)
         window.addEventListener('mouseup', this, false)
         break
       case 'mousemove':
@@ -46,7 +45,6 @@ class Planetarium extends Component {
         break
       case 'mouseup':
         this.props.screenA.mouseUp(new Vector(e.clientX, e.clientY))
-        window.removeEventListener('mousemove', this, false)
         window.removeEventListener('mouseup', this, false)
         break
     }
@@ -54,7 +52,9 @@ class Planetarium extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this, false)
+    window.addEventListener('mousemove', this, false)
     this.canvas.addEventListener('mousedown', this, false)
+    this.canvas.addEventListener('mouseover', this, false)
     this.canvas.addEventListener('wheel', this, false)
     this.requestFrame()
   }
@@ -62,7 +62,9 @@ class Planetarium extends Component {
   componentWillUnmount() {
     this.cancelFrame()
     this.canvas.removeEventListener('wheel', this, false)
+    this.canvas.removeEventListener('mouseover', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
+    window.removeEventListener('mousemove', this, false)
     window.removeEventListener('resize', this, false)
   }
 
@@ -88,7 +90,16 @@ class Planetarium extends Component {
       this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
       this.props.update.update(this.state.dMs, this.props.bodies)
     } else {
-      this.props.update.update(2000, this.props.bodies)
+      this.props.update.update(1000, this.props.bodies)
+    }
+
+    if (this.props.hovered) {
+      this.canvas.style.cursor = 'pointer'
+      this.canvas.style.cursor = '-moz-grab'
+      this.canvas.style.cursor = '-webkit-grab'
+      this.canvas.style.cursor = 'grab'
+    } else {
+      this.canvas.style.cursor = 'auto'
     }
 
     let ctx = this.canvas.getContext('2d')
@@ -151,8 +162,12 @@ class Planetarium extends Component {
     ctx.restore()
 
     // draw selection
-    if (bodyKey === this.props.selected) {
+    if (bodyKey === this.props.selected && bodyKey === this.props.hovered) {
+      this.drawCircle(ctx, body.radius, 'rgba(0,127,255,.25)', 'rgba(0,127,255,.5)', 10, false)
+    } else if (bodyKey === this.props.selected) {
       this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
+    } else if (bodyKey === this.props.hovered) {
+      this.drawCircle(ctx, body.radius, 'rgba(0,127,255,.25)')
     }
 
     // draw force and velocity vectors
@@ -226,6 +241,7 @@ function mapStateToProps(state) {
     screen: state.screen.screen,
     viewport: state.screen.viewport,
     selected: state.screen.selected,
+    hovered: state.screen.hovered,
     bodies: state.bodies,
   }
 }
