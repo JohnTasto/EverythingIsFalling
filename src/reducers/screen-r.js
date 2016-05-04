@@ -30,7 +30,7 @@ export default function(state = INITIAL_STATE, action) {
     case SELECT_BODY:
       return { ...state, selected: action.selected }
     case HOVER_BODY:
-      return { ...state, hovered: action.selected }
+      return { ...state, hovered: action.hovered }
   default:
     return state
   }

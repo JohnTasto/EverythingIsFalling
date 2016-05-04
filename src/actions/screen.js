@@ -9,6 +9,7 @@ import {
 } from './types'
 
 
+let cursorPosition
 let cursorStart
 let mousePressed = false
 
@@ -58,44 +59,55 @@ export function zoom(dY, cursor) {
   }
 }
 
-export function mouseDown(cursor, hover) {
+export function mouseDown(cursor) {
+  mousePressed = true
+  cursorStart = cursorPosition
   return (dispatch, getState) => {
-    let { bodies, screen: { screen, viewport } } = getState()
-    cursor = viewport.min.lerp(viewport.max, cursor.div(screen.size))
-    if (!hover) {
-      mousePressed = true
-      cursorStart = cursor
-    }
-    let selected
-    for (let bodyKey in bodies) {
-      let body = bodies[bodyKey]
-      if (body.position.distanceToSquared(cursor) < body.radius * body.radius) {
-        selected = bodyKey
-      }
-    }
+    let selected = checkHit(cursorPosition, getState().bodies)
     dispatch({
-      type: hover ? HOVER_BODY : SELECT_BODY,
+      type: SELECT_BODY,
       selected
     })
   }
 }
 
 export function mouseMove(cursor) {
-  if (!mousePressed) {
-    return mouseDown(cursor, true)
-  }
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
-    let offset = cursorStart.sub(viewport.min.lerp(viewport.max, cursor.div(screen.size)))
-    dispatch({
-      type: PAN_WINDOW,
-      min: viewport.min.add(offset),
-      max: viewport.max.add(offset),
-    })
+    cursorPosition = viewport.min.lerp(viewport.max, cursor.div(screen.size))
+    if (mousePressed) {
+      let offset = cursorStart.sub(cursorPosition)
+      dispatch({
+        type: PAN_WINDOW,
+        min: viewport.min.add(offset),
+        max: viewport.max.add(offset),
+      })
+    }
   }
 }
 
 export function mouseUp(cursor) {
   mousePressed = false
   return mouseMove(cursor)
+}
+
+export function checkHover() {
+  return (dispatch, getState) => {
+    let hovered = checkHit(cursorPosition, getState().bodies)
+    dispatch({
+      type: HOVER_BODY,
+      hovered
+    })
+  }
+}
+
+function checkHit(cursor, bodies) {
+  let hit
+  for (let bodyKey in bodies) {
+    let body = bodies[bodyKey]
+    if (body.position.distanceToSquared(cursorPosition) < body.radius * body.radius) {
+      hit = bodyKey
+    }
+  }
+  return hit
 }

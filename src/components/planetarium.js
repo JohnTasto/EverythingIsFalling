@@ -93,6 +93,7 @@ class Planetarium extends Component {
       this.props.update.update(1000, this.props.bodies)
     }
 
+    this.props.screenA.checkHover()
     if (this.props.hovered) {
       this.canvas.style.cursor = 'pointer'
       this.canvas.style.cursor = '-moz-grab'
