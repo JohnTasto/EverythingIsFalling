@@ -163,12 +163,11 @@ class Planetarium extends Component {
     ctx.restore()
 
     // draw selection
-    if (bodyKey === this.props.selected && bodyKey === this.props.hovered) {
-      this.drawCircle(ctx, body.radius, 'rgba(0,127,255,.25)', 'rgba(0,127,255,.5)', 10, false)
-    } else if (bodyKey === this.props.selected) {
+    if (bodyKey === this.props.selected) {
       this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
-    } else if (bodyKey === this.props.hovered) {
-      this.drawCircle(ctx, body.radius, 'rgba(0,127,255,.25)')
+    }
+    if (bodyKey === this.props.hovered) {
+      this.drawCircle(ctx, body.radius, 'rgba(255,255,255,.25)')
     }
 
     // draw force and velocity vectors

@@ -103,10 +103,12 @@ export function checkHover() {
 
 function checkHit(cursor, bodies) {
   let hit
-  for (let bodyKey in bodies) {
-    let body = bodies[bodyKey]
-    if (body.position.distanceToSquared(cursorPosition) < body.radius * body.radius) {
-      hit = bodyKey
+  if (cursor) {
+    for (let bodyKey in bodies) {
+      let body = bodies[bodyKey]
+      if (body.position.distanceToSquared(cursorPosition) < body.radius * body.radius) {
+        hit = bodyKey
+      }
     }
   }
   return hit
