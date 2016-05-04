@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import { init } from '../actions/bodies'
 import Planetarium from './planetarium'
 
 
 class App extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(init())
+  }
 
   render() {
     return (
@@ -15,4 +19,4 @@ class App extends Component {
 }
 
 
-export default App
+export default connect()(App)

@@ -179,7 +179,7 @@ function mapStateToProps(state) {
   return {
     screen: state.screen.screen,
     viewport: state.screen.viewport,
-    bodies: state.bodies.sim,
+    bodies: state.bodies,
   }
 }
 

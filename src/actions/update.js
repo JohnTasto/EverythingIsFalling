@@ -11,7 +11,7 @@ export function update(dMs) {
   let bounce = true
 
   return (dispatch, getState) => {
-    let bodies = { ...getState().bodies.sim }
+    let bodies = getState().bodies
 
     // clear forces
     for (let bodyKey in bodies) {
