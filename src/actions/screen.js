@@ -1,10 +1,14 @@
 import Vector from '../geometry/vector'
+
 import {
   RESIZE_WINDOW,
   ZOOM_WINDOW,
-  PAN_WINDOW_START,
   PAN_WINDOW,
 } from './types'
+
+
+let panStart
+
 
 export function resize(size) {
   return (dispatch, getState) => {
@@ -29,11 +33,11 @@ export function resize(size) {
   }
 }
 
-export function zoom(dY, cursorPos) {
+export function zoom(dY, cursor) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
     let dZoom = Math.pow(2, (dY / 100))
-    let mousePercent = cursorPos.div(screen.size)
+    let mousePercent = cursor.div(screen.size)
     // (dZoom * viewport.size) - viewport.size
     let viewportDx = viewport.size.scale(dZoom).sub(viewport.size)
     let min = viewport.min.add(viewportDx.mult(mousePercent))
@@ -51,20 +55,18 @@ export function zoom(dY, cursorPos) {
   }
 }
 
-export function mouseDown(cursorPos) {
+export function mouseDown(cursor) {
   return (dispatch, getState) => {
-    let { screen: { screen, viewport } } = getState()
-    dispatch({
-      type: PAN_WINDOW_START,
-      panStart: viewport.min.lerp(viewport.max, cursorPos.div(screen.size)),
-    })
+    let { bodies, screen: { screen, viewport } } = getState()
+    cursor = viewport.min.lerp(viewport.max, cursor.div(screen.size))
+    panStart = cursor
   }
 }
 
-export function mouseMove(cursorPos) {
+export function mouseMove(cursor) {
   return (dispatch, getState) => {
-    let { screen: { screen, viewport, panStart } } = getState()
-    let offset = panStart.sub(viewport.min.lerp(viewport.max, cursorPos.div(screen.size)))
+    let { screen: { screen, viewport } } = getState()
+    let offset = panStart.sub(viewport.min.lerp(viewport.max, cursor.div(screen.size)))
     dispatch({
       type: PAN_WINDOW,
       min: viewport.min.add(offset),
@@ -73,6 +75,6 @@ export function mouseMove(cursorPos) {
   }
 }
 
-export function mouseUp(cursorPos) {
-  return mouseMove(cursorPos)
+export function mouseUp(cursor) {
+  return mouseMove(cursor)
 }

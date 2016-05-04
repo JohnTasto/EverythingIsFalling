@@ -2,7 +2,6 @@ import Vector from '../geometry/vector'
 import {
   RESIZE_WINDOW,
   ZOOM_WINDOW,
-  PAN_WINDOW_START,
   PAN_WINDOW,
 } from '../actions/types'
 
@@ -24,8 +23,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, screen: action.screen, viewport: action.viewport }
     case ZOOM_WINDOW:
       return { ...state, viewport: action.viewport }
-    case PAN_WINDOW_START:
-      return { ...state, panStart: action.panStart }
     case PAN_WINDOW:
       return { ...state, viewport: { ...state.viewport, min: action.min, max: action.max } }
   default:
