@@ -339,6 +339,23 @@ class Vector {
   }
 
   /**
+   * Linearly interpolates between this Vector and another. It takes either a
+   *   number or a Vector for the percentage. Use a number to interpolate the
+   *   same amount in each dimension, use a Vector to interpolate by different
+   *   amounts.
+   * @param {Vector} other The other Vector to interpolate to.
+   * @param {number} percent The interpolation amount between [0, 1].
+   * @param {Vector} percent The interpolation amount with components between
+   *   [0, 1].
+   * @return {number} A new Vector in between this one and another one.
+   */
+  lerp(other, percent) {
+    return (percent instanceof Vector) ?
+      this.mult(Vector.one().sub(percent)).add(other.mult(percent)) :
+      this.scale(1 - percent).add(other.scale(percent))
+  }
+
+  /**
    * Gets the distance from this Vector to another.
    * @param {Vector} other The Vector to measure to.
    * @return {number} The distance to the other Vector.
@@ -366,23 +383,6 @@ class Vector {
    */
   angleTo(other) {
     return (other.angle() - this.angle() + PI2) % PI2
-  }
-
-  /**
-   * Linearly interpolates between this Vector and another. It takes either a
-   *   number or a Vector for the percentage. Use a number to interpolate the
-   *   same amount in each dimension, use a Vector to interpolate by different
-   *   amounts.
-   * @param {Vector} other The other Vector to interpolate to.
-   * @param {number} percent The interpolation amount between [0, 1].
-   * @param {Vector} percent The interpolation amount with components between
-   *   [0, 1].
-   * @return {number} A new Vector in between this one and another one.
-   */
-  lerp(other, percent) {
-    return (percent instanceof Vector) ?
-      this.mult(Vector.one().sub(percent)).add(other.mult(percent)) :
-      this.scale(1 - percent).add(other.scale(percent))
   }
 
   /**
