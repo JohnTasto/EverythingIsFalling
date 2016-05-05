@@ -54,7 +54,6 @@ class Planetarium extends Component {
     window.addEventListener('resize', this, false)
     window.addEventListener('mousemove', this, false)
     this.canvas.addEventListener('mousedown', this, false)
-    this.canvas.addEventListener('mouseover', this, false)
     this.canvas.addEventListener('wheel', this, false)
     this.requestFrame()
   }
@@ -62,7 +61,6 @@ class Planetarium extends Component {
   componentWillUnmount() {
     this.cancelFrame()
     this.canvas.removeEventListener('wheel', this, false)
-    this.canvas.removeEventListener('mouseover', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
     window.removeEventListener('mousemove', this, false)
     window.removeEventListener('resize', this, false)

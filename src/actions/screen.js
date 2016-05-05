@@ -47,7 +47,7 @@ export function resize(size) {
 export function zoom(dY, cursor) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
-    let dZoom = Math.pow(2, (dY / 100))
+    let dZoom = Math.pow(2, (-dY / 100))
     let mousePercent = cursor.div(screen.size)
     // (dZoom * viewport.size) - viewport.size
     let viewportDx = viewport.size.scale(dZoom).sub(viewport.size)
@@ -140,7 +140,6 @@ export function checkHover() {
 
 export function checkDragging() {
   return (dispatch, getState) => {
-    //let { screen: { screen, viewport }, bodies } = getState()
     if (mousePressed && justSelected && dragging) {
       let offset = cursorVStart.sub(cursorVPosition)
       dispatch({
