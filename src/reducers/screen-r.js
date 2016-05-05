@@ -5,6 +5,7 @@ import {
   PAN_WINDOW,
   SELECT_BODY,
   HOVER_BODY,
+  DRAG_BODY,
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -16,22 +17,26 @@ const INITIAL_STATE = {
     max: new Vector( window.innerWidth * 2500000,  window.innerHeight * 2500000),
     size: new Vector( window.innerWidth * 5000000,  window.innerHeight * 5000000),
     zoom: 1 / 5000000,
-  }
+  },
+  selected: undefined,
+  dragging: undefined,
 }
 
-export default function(state = INITIAL_STATE, action) {
+export default function(screen = INITIAL_STATE, action) {
   switch (action.type) {
     case RESIZE_WINDOW:
-      return { ...state, screen: action.screen, viewport: action.viewport }
+      return { ...screen, screen: action.screen, viewport: action.viewport }
     case ZOOM_WINDOW:
-      return { ...state, viewport: action.viewport }
+      return { ...screen, viewport: action.viewport }
     case PAN_WINDOW:
-      return { ...state, viewport: { ...state.viewport, min: action.min, max: action.max } }
+      return { ...screen, viewport: { ...screen.viewport, min: action.min, max: action.max } }
     case SELECT_BODY:
-      return { ...state, selected: action.selected }
+      return { ...screen, selected: action.body }
     case HOVER_BODY:
-      return { ...state, hovered: action.hovered }
+      return { ...screen, hovered: action.body }
+    case DRAG_BODY:
+      return { ...screen, dragging: action.body }
   default:
-    return state
+    return screen
   }
 }

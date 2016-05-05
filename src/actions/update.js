@@ -11,7 +11,7 @@ export function update(dMs) {
   let bounce = true
 
   return (dispatch, getState) => {
-    let bodies = getState().bodies
+    let { bodies, screen: { dragging } } = getState()
 
     // clear forces
     for (let bodyKey in bodies) {
@@ -46,8 +46,16 @@ export function update(dMs) {
               let x1sx2 = x1.subtract(x2)
               let x2sx1 = x2.subtract(x1)
               // https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
-              body.velocity      = v1.subtract(x1sx2.scale((2*m2 / (m1+m2)) * (v1.subtract(v2).dot(x1sx2) / x1sx2.lengthSquared())))
-              otherBody.velocity = v2.subtract(x2sx1.scale((2*m1 / (m1+m2)) * (v2.subtract(v1).dot(x2sx1) / x2sx1.lengthSquared())))
+              let bodyVelocity      = v1.subtract(x1sx2.scale((2*m2 / (m1+m2)) * (v1.subtract(v2).dot(x1sx2) / x1sx2.lengthSquared())))
+              let otherBodyVelocity = v2.subtract(x2sx1.scale((2*m1 / (m1+m2)) * (v2.subtract(v1).dot(x2sx1) / x2sx1.lengthSquared())))
+              if (dragging === bodyKey)
+                otherBody.velocity = otherBodyVelocity.sub(bodyVelocity)
+              else if (dragging === otherBodyKey)
+                body.velocity = bodyVelocity.sub(otherBodyVelocity)
+              else {
+                body.velocity = bodyVelocity
+                otherBody.velocity = otherBodyVelocity
+              }
 
               // de-overlap bodies
               // large velocity loss
@@ -68,46 +76,48 @@ export function update(dMs) {
         }
       }
 
-      if (bounce) {
-        // bounce off window
-        let viewport = { ...getState().screen.viewport }
-        if (body.position.x + body.radius > viewport.max.x) {
-          body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
-          //body.position = new Vector(viewport.max.x - body.radius, body.position.y)
+      if (dragging !== bodyKey) {
+        if (bounce) {
+          // bounce off window
+          let viewport = { ...getState().screen.viewport }
+          if (body.position.x + body.radius > viewport.max.x) {
+            body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
+            //body.position = new Vector(viewport.max.x - body.radius, body.position.y)
+          }
+          if (body.position.x - body.radius < viewport.min.x) {
+            body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
+            //body.position = new Vector(viewport.min.x + body.radius, body.position.y)
+          }
+          if (body.position.y + body.radius > viewport.max.y) {
+            body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
+            //body.position = new Vector(body.position.x, viewport.max.y - body.radius)
+          }
+          if (body.position.y - body.radius < viewport.min.y) {
+            body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
+            //body.position = new Vector(body.position.x, viewport.min.y + body.radius)
+          }
         }
-        if (body.position.x - body.radius < viewport.min.x) {
-          body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
-          //body.position = new Vector(viewport.min.x + body.radius, body.position.y)
+
+        // sum forces
+        body.force = new Vector(0, 0)
+        for (let forceKey in body.forces) {
+          body.force = body.force.add(body.forces[forceKey])
         }
-        if (body.position.y + body.radius > viewport.max.y) {
-          body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
-          //body.position = new Vector(body.position.x, viewport.max.y - body.radius)
+
+        if (!body.bounced) {
+
+          // F = ma  or  a = F/m  or  a = F(1/m)
+          let acceleration = body.force.scale(1 / body.mass)
+
+          // v = v0 + at
+          body.velocity = body.velocity.add(acceleration.scale(dMs))
+
+        } else {
+          body.bounced = false
         }
-        if (body.position.y - body.radius < viewport.min.y) {
-          body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
-          //body.position = new Vector(body.position.x, viewport.min.y + body.radius)
-        }
+
+        body.position = body.position.add(body.velocity)
       }
-
-      // sum forces
-      body.force = new Vector(0, 0)
-      for (let forceKey in body.forces) {
-        body.force = body.force.add(body.forces[forceKey])
-      }
-
-      if (!body.bounced) {
-
-        // F = ma  or  a = F/m  or  a = F(1/m)
-        let acceleration = body.force.scale(1 / body.mass)
-
-        // v = v0 + at
-        body.velocity = body.velocity.add(acceleration.scale(dMs))
-
-      } else {
-        body.bounced = false
-      }
-
-      body.position = body.position.add(body.velocity)
     }
 
     dispatch({

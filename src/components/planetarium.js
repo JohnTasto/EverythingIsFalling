@@ -86,21 +86,28 @@ class Planetarium extends Component {
   }
 
   update(currentMs) {
-    if (FRAMERATE_INDEPENDENT_TIME) {
-      this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
-      this.props.update.update(this.state.dMs, this.props.bodies)
-    } else {
-      this.props.update.update(1000, this.props.bodies)
-    }
-
+    this.props.screenA.checkDragging()
     this.props.screenA.checkHover()
-    if (this.props.hovered) {
+
+    if (this.props.dragging) {
+      this.canvas.style.cursor = 'pointer'
+      this.canvas.style.cursor = '-moz-grabbing'
+      this.canvas.style.cursor = '-webkit-grabbing'
+      this.canvas.style.cursor = 'grabbing'
+    } else if (this.props.hovered) {
       this.canvas.style.cursor = 'pointer'
       this.canvas.style.cursor = '-moz-grab'
       this.canvas.style.cursor = '-webkit-grab'
       this.canvas.style.cursor = 'grab'
     } else {
       this.canvas.style.cursor = 'auto'
+    }
+
+    if (FRAMERATE_INDEPENDENT_TIME) {
+      this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
+      this.props.update.update(this.state.dMs, this.props.bodies)
+    } else {
+      this.props.update.update(1000, this.props.bodies)
     }
 
     let ctx = this.canvas.getContext('2d')
@@ -242,6 +249,7 @@ function mapStateToProps(state) {
     viewport: state.screen.viewport,
     selected: state.screen.selected,
     hovered: state.screen.hovered,
+    dragging: state.screen.dragging,
     bodies: state.bodies,
   }
 }
