@@ -10,14 +10,14 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.(js|es6)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel'
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         exclude: /node_modules/,
-        loader: 'style!css!autoprefixer'
+        loader: 'style!css!autoprefixer!sass'
       },
       {
         test: /\.json$/,
@@ -27,7 +27,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.css']
+    extensions: ['', '.js', '.jsx', '.scss']
   },
   devServer: {
     historyApiFallback: true,
