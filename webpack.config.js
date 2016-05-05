@@ -15,6 +15,10 @@ module.exports = {
         loader: 'babel'
       },
       {
+        test: /\.css$/,
+        loader: 'style!css!autoprefixer',
+      },
+      {
         test: /\.scss$/,
         exclude: /node_modules/,
         loader: 'style!css!autoprefixer!sass'
@@ -27,7 +31,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.scss']
+    extensions: ['', '.js', '.jsx', '.css', '.scss']
   },
   devServer: {
     historyApiFallback: true,
