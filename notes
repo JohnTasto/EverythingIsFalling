@@ -1,0 +1,86 @@
+General settings:
+  select:     preset
+  log slider: speed
+  radio:      square, linear, constant, inverse linear, inverse square
+  log slider: radii scale
+  radio:      linear or logarithmic radii
+  checkbox:   bounce bodies, bounce screen, show vectors, pause on hover
+  select:     add body
+  select:     edit body
+
+Body settings:
+  label:      name
+  select:     template
+  log slider: mass
+  log slider: radius
+  number:     x
+  number:     y
+
+velocity:   v = sqrt[G*M*(2/r - 1/a)]
+perihelion: r = a(1-e)
+aphelion:   r = a(1+e)
+
+v = velocity (m/s)
+G = 6.67308e-11
+M = mass of orbited body (kg)
+r = current radius (m)
+a = semimajor axis (m)
+e = eccentricity
+
+gravity:    f = G((m1*m2)/r^2)
+
+f = force (N or kg*m/s^2)
+G = 6.67308e-11
+m = mass of bodies (kg)
+r = distance between bodies (m)
+
+{
+  "mercury": {
+    "semiMajorAxis": 5.790905e10,
+    "eccentricity": 0.205630,
+    "mass": 3.3011e23,
+    "radius": 2.4397e6
+  },
+  "venus": {
+    "semiMajorAxis": 1.08208e11,
+    "eccentricity": 0.006772,
+    "mass": 4.8675e24,
+    "radius": 6.0518e6
+  },
+  "earth": {
+    "semiMajorAxis": 1.49598023e11,
+    "eccentricity": 0.0167086,
+    "mass": 5.97237e24,
+    "radius": 6.371e6
+  },
+  "mars": {
+    "semiMajorAxis": 2.279392e11,
+    "eccentricity": 0.0934,
+    "mass": 6.4171e23,
+    "radius": 3.3895e6
+  },
+  "jupiter": {
+    "semiMajorAxis": 7.78299e11,
+    "eccentricity": 0.048498,
+    "mass": 1.8986e27,
+    "radius": 6.9911e7
+  },
+  "saturn": {
+    "semiMajorAxis": 1.42939e12,
+    "eccentricity": 0.05555,
+    "mass": 5.6836e26,
+    "radius": 5.8232e7
+  },
+  "uranus": {
+    "semiMajorAxis": 2.87504e12,
+    "eccentricity": 0.046381,
+    "mass": 8.6810e25,
+    "radius": 2.5362e7
+  },
+  "neptune": {
+    "semiMajorAxis": 4.50445e12,
+    "eccentricity": 0.009456,
+    "mass": 1.0243e26,
+    "radius": 2.4622e7
+  }
+}
