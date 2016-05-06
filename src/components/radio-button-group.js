@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import classNames from 'classnames'
 
+import Tooltip from 'rc-tooltip'
+import 'rc-tooltip/assets/bootstrap.css'
+
 
 class RadioButtonGroup extends Component {
   constructor(props) {
@@ -27,20 +30,28 @@ class RadioButtonGroup extends Component {
 
   renderRadio(option) {
     return (
-      <label
+      <Tooltip
         key={option.value}
-        className={classNames('btn', 'btn-primary', { active: option.value === this.state.checked })}
+        placement='top'
+        mouseEnterDelay={0}
+        mouseLeaveDelay={0}
+        overlay={option.tip || ''}
+        trigger={option.tip ? ['hover'] : []}
       >
-        <input
-          type='radio'
-          name={this.props.name}
-          id={this.props.name + option.value}
-          checked={option.value === this.state.checked}
-          autoComplete='off'
-          onChange={this.handleChange}
-        />
-        <div dangerouslySetInnerHTML={{ __html: option.text }} />
-      </label>
+        <label
+          className={classNames('btn', 'btn-primary', { active: option.value === this.state.checked })}
+        >
+          <input
+            type='radio'
+            name={this.props.name}
+            id={this.props.name + option.value}
+            checked={option.value === this.state.checked}
+            autoComplete='off'
+            onChange={this.handleChange}
+          />
+          <div dangerouslySetInnerHTML={{ __html: option.text }} />
+        </label>
+      </Tooltip>
     )
   }
 
