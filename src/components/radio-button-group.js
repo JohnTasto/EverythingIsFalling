@@ -12,12 +12,13 @@ class RadioButtonGroup extends Component {
       checked: this.props.defaultChecked,
     }
     this.handleChange = this.handleChange.bind(this)
+    this.renderGroup = this.renderGroup.bind(this)
     this.renderRadio = this.renderRadio.bind(this)
   }
 
   static propTypes = {
     name: PropTypes.string.isRequired,
-    options: PropTypes.arrayOf(PropTypes.object).isRequired,
+    options: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
     defaultChecked: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
   }
@@ -28,7 +29,7 @@ class RadioButtonGroup extends Component {
     this.props.onChange(value)
   }
 
-  renderRadio(option) {
+  renderRadio(option, index) {
     return (
       <Tooltip
         key={option.value}
@@ -55,10 +56,18 @@ class RadioButtonGroup extends Component {
     )
   }
 
+  renderGroup(optionGroup, index) {
+    return (
+      <div key={index} className='btn-group' data-toggle='buttons' style={index ? { marginLeft: '1em' } : {} }>
+        {optionGroup.map(this.renderRadio)}
+      </div>
+    )
+  }
+
   render() {
     return (
-      <div className='btn-group' data-toggle='buttons'>
-        {this.props.options.map(this.renderRadio)}
+      <div>
+        {this.props.options.map(this.renderGroup)}
       </div>
     )
   }

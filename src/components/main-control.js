@@ -52,17 +52,6 @@ class MainControl extends Component {
 
   render() {
     //console.log(this.props)
-    const attractionFalloff = [
-      { text: 'r<sup>2</sup>', value: 'squared', tip: 'Squared (normal gravity)' },
-      { text: 'r<sup>1</sup>', value: 'linear', tip: 'Linear' },
-      { text: 'r<sup>0</sup>', value: 'constant', tip: 'Constant' },
-      { text: 'r<sup>-1</sup>', value: 'inverse-linear', tip: 'Inverse Linear' },
-      { text: 'r<sup>-1</sup>', value: 'inverse-squared', tip: 'Inverse Squared (rubber band)' },
-    ]
-    const radiiLog = [
-      { text: 'actual', value: 'constant' },
-      { text: 'logarithmic', value: 'log' },
-    ]
     return (
       <div className='container-fluid' style={this.props.style}>
         <h5 style={{ marginTop: '10px' }}>EverythingIsFalling</h5>
@@ -77,8 +66,18 @@ class MainControl extends Component {
         <label>Gravitational falloff:</label>
         <RadioButtonGroup
           name='attraction-falloff'
-          options={attractionFalloff}
-          defaultChecked={attractionFalloff[0].value}
+          options={[
+            [
+              { text: 'r<sup>2</sup>', value: 'squared', tip: 'Squared (normal gravity)' },
+              { text: 'r<sup>1</sup>', value: 'linear', tip: 'Linear' },
+              { text: 'r<sup>0</sup>', value: 'constant', tip: 'Constant' },
+              { text: 'r<sup>-1</sup>', value: 'inverse-linear', tip: 'Inverse Linear' },
+              { text: 'r<sup>-1</sup>', value: 'inverse-squared', tip: 'Inverse Squared (rubber band)' },
+            ], [
+              { text: 'No gravity', value: 'no-gravity' },
+            ],
+          ]}
+          defaultChecked='squared'
           onChange={this.handleFalloffChange}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>
@@ -91,8 +90,11 @@ class MainControl extends Component {
         />
         <RadioButtonGroup
           name='radii-log'
-          options={radiiLog}
-          defaultChecked={radiiLog[0].value}
+          options={[[
+            { text: 'Actual size', value: 'constant' },
+            { text: 'Logarithmic size', value: 'log' },
+          ]]}
+          defaultChecked={'constant'}
           onChange={this.handleRadiiLogChange}
         />
         <CheckboxButtonGroup
