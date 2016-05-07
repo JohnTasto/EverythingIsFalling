@@ -17,7 +17,7 @@ class App extends Component {
       mainControlStyle: {
         position: 'absolute',
         background: 'rgba(63,95,127,.75)',
-        width: '250px',
+        width: '320px',
         right: '2rem',
         top: '2rem',
         borderRadius: '0.25rem'

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import LogSlider from './log-slider'
 import RadioButtonGroup from './radio-button-group'
+import CheckboxButtonGroup from './checkbox-button-group'
 
 
 class MainControl extends Component {
@@ -16,6 +17,7 @@ class MainControl extends Component {
     this.handleFalloffChange = this.handleFalloffChange.bind(this)
     this.handleRadiiScaleChange = this.handleRadiiScaleChange.bind(this)
     this.handleRadiiLogChange = this.handleRadiiLogChange.bind(this)
+    this.handleButtonChange = this.handleButtonChange.bind(this)
   }
 
   static contextTypes = {}
@@ -31,8 +33,8 @@ class MainControl extends Component {
     this.setState({ speed: value })
   }
 
-  handleFalloffChange(e) {
-    console.log(e)
+  handleFalloffChange(value) {
+    console.log(value)
   }
 
   handleRadiiScaleChange(value) {
@@ -40,8 +42,12 @@ class MainControl extends Component {
     this.setState({ radiiScale: value })
   }
 
-  handleRadiiLogChange(e) {
-    console.log(e)
+  handleRadiiLogChange(value) {
+    console.log(value)
+  }
+
+  handleButtonChange(value) {
+    console.log(value)
   }
 
   render() {
@@ -68,14 +74,14 @@ class MainControl extends Component {
           max={100000000000000}
           onChange={this.handleSpeedChange}
         />
-        <label>Gravitational Falloff:</label>
+        <label>Gravitational falloff:</label>
         <RadioButtonGroup
           name='attraction-falloff'
           options={attractionFalloff}
           defaultChecked={attractionFalloff[0].value}
           onChange={this.handleFalloffChange}
         />
-        <label htmlFor='radii-scale'>Radii Scale:</label>
+        <label htmlFor='radii-scale'>Radii scale factor:</label>
         <LogSlider
           id='radii-scale'
           defaultValue={this.state.radiiScale}
@@ -88,6 +94,13 @@ class MainControl extends Component {
           options={radiiLog}
           defaultChecked={radiiLog[0].value}
           onChange={this.handleRadiiLogChange}
+        />
+        <CheckboxButtonGroup
+          options={[
+            { text: 'Bounce off bodies', value: 'bounce-bodies', defaultChecked: true },
+            { text: 'Bounce off screen', value: 'bounce-screen' },
+          ]}
+          onChange={this.handleButtonChange}
         />
       </div>
     )
