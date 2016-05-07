@@ -8,12 +8,17 @@ import 'rc-tooltip/assets/bootstrap.css'
 class RadioButtonGroup extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      checked: this.props.defaultChecked,
+    this.state = {}
+    let options = this.props.options
+    for (let g in options) {
+      for (let o in options[g]) {
+        if (options[g][o].value === this.props.defaultChecked) {
+          this.state.gChecked = +g
+          this.state.oChecked = +o
+        }
+      }
     }
-    this.handleChange = this.handleChange.bind(this)
     this.renderGroup = this.renderGroup.bind(this)
-    this.renderRadio = this.renderRadio.bind(this)
   }
 
   static propTypes = {
@@ -23,13 +28,12 @@ class RadioButtonGroup extends Component {
     onChange: PropTypes.func.isRequired,
   }
 
-  handleChange(event) {
-    let value = event.target.id.substring(this.props.name.length)
-    this.setState({ checked: value })
+  handleChange(gIndex, oIndex, value, event) {
+    this.setState({ gChecked: gIndex, oChecked: oIndex })
     this.props.onChange(value)
   }
 
-  renderRadio(option, index) {
+  renderRadio(gIndex, option, oIndex) {
     return (
       <Tooltip
         key={option.value}
@@ -40,15 +44,18 @@ class RadioButtonGroup extends Component {
         trigger={option.tip ? ['hover'] : []}
       >
         <label
-          className={classNames('btn', 'btn-primary', { active: option.value === this.state.checked })}
+          className={classNames(
+            'btn',
+            'btn-primary',
+            { active: gIndex === this.state.gChecked && oIndex === this.state.oChecked },
+          )}
         >
           <input
             type='radio'
             name={this.props.name}
-            id={this.props.name + option.value}
-            checked={option.value === this.state.checked}
+            checked={gIndex === this.state.gChecked && oIndex === this.state.oChecked}
             autoComplete='off'
-            onChange={this.handleChange}
+            onChange={this.handleChange.bind(this, gIndex, oIndex, option.value)}
           />
           <div dangerouslySetInnerHTML={{ __html: option.text }} />
         </label>
@@ -56,10 +63,15 @@ class RadioButtonGroup extends Component {
     )
   }
 
-  renderGroup(optionGroup, index) {
+  renderGroup(optionGroup, gIndex) {
     return (
-      <div key={index} className='btn-group' data-toggle='buttons' style={index ? { marginLeft: '1em' } : {} }>
-        {optionGroup.map(this.renderRadio)}
+      <div
+        key={gIndex}
+        className='btn-group'
+        data-toggle='buttons'
+        style={gIndex ? { marginLeft: '1em' } : {} }
+      >
+        {optionGroup.map(this.renderRadio.bind(this, gIndex))}
       </div>
     )
   }
