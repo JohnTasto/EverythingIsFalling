@@ -151,12 +151,12 @@ export function checkDragging() {
   }
 }
 
-function checkHit(cursor, bodies) {
+function checkHit(point, bodies) {
   let hit
-  if (cursor) {
+  if (point) {
     for (let bodyKey in bodies) {
       let body = bodies[bodyKey]
-      if (body.position.distanceToSquared(cursorVPosition) < body.radius * body.radius) {
+      if (body.position.distanceToSquared(point) < body.radius * body.radius) {
         hit = bodyKey
       }
     }
