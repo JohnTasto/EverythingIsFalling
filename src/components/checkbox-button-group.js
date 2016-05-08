@@ -45,7 +45,7 @@ class CheckboxButtonGroup extends Component {
             autoComplete='off'
             onChange={this.handleChange.bind(this, index, option.value)}
           />
-          <div dangerouslySetInnerHTML={{ __html: option.text }} />
+          {option.text}
         </label>
       </Tooltip>
     )

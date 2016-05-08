@@ -63,21 +63,21 @@ class MainControl extends Component {
           max={100000000000000}
           onChange={this.handleSpeedChange}
         />
-        <label>Gravitational falloff:</label>
+        <label>Attraction falloff:</label>
         <RadioButtonGroup
           name='attraction-falloff'
           options={[
             [
-              { text: 'r<sup>2</sup>', value: 'squared', tip: 'Squared (normal gravity)' },
-              { text: 'r<sup>1</sup>', value: 'linear', tip: 'Linear' },
-              { text: 'r<sup>0</sup>', value: 'constant', tip: 'Constant' },
-              { text: 'r<sup>-1</sup>', value: 'inverse-linear', tip: 'Inverse Linear' },
-              { text: 'r<sup>-1</sup>', value: 'inverse-squared', tip: 'Inverse Squared (rubber band)' },
+              { text: <div>r<sup>-2</sup></div>, value: 'inverse-squared', tip: 'Inverse squared (gravity)' },
+              { text: <div>r<sup>-1</sup></div>, value: 'inverse-linear', tip: 'Inverse linear' },
+              { text: <div>r<sup>0</sup></div>, value: 'constant', tip: 'Constant' },
+              { text: <div>r<sup>1</sup></div>, value: 'linear', tip: 'Linear (spring)' },
+              { text: <div>r<sup>2</sup></div>, value: 'squared', tip: 'Squared' },
             ], [
               { text: 'No gravity', value: 'no-gravity' },
             ],
           ]}
-          defaultChecked='squared'
+          defaultChecked='inverse-squared'
           onChange={this.handleFalloffChange}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>

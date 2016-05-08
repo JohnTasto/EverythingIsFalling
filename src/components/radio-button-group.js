@@ -57,7 +57,7 @@ class RadioButtonGroup extends Component {
             autoComplete='off'
             onChange={this.handleChange.bind(this, gIndex, oIndex, option.value)}
           />
-          <div dangerouslySetInnerHTML={{ __html: option.text }} />
+          {option.text}
         </label>
       </Tooltip>
     )
