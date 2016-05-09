@@ -16,6 +16,14 @@ Body settings:
   number:     x
   number:     y
 
+Todo:
+  autocenter
+  autozoom
+  sun shadows
+  presets
+  touch events
+  dynamic starfield
+
 velocity:   v = sqrt[G*M*(2/r - 1/a)]
 perihelion: r = a(1-e)
 aphelion:   r = a(1+e)

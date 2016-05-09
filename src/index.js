@@ -7,7 +7,7 @@ import reduxThunk from 'redux-thunk'
 import App from './components/app'
 import reducers from './reducers'
 
-require('./scss/bootstrap')
+import './scss/index'
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore)
 const store = createStoreWithMiddleware(reducers)

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Select from 'react-select'
+
 import LogSlider from './log-slider'
 import RadioButtonGroup from './radio-button-group'
 import CheckboxButtonGroup from './checkbox-button-group'
@@ -18,6 +20,7 @@ class MainControl extends Component {
     this.handleRadiiScaleChange = this.handleRadiiScaleChange.bind(this)
     this.handleRadiiLogChange = this.handleRadiiLogChange.bind(this)
     this.handleButtonChange = this.handleButtonChange.bind(this)
+    this.handleSelectTemplate = this.handleSelectTemplate.bind(this)
   }
 
   static contextTypes = {}
@@ -50,8 +53,29 @@ class MainControl extends Component {
     console.log(value)
   }
 
+  handleSelectTemplate(value) {
+    console.log(value)
+  }
+
+  selectBodyRenderer(value) {
+    return (
+      <div>
+        <img src={`/img/${value.value}-icon.png`} style={{ width: '32px' }}/>
+        &nbsp;
+        {value.label}
+      </div>
+    )
+  }
+
   render() {
     //console.log(this.props)
+    let templateOptions = []
+    for (let optionKey in this.props.templates) {
+      templateOptions.push({
+        value: optionKey,
+        label: optionKey[0].toUpperCase() + optionKey.substring(1),
+      })
+    }
     return (
       <div className='container-fluid' style={this.props.style}>
         <h5 style={{ marginTop: '10px' }}>EverythingIsFalling</h5>
@@ -100,9 +124,39 @@ class MainControl extends Component {
         <CheckboxButtonGroup
           options={[
             { text: 'Bounce off bodies', value: 'bounce-bodies', defaultChecked: true },
-            { text: 'Bounce off screen', value: 'bounce-screen' },
+            { text: 'Bounce off screen', value: 'bounce-screen', defaultChecked: true },
           ]}
           onChange={this.handleButtonChange}
+        />
+        <CheckboxButtonGroup
+          options={[
+            { text: 'Show vectors', value: 'show-vectors' },
+          ]}
+          onChange={this.handleButtonChange}
+        />
+        <span style={{ paddingLeft: '1rem' }} />
+        <CheckboxButtonGroup
+          options={[
+            { text: 'Pause on hover', value: 'pause-hover', defaultChecked: true },
+          ]}
+          onChange={this.handleButtonChange}
+        />
+        <Select
+          name='select-template'
+          placeholder='Add a new body...'
+          options={templateOptions}
+          onChange={this.handleSelectTemplate}
+          optionRenderer={this.selectBodyRenderer}
+          valueRenderer={this.selectBodyRenderer}
+        />
+        <label>Selection:</label>
+        <Select
+          name='select-template'
+          placeholder='Select a body to adjust...'
+          options={templateOptions}
+          onChange={this.handleSelectTemplate}
+          optionRenderer={this.selectBodyRenderer}
+          valueRenderer={this.selectBodyRenderer}
         />
       </div>
     )
@@ -114,8 +168,8 @@ function mapStateToProps(state) {
     // screen: state.screen.screen,
     // viewport: state.screen.viewport,
     // selected: state.screen.selected,
-    // bodies: state.bodies,
-    // templates: state.templates,
+    bodies: state.bodies,
+    templates: state.templates,
   }
 }
 
