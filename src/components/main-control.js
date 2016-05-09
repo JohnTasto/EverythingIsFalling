@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import Select from 'react-select'
@@ -6,6 +7,8 @@ import Select from 'react-select'
 import LogSlider from './log-slider'
 import RadioButtonGroup from './radio-button-group'
 import CheckboxButtonGroup from './checkbox-button-group'
+
+import * as view from '../actions/view'
 
 
 class MainControl extends Component {
@@ -21,6 +24,7 @@ class MainControl extends Component {
     this.handleRadiiLogChange = this.handleRadiiLogChange.bind(this)
     this.handleButtonChange = this.handleButtonChange.bind(this)
     this.handleSelectTemplate = this.handleSelectTemplate.bind(this)
+    this.handleSelectBody = this.handleSelectBody.bind(this)
   }
 
   static contextTypes = {}
@@ -55,6 +59,11 @@ class MainControl extends Component {
 
   handleSelectTemplate(value) {
     console.log(value)
+  }
+
+  handleSelectBody(value) {
+    if (value) this.props.view.select(value.value)
+    else this.props.view.deselect()
   }
 
   selectBodyRenderer(value) {
@@ -161,7 +170,7 @@ class MainControl extends Component {
           placeholder='Select a body to adjust...'
           value={this.props.selected}
           options={bodyOptions}
-          onChange={this.handleSelectTemplate}
+          onChange={this.handleSelectBody}
           optionRenderer={this.selectBodyRenderer}
           valueRenderer={this.selectBodyRenderer}
         />
@@ -182,6 +191,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    view: bindActionCreators(view, dispatch),
   }
 }
 
