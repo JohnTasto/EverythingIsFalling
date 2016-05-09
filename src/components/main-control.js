@@ -70,11 +70,17 @@ class MainControl extends Component {
   render() {
     //console.log(this.props)
     let templateOptions = []
+    let bodyOptions = []
     for (let optionKey in this.props.templates) {
-      templateOptions.push({
+      let option = {
         value: optionKey,
         label: optionKey[0].toUpperCase() + optionKey.substring(1),
-      })
+      }
+      if (this.props.bodies[optionKey]) {
+        bodyOptions.push(option)
+      } else {
+        templateOptions.push(option)
+      }
     }
     return (
       <div className='container-fluid' style={this.props.style}>
@@ -151,9 +157,10 @@ class MainControl extends Component {
         />
         <label>Selection:</label>
         <Select
-          name='select-template'
+          name='select-body'
           placeholder='Select a body to adjust...'
-          options={templateOptions}
+          value={this.props.selected}
+          options={bodyOptions}
           onChange={this.handleSelectTemplate}
           optionRenderer={this.selectBodyRenderer}
           valueRenderer={this.selectBodyRenderer}
@@ -167,7 +174,7 @@ function mapStateToProps(state) {
   return {
     // screen: state.screen.screen,
     // viewport: state.screen.viewport,
-    // selected: state.screen.selected,
+    selected: state.screen.selected,
     bodies: state.bodies,
     templates: state.templates,
   }
