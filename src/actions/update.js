@@ -12,9 +12,13 @@ export function update(dMs) {
 
   return (dispatch, getState) => {
     let { bodies, screen: { dragging } } = getState()
+    // make new body container
+    bodies = { ...bodies }
 
-    // clear forces
     for (let bodyKey in bodies) {
+      // make new body objects
+      bodies[bodyKey] = { ...bodies[bodyKey] }
+      // clear forces
       bodies[bodyKey].forces = {}
     }
 
