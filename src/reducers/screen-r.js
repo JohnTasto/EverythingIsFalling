@@ -31,11 +31,11 @@ export default function(screen = INITIAL_STATE, action) {
     case PAN_WINDOW:
       return { ...screen, viewport: { ...screen.viewport, min: action.min, max: action.max } }
     case SELECT_BODY:
-      return { ...screen, selected: action.body }
+      return { ...screen, selected: action.bodyKey }
     case HOVER_BODY:
-      return { ...screen, hovered: action.body }
+      return { ...screen, hovering: action.bodyKey }
     case DRAG_BODY:
-      return { ...screen, dragging: action.body }
+      return { ...screen, dragging: action.bodyKey }
   default:
     return screen
   }

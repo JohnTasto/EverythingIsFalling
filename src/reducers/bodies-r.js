@@ -3,6 +3,8 @@ import Vector from '../geometry/vector'
 import {
   REPLACE_BODIES,
   UPDATE_BODIES,
+  PLACE_BODY,
+  MOVE_BODY,
   DRAG_BODY,
 } from '../actions/types'
 
@@ -14,14 +16,32 @@ export default function(bodies = {}, action) {
       return { ...action.bodies }
     case UPDATE_BODIES:
       return { ...bodies, ...action.bodies }
+    case PLACE_BODY:
+      return {
+        ...bodies,
+        [action.bodyKey]: {
+          ...bodies[action.bodyKey],
+          position: action.position,
+        }
+      }
+    case MOVE_BODY:
+      let position = bodies[action.bodyKey].position.sub(action.offset)
+      return {
+        ...bodies,
+        [action.bodyKey]: {
+          ...bodies[action.bodyKey],
+          position,
+        }
+      }
     case DRAG_BODY:
-      if (action.body) {
-        let velocity = action.position.sub(bodies[action.body].position)
+      if (action.bodyKey) {
+        let position = bodies[action.bodyKey].position.sub(action.offset)
+        let velocity = position.sub(bodies[action.bodyKey].position)
         return {
           ...bodies,
-          [action.body]: {
-            ...bodies[action.body],
-            position: action.position,
+          [action.bodyKey]: {
+            ...bodies[action.bodyKey],
+            position,
             velocity,
           }
         }

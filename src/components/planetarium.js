@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import AnimationFrame from 'animation-frame'
 
 import Vector from '../geometry/vector'
-import * as screen from '../actions/screen'
+import * as view from '../actions/view'
 import * as update from '../actions/update'
+import * as mouse from '../actions/mouse'
 
 
 const FRAMERATE_INDEPENDENT_TIME = false
@@ -30,21 +31,21 @@ class Planetarium extends Component {
   handleEvent(e) {
     switch (e.type) {
       case 'resize':
-        this.props.screenA.resize(new Vector(window.innerWidth, window.innerHeight))
+        this.props.view.resize(new Vector(window.innerWidth, window.innerHeight))
         break
       case 'wheel':
-        this.props.screenA.zoom(e.deltaY, new Vector(e.clientX, e.clientY))
+        this.props.mouse.wheel(e.deltaY, new Vector(e.clientX, e.clientY))
         e.preventDefault()
         break
       case 'mousedown':
-        this.props.screenA.mouseDown(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseDown(new Vector(e.clientX, e.clientY))
         window.addEventListener('mouseup', this, false)
         break
       case 'mousemove':
-        this.props.screenA.mouseMove(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseMove(new Vector(e.clientX, e.clientY))
         break
       case 'mouseup':
-        this.props.screenA.mouseUp(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseUp(new Vector(e.clientX, e.clientY))
         window.removeEventListener('mouseup', this, false)
         break
     }
@@ -84,15 +85,15 @@ class Planetarium extends Component {
   }
 
   update(currentMs) {
-    this.props.screenA.checkDragging()
-    this.props.screenA.checkHover()
+    this.props.mouse.checkDragging()
+    this.props.mouse.checkHovering()
 
     if (this.props.dragging) {
       this.canvas.style.cursor = 'pointer'
       this.canvas.style.cursor = '-moz-grabbing'
       this.canvas.style.cursor = '-webkit-grabbing'
       this.canvas.style.cursor = 'grabbing'
-    } else if (this.props.hovered) {
+    } else if (this.props.hovering) {
       this.canvas.style.cursor = 'pointer'
       this.canvas.style.cursor = '-moz-grab'
       this.canvas.style.cursor = '-webkit-grab'
@@ -171,7 +172,7 @@ class Planetarium extends Component {
     if (bodyKey === this.props.selected) {
       this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
     }
-    if (bodyKey === this.props.hovered) {
+    if (bodyKey === this.props.hovering) {
       this.drawCircle(ctx, body.radius, 'rgba(255,255,255,.25)')
     }
 
@@ -246,7 +247,7 @@ function mapStateToProps(state) {
     screen: state.screen.screen,
     viewport: state.screen.viewport,
     selected: state.screen.selected,
-    hovered: state.screen.hovered,
+    hovering: state.screen.hovering,
     dragging: state.screen.dragging,
     bodies: state.bodies,
   }
@@ -254,8 +255,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    screenA: bindActionCreators(screen, dispatch),
+    view: bindActionCreators(view, dispatch),
     update: bindActionCreators(update, dispatch),
+    mouse: bindActionCreators(mouse, dispatch),
   }
 }
 
