@@ -142,6 +142,10 @@ class Planetarium extends Component {
 
     ctx.translate(body.position.x, body.position.y)
 
+    // scale radii
+    ctx.save()
+    ctx.scale(this.props.options.radiiScale, this.props.options.radiiScale)
+
     // scale images
     ctx.save()
     ctx.scale(
@@ -175,6 +179,9 @@ class Planetarium extends Component {
     if (bodyKey === this.props.hovering) {
       this.drawCircle(ctx, body.radius, 'rgba(255,255,255,.25)')
     }
+
+    // undo scale radii
+    ctx.restore()
 
     // draw force and velocity vectors
     let vectors = true

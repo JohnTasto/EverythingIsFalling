@@ -11,7 +11,7 @@ export function update(dMs) {
   let bounce = true
 
   return (dispatch, getState) => {
-    let { bodies, screen: { dragging } } = getState()
+    let { bodies, screen: { dragging }, options: { radiiScale } } = getState()
     // make new body container
     bodies = { ...bodies }
 
@@ -39,7 +39,7 @@ export function update(dMs) {
           // bounce
           if (bounce) {
             // bounce off planets
-            let overlap = (body.radius + otherBody.radius) - Math.sqrt(distanceSquared)
+            let overlap = (body.radius * radiiScale + otherBody.radius * radiiScale) - Math.sqrt(distanceSquared)
             if (overlap > 0 && Math.abs(otherBody.velocity.subtract(body.velocity).angle() - angle) > Math.PI / 2) {
               let x1 = body.position
               let x2 = otherBody.position
@@ -63,8 +63,8 @@ export function update(dMs) {
 
               // de-overlap bodies
               // large velocity loss
-              // body.position =      x1.add(Vector.fromPolar(angle + Math.PI, overlap * (body.radius/(body.radius + otherBody.radius))))
-              // otherBody.position = x2.add(Vector.fromPolar(angle, overlap * (otherBody.radius/(body.radius + otherBody.radius))))
+              body.position =      x1.add(Vector.fromPolar(angle + Math.PI, overlap * (     body.radius*radiiScale / (body.radius*radiiScale + otherBody.radius*radiiScale))))
+              otherBody.position = x2.add(Vector.fromPolar(angle,           overlap * (otherBody.radius*radiiScale / (body.radius*radiiScale + otherBody.radius*radiiScale))))
 
               // skip adding gravitational forces, replacing this update
               // no velocity loss
@@ -84,22 +84,22 @@ export function update(dMs) {
         if (bounce) {
           // bounce off window
           let viewport = { ...getState().screen.viewport }
-          if (body.position.x + body.radius > viewport.max.x) {
+          if (body.position.x + body.radius * radiiScale > viewport.max.x) {
             body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
             body.bounced = true
             //body.position = new Vector(viewport.max.x - body.radius, body.position.y)
           }
-          if (body.position.x - body.radius < viewport.min.x) {
+          if (body.position.x - body.radius * radiiScale < viewport.min.x) {
             body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
             body.bounced = true
             //body.position = new Vector(viewport.min.x + body.radius, body.position.y)
           }
-          if (body.position.y + body.radius > viewport.max.y) {
+          if (body.position.y + body.radius * radiiScale > viewport.max.y) {
             body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
             body.bounced = true
             //body.position = new Vector(body.position.x, viewport.max.y - body.radius)
           }
-          if (body.position.y - body.radius < viewport.min.y) {
+          if (body.position.y - body.radius * radiiScale < viewport.min.y) {
             body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
             body.bounced = true
             //body.position = new Vector(body.position.x, viewport.min.y + body.radius)

@@ -31,9 +31,6 @@ const PAUSE_HOVER = 'PAUSE_HOVER'
 class MainControl extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      radiiScale: 1,
-    }
     this.handleSpeedChange = this.handleSpeedChange.bind(this)
     this.handleFalloffChange = this.handleFalloffChange.bind(this)
     this.handleRadiiScaleChange = this.handleRadiiScaleChange.bind(this)
@@ -52,7 +49,6 @@ class MainControl extends Component {
   // }
 
   handleSpeedChange(value) {
-    console.log(value)
     this.props.set.speed(value)
   }
 
@@ -61,8 +57,7 @@ class MainControl extends Component {
   }
 
   handleRadiiScaleChange(value) {
-    console.log(value)
-    this.setState({ radiiScale: value })
+    this.props.set.radiiScale(value)
   }
 
   handleRadiiLogChange(value) {
@@ -138,9 +133,9 @@ class MainControl extends Component {
         <label htmlFor='radii-scale'>Radii scale factor:</label>
         <LogSlider
           id='radii-scale'
-          defaultValue={this.state.radiiScale}
-          min={1}
-          max={100}
+          defaultValue={this.props.options.radiiScale}
+          min={0.1}
+          max={10}
           onChange={this.handleRadiiScaleChange}
         />
         <CheckboxButtonGroup

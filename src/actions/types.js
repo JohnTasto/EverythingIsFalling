@@ -12,3 +12,4 @@ export const MOVE_BODY = 'MOVE_BODY'
 export const DRAG_BODY = 'DRAG_BODY'
 
 export const SET_SPEED = 'SET_SPEED'
+export const SET_RADII_SCALE = 'SET_RADII_SCALE'
