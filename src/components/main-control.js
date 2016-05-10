@@ -12,6 +12,22 @@ import * as view from '../actions/view'
 import * as options from '../actions/options'
 
 
+const ATTRACTION_INVERSE_SQUARED = 'ATTRACTION_INVERSE_SQUARED'
+const ATTRACTION_INVERSE_LINEAR = 'ATTRACTION_INVERSE_LINEAR'
+const ATTRACTION_CONSTANT = 'ATTRACTION_CONSTANT'
+const ATTRACTION_LINEAR = 'ATTRACTION_LINEAR'
+const ATTRACTION_SQUARED = 'ATTRACTION_SQUARED'
+const ATTRACTION_NONE = 'ATTRACTION_NONE'
+
+const SCALE_LOGARITHMIC = 'SCALE_LOGARITHMIC'
+
+const BOUNCE_BODIES = 'BOUNCE_BODIES'
+const BOUNCE_SCREEN = 'BOUNCE_SCREEN'
+
+const SHOW_VECTORS = 'SHOW_VECTORS'
+const PAUSE_HOVER = 'PAUSE_HOVER'
+
+
 class MainControl extends Component {
   constructor(props) {
     super(props)
@@ -107,13 +123,13 @@ class MainControl extends Component {
           name='attraction-falloff'
           options={[
             [
-              { text: <div>r<sup>-2</sup></div>, value: 'inverse-squared', tip: 'Inverse squared (gravity)' },
-              { text: <div>r<sup>-1</sup></div>, value: 'inverse-linear', tip: 'Inverse linear' },
-              { text: <div>r<sup>0</sup></div>, value: 'constant', tip: 'Constant' },
-              { text: <div>r<sup>1</sup></div>, value: 'linear', tip: 'Linear (spring)' },
-              { text: <div>r<sup>2</sup></div>, value: 'squared', tip: 'Squared' },
+              { text: <div>r<sup>-2</sup></div>, value: ATTRACTION_INVERSE_SQUARED, tip: 'Inverse squared (gravity)' },
+              { text: <div>r<sup>-1</sup></div>, value: ATTRACTION_INVERSE_LINEAR, tip: 'Inverse linear' },
+              { text: <div>r<sup>0</sup></div>, value: ATTRACTION_CONSTANT, tip: 'Constant' },
+              { text: <div>r<sup>1</sup></div>, value: ATTRACTION_LINEAR, tip: 'Linear (spring)' },
+              { text: <div>r<sup>2</sup></div>, value: ATTRACTION_SQUARED, tip: 'Squared' },
             ], [
-              { text: 'No gravity', value: 'no-gravity' },
+              { text: 'No gravity', value: ATTRACTION_NONE },
             ],
           ]}
           defaultChecked='inverse-squared'
@@ -127,32 +143,29 @@ class MainControl extends Component {
           max={100}
           onChange={this.handleRadiiScaleChange}
         />
-        <RadioButtonGroup
-          name='radii-log'
-          options={[[
-            { text: 'Actual size', value: 'constant' },
-            { text: 'Logarithmic size', value: 'log' },
-          ]]}
-          defaultChecked={'constant'}
-          onChange={this.handleRadiiLogChange}
-        />
         <CheckboxButtonGroup
           options={[
-            { text: 'Bounce off bodies', value: 'bounce-bodies', defaultChecked: true },
-            { text: 'Bounce off screen', value: 'bounce-screen', defaultChecked: true },
+            { text: 'Logarithmicly scale radii', value: SCALE_LOGARITHMIC, defaultChecked: false },
           ]}
           onChange={this.handleButtonChange}
         />
         <CheckboxButtonGroup
           options={[
-            { text: 'Show vectors', value: 'show-vectors' },
+            { text: 'Bounce off bodies', value: BOUNCE_BODIES, defaultChecked: true },
+            { text: 'Bounce off screen', value: BOUNCE_SCREEN, defaultChecked: true },
+          ]}
+          onChange={this.handleButtonChange}
+        />
+        <CheckboxButtonGroup
+          options={[
+            { text: 'Show vectors', value: SHOW_VECTORS },
           ]}
           onChange={this.handleButtonChange}
         />
         <span style={{ paddingLeft: '1rem' }} />
         <CheckboxButtonGroup
           options={[
-            { text: 'Pause on hover', value: 'pause-hover', defaultChecked: true },
+            { text: 'Pause on hover', value: PAUSE_HOVER, defaultChecked: true },
           ]}
           onChange={this.handleButtonChange}
         />
