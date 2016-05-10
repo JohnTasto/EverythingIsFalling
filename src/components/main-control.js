@@ -98,8 +98,8 @@ class MainControl extends Component {
         <LogSlider
           id='speed'
           defaultValue={this.state.speed}
-          min={0}
-          max={100000000000000}
+          min={0.1}
+          max={10}
           onChange={this.handleSpeedChange}
         />
         <label>Attraction falloff:</label>
@@ -123,8 +123,8 @@ class MainControl extends Component {
         <LogSlider
           id='radii-scale'
           defaultValue={this.state.radiiScale}
-          min={0}
-          max={100000000000000}
+          min={1}
+          max={100}
           onChange={this.handleRadiiScaleChange}
         />
         <RadioButtonGroup

@@ -13,18 +13,18 @@ class LogSlider extends Component {
   }
 
   formatter(value) {
-    return value * value
+    return Math.round(Math.exp(value / 10000) * 10) / 10
   }
 
   render() {
     return (
       <div style={{ marginBottom: '10px' }}>
         <Slider
-          defaultValue={Math.sqrt(this.props.defaultValue)}
-          min={Math.sqrt(this.props.min)}
-          max={Math.sqrt(this.props.max)}
+          defaultValue={Math.log(this.props.defaultValue) * 10000}
+          min={Math.log(this.props.min) * 10000}
+          max={Math.log(this.props.max) * 10000}
           tipFormatter={this.formatter}
-          onChange={value => this.props.onChange(value * value)}
+          onChange={value => this.props.onChange(Math.exp(value / 10000))}
         />
       </div>
     )
