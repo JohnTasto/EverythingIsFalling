@@ -124,7 +124,7 @@ export function update(dMs) {
           body.bounced = false
         }
 
-        body.position = body.position.add(body.velocity)
+        body.position = body.position.add(body.velocity.scale(dMs))
       }
     }
 

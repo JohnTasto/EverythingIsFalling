@@ -9,14 +9,14 @@ import RadioButtonGroup from './radio-button-group'
 import CheckboxButtonGroup from './checkbox-button-group'
 
 import * as view from '../actions/view'
+import * as options from '../actions/options'
 
 
 class MainControl extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      speed: 50,
-      radiiScale: 50,
+      radiiScale: 1,
     }
     this.handleSpeedChange = this.handleSpeedChange.bind(this)
     this.handleFalloffChange = this.handleFalloffChange.bind(this)
@@ -37,7 +37,7 @@ class MainControl extends Component {
 
   handleSpeedChange(value) {
     console.log(value)
-    this.setState({ speed: value })
+    this.props.set.speed(value)
   }
 
   handleFalloffChange(value) {
@@ -97,7 +97,7 @@ class MainControl extends Component {
         <label htmlFor='speed'>Speed:</label>
         <LogSlider
           id='speed'
-          defaultValue={this.state.speed}
+          defaultValue={this.props.options.speed}
           min={0.1}
           max={10}
           onChange={this.handleSpeedChange}
@@ -186,12 +186,14 @@ function mapStateToProps(state) {
     selected: state.screen.selected,
     bodies: state.bodies,
     templates: state.templates,
+    options: state.options,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     view: bindActionCreators(view, dispatch),
+    set: bindActionCreators(options, dispatch),
   }
 }
 

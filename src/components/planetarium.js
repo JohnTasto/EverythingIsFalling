@@ -104,9 +104,9 @@ class Planetarium extends Component {
 
     if (FRAMERATE_INDEPENDENT_TIME) {
       this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
-      this.props.update.update(this.state.dMs, this.props.bodies)
+      this.props.update.update(this.state.dMs * this.props.options.speed, this.props.bodies)
     } else {
-      this.props.update.update(1000, this.props.bodies)
+      this.props.update.update(16.666666 * this.props.options.speed, this.props.bodies)
     }
 
     let ctx = this.canvas.getContext('2d')
@@ -250,6 +250,7 @@ function mapStateToProps(state) {
     hovering: state.screen.hovering,
     dragging: state.screen.dragging,
     bodies: state.bodies,
+    options: state.options,
   }
 }
 
