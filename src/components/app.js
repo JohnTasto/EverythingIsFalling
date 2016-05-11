@@ -13,25 +13,34 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      wrapperStyle: {
-        height: '100vh',
-        width: '100vw',
-      },
-      mainControlStyle: {
-        width: `${CONTROL_PANEL_WIDTH}px`,
-        height: '100%',
-        float: 'left',
-        background: 'rgb(63,95,127)',
-      },
-      planetariumWrapperStyle: {
-        marginLeft: `${CONTROL_PANEL_WIDTH}px`,
-        height: '100%',
-      },
-      planetariumStyle: {
-        background: 'url("/img/stars.jpg") center',
-        backgroundSize: 'cover',
-        width: '100%',
-        height: '100%',
+      style: {
+        wrapper: {
+          display: 'flex',
+          height: '100vh',
+          width: '100vw',
+        },
+        mainControlWrapper: {
+          flex: `0 0 ${CONTROL_PANEL_WIDTH}px`,
+          position: 'relative',
+        },
+        mainControl: {
+          position: 'absolute',
+          height: '100%',
+          width: `${CONTROL_PANEL_WIDTH}`,
+          right: '0',
+          padding: '1.5rem',
+          background: 'rgb(63,95,127)',
+        },
+        planetariumWrapper: {
+          flex: '1 0 0%',
+          height: '100%',
+        },
+        planetarium: {
+          background: 'url("/img/stars.jpg") center',
+          backgroundSize: 'cover',
+          width: '100%',
+          height: '100%',
+        },
       },
     }
   }
@@ -42,15 +51,17 @@ class App extends Component {
 
   render() {
     return (
-      <div style={this.state.wrapperStyle}>
-        <MainControl style={this.state.mainControlStyle}/>
-        <div style={this.state.planetariumWrapperStyle}>
-          <Planetarium style={this.state.planetariumStyle} />
+      <div style={this.state.style.wrapper}>
+        <div style={this.state.style.mainControlWrapper}>
+          <MainControl style={this.state.style.mainControl}/>
+        </div>
+        <div style={this.state.style.planetariumWrapper}>
+          <Planetarium style={this.state.style.planetarium} />
         </div>
       </div>
     )
   }
 }
-//        <Planetarium style={this.state.planetariumStyle}/>
+
 
 export default connect()(App)

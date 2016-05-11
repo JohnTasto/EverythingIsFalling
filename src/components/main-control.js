@@ -105,8 +105,8 @@ class MainControl extends Component {
       }
     }
     return (
-      <div className='container-fluid' style={this.props.style}>
-        <h5 style={{ marginTop: '10px' }}>EverythingIsFalling</h5>
+      <div style={this.props.style}>
+        <h5>EverythingIsFalling</h5>
         <label htmlFor='speed'>Speed:</label>
         <LogSlider
           id='speed'
