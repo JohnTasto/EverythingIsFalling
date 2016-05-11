@@ -4,6 +4,15 @@ import { connect } from 'react-redux'
 
 import Select from 'react-select'
 
+import {
+  ATTRACTION_INVERSE_SQUARED,
+  ATTRACTION_INVERSE_LINEAR,
+  ATTRACTION_CONSTANT,
+  ATTRACTION_LINEAR,
+  ATTRACTION_SQUARED,
+  ATTRACTION_NONE,
+} from '../constants'
+
 import LogSlider from './log-slider'
 import RadioButtonGroup from './radio-button-group'
 import CheckboxButtonGroup from './checkbox-button-group'
@@ -11,13 +20,6 @@ import CheckboxButtonGroup from './checkbox-button-group'
 import * as view from '../actions/view'
 import * as options from '../actions/options'
 
-
-const ATTRACTION_INVERSE_SQUARED = 'ATTRACTION_INVERSE_SQUARED'
-const ATTRACTION_INVERSE_LINEAR = 'ATTRACTION_INVERSE_LINEAR'
-const ATTRACTION_CONSTANT = 'ATTRACTION_CONSTANT'
-const ATTRACTION_LINEAR = 'ATTRACTION_LINEAR'
-const ATTRACTION_SQUARED = 'ATTRACTION_SQUARED'
-const ATTRACTION_NONE = 'ATTRACTION_NONE'
 
 const SCALE_LOGARITHMIC = 'SCALE_LOGARITHMIC'
 
@@ -127,7 +129,7 @@ class MainControl extends Component {
               { text: 'No gravity', value: ATTRACTION_NONE },
             ],
           ]}
-          defaultChecked='inverse-squared'
+          defaultChecked={ATTRACTION_INVERSE_SQUARED}
           onChange={this.handleFalloffChange}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>

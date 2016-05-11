@@ -18,12 +18,6 @@ class Planetarium extends Component {
     this.state = {
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
-      canvasStyle: {
-        background: 'url("/img/stars.jpg") center',
-        backgroundSize: 'cover',
-        width: '100%',
-        height: '100%',
-      },
     }
     if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
   }
@@ -31,21 +25,22 @@ class Planetarium extends Component {
   handleEvent(e) {
     switch (e.type) {
       case 'resize':
-        this.props.view.resize(new Vector(window.innerWidth, window.innerHeight))
+        let bounds = this.canvas.getBoundingClientRect()
+        this.props.view.resize(new Vector(bounds.width, bounds.height))
         break
       case 'wheel':
-        this.props.mouse.wheel(e.deltaY, new Vector(e.clientX, e.clientY))
+        this.props.mouse.wheel(e.deltaY, new Vector(e.offsetX, e.offsetY))
         e.preventDefault()
         break
       case 'mousedown':
-        this.props.mouse.mouseDown(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseDown(new Vector(e.offsetX, e.offsetY))
         window.addEventListener('mouseup', this, false)
         break
       case 'mousemove':
-        this.props.mouse.mouseMove(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseMove(new Vector(e.offsetX, e.offsetY))
         break
       case 'mouseup':
-        this.props.mouse.mouseUp(new Vector(e.clientX, e.clientY))
+        this.props.mouse.mouseUp(new Vector(e.offsetX, e.offsetY))
         window.removeEventListener('mouseup', this, false)
         break
     }
@@ -239,7 +234,7 @@ class Planetarium extends Component {
 
   render() {
     return (
-      <canvas style={this.state.canvasStyle}
+      <canvas style={this.props.style}
         width={this.props.screen.size.x * this.state.ratio}
         height={this.props.screen.size.y * this.state.ratio}
         ref={(ref) => this.canvas = ref}>

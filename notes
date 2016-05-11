@@ -3,7 +3,9 @@ General settings:
 - log slider: speed
   radio:      square, linear, constant, inverse linear, inverse square
 - log slider: radii scale
-  radio:      linear or logarithmic radii
+    if bounce-bodies, limit radii scaling so they can't overlap
+  checkbox:   logarithmic radii
+    disable logarithmic button if bodies will overlap
   checkbox:   bounce bodies, bounce screen, show vectors, pause on hover
   select:     add body
 - select:     edit body

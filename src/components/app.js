@@ -5,6 +5,8 @@ import { init } from '../actions/bodies'
 import Planetarium from './planetarium'
 import MainControl from './main-control'
 
+import { CONTROL_PANEL_WIDTH } from '../constants'
+
 
 class App extends Component {
 
@@ -12,15 +14,24 @@ class App extends Component {
     super(props)
     this.state = {
       wrapperStyle: {
-        position: 'relative',
+        height: '100vh',
+        width: '100vw',
       },
       mainControlStyle: {
-        position: 'absolute',
-        background: 'rgba(63,95,127,.75)',
-        width: '320px',
-        right: '2rem',
-        top: '2rem',
-        borderRadius: '0.25rem'
+        width: `${CONTROL_PANEL_WIDTH}px`,
+        height: '100%',
+        float: 'left',
+        background: 'rgb(63,95,127)',
+      },
+      planetariumWrapperStyle: {
+        marginLeft: `${CONTROL_PANEL_WIDTH}px`,
+        height: '100%',
+      },
+      planetariumStyle: {
+        background: 'url("/img/stars.jpg") center',
+        backgroundSize: 'cover',
+        width: '100%',
+        height: '100%',
       },
     }
   }
@@ -32,12 +43,14 @@ class App extends Component {
   render() {
     return (
       <div style={this.state.wrapperStyle}>
-        <Planetarium />
         <MainControl style={this.state.mainControlStyle}/>
+        <div style={this.state.planetariumWrapperStyle}>
+          <Planetarium style={this.state.planetariumStyle} />
+        </div>
       </div>
     )
   }
 }
-
+//        <Planetarium style={this.state.planetariumStyle}/>
 
 export default connect()(App)
