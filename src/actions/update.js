@@ -17,10 +17,8 @@ const G = 6.67308e-11
 
 
 export function update(dMs) {
-  let bounce = true
-
   return (dispatch, getState) => {
-    let { bodies, screen: { dragging }, options: { falloff, radiiScale } } = getState()
+    let { bodies, screen: { dragging }, options: { falloff, radiiScale, bounceBodies, bounceScreen } } = getState()
     // make new body container
     bodies = { ...bodies }
 
@@ -66,7 +64,7 @@ export function update(dMs) {
           }
 
           // bounce
-          if (bounce) {
+          if (bounceBodies) {
             // bounce off planets
             let overlap = (body.radius * radiiScale + otherBody.radius * radiiScale) - Math.sqrt(distanceSquared)
             if (overlap > 0 && Math.abs(otherBody.velocity.subtract(body.velocity).angle() - angle) > Math.PI / 2) {
@@ -110,7 +108,7 @@ export function update(dMs) {
       }
 
       if (dragging !== bodyKey) {
-        if (bounce) {
+        if (bounceScreen) {
           // bounce off window
           let viewport = { ...getState().screen.viewport }
           if (body.position.x + body.radius * radiiScale > viewport.max.x) {

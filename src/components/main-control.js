@@ -37,7 +37,7 @@ class MainControl extends Component {
     this.handleFalloffChange = this.handleFalloffChange.bind(this)
     this.handleRadiiScaleChange = this.handleRadiiScaleChange.bind(this)
     this.handleRadiiLogChange = this.handleRadiiLogChange.bind(this)
-    this.handleButtonChange = this.handleButtonChange.bind(this)
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
     this.handleSelectTemplate = this.handleSelectTemplate.bind(this)
     this.handleSelectBody = this.handleSelectBody.bind(this)
   }
@@ -66,8 +66,15 @@ class MainControl extends Component {
     console.log(value)
   }
 
-  handleButtonChange(value) {
-    console.log(value)
+  handleCheckboxChange(value, checked) {
+    switch (value) {
+      case BOUNCE_BODIES:
+        this.props.set.bounceBodies(checked)
+        break
+      case BOUNCE_SCREEN:
+        this.props.set.bounceScreen(checked)
+        break
+    }
   }
 
   handleSelectTemplate(value) {
@@ -90,7 +97,6 @@ class MainControl extends Component {
   }
 
   render() {
-    //console.log(this.props)
     let templateOptions = []
     let bodyOptions = []
     for (let optionKey in this.props.templates) {
@@ -142,29 +148,29 @@ class MainControl extends Component {
         />
         <CheckboxButtonGroup
           options={[
-            { text: 'Logarithmicly scale radii', value: SCALE_LOGARITHMIC, defaultChecked: false },
+            { text: 'Logarithmicly scale radii', value: SCALE_LOGARITHMIC, checked: false },
           ]}
-          onChange={this.handleButtonChange}
+          onChange={this.handleCheckboxChange}
         />
         <CheckboxButtonGroup
           options={[
-            { text: 'Bounce off bodies', value: BOUNCE_BODIES, defaultChecked: true },
-            { text: 'Bounce off screen', value: BOUNCE_SCREEN, defaultChecked: true },
+            { text: 'Bounce off bodies', value: BOUNCE_BODIES, checked: this.props.options.bounceBodies },
+            { text: 'Bounce off screen', value: BOUNCE_SCREEN, checked: this.props.options.bounceScreen },
           ]}
-          onChange={this.handleButtonChange}
+          onChange={this.handleCheckboxChange}
         />
         <CheckboxButtonGroup
           options={[
-            { text: 'Show vectors', value: SHOW_VECTORS },
+            { text: 'Show vectors', value: SHOW_VECTORS, checked: false },
           ]}
-          onChange={this.handleButtonChange}
+          onChange={this.handleCheckboxChange}
         />
         <span style={{ paddingLeft: '1rem' }} />
         <CheckboxButtonGroup
           options={[
-            { text: 'Pause on hover', value: PAUSE_HOVER, defaultChecked: true },
+            { text: 'Pause on hover', value: PAUSE_HOVER, checked: true },
           ]}
-          onChange={this.handleButtonChange}
+          onChange={this.handleCheckboxChange}
         />
         <Select
           name='select-template'

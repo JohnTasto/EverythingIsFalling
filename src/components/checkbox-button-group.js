@@ -8,22 +8,12 @@ import 'rc-tooltip/assets/bootstrap.css'
 class CheckboxButtonGroup extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      checks: this.props.options.map(option => option.defaultChecked)
-    }
     this.renderCheckbox = this.renderCheckbox.bind(this)
   }
 
   static propTypes = {
     options: PropTypes.arrayOf(PropTypes.object).isRequired,
     onChange: PropTypes.func.isRequired,
-  }
-
-  handleChange(index, value, event) {
-    let checks = this.state.checks
-    checks[index] = !checks[index]
-    this.setState({ checks })
-    this.props.onChange(value)
   }
 
   renderCheckbox(option, index) {
@@ -37,13 +27,13 @@ class CheckboxButtonGroup extends Component {
         trigger={option.tip ? ['hover'] : []}
       >
         <label
-          className={classNames('btn', 'btn-primary', { active: this.state.checks[index] })}
+          className={classNames('btn', 'btn-primary', { active: option.checked })}
         >
           <input
             type='checkbox'
-            checked={this.state.checks[index]}
+            checked={option.checked}
             autoComplete='off'
-            onChange={this.handleChange.bind(this, index, option.value)}
+            onChange={() => this.props.onChange(option.value, !option.checked)}
           />
           {option.text}
         </label>
