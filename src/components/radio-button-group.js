@@ -8,32 +8,18 @@ import 'rc-tooltip/assets/bootstrap.css'
 class RadioButtonGroup extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
-    let options = this.props.options
-    for (let g in options) {
-      for (let o in options[g]) {
-        if (options[g][o].value === this.props.defaultChecked) {
-          this.state.gChecked = +g
-          this.state.oChecked = +o
-        }
-      }
-    }
     this.renderGroup = this.renderGroup.bind(this)
+    this.renderRadio = this.renderRadio.bind(this)
   }
 
   static propTypes = {
     name: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
-    defaultChecked: PropTypes.string.isRequired,
+    checked: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
   }
 
-  handleChange(gIndex, oIndex, value, event) {
-    this.setState({ gChecked: gIndex, oChecked: oIndex })
-    this.props.onChange(value)
-  }
-
-  renderRadio(gIndex, option, oIndex) {
+  renderRadio(option) {
     return (
       <Tooltip
         key={option.value}
@@ -47,15 +33,15 @@ class RadioButtonGroup extends Component {
           className={classNames(
             'btn',
             'btn-primary',
-            { active: gIndex === this.state.gChecked && oIndex === this.state.oChecked },
+            { active: option.value === this.props.checked },
           )}
         >
           <input
             type='radio'
             name={this.props.name}
-            checked={gIndex === this.state.gChecked && oIndex === this.state.oChecked}
+            checked={option.value === this.props.checked}
             autoComplete='off'
-            onChange={this.handleChange.bind(this, gIndex, oIndex, option.value)}
+            onChange={() => this.props.onChange(option.value)}
           />
           {option.text}
         </label>
@@ -71,7 +57,7 @@ class RadioButtonGroup extends Component {
         data-toggle='buttons'
         style={gIndex ? { marginLeft: '1em' } : {} }
       >
-        {optionGroup.map(this.renderRadio.bind(this, gIndex))}
+        {optionGroup.map(this.renderRadio)}
       </div>
     )
   }

@@ -135,7 +135,7 @@ class MainControl extends Component {
               { text: 'No gravity', value: ATTRACTION_NONE },
             ],
           ]}
-          defaultChecked={this.props.options.falloff}
+          checked={this.props.options.falloff}
           onChange={this.handleFalloffChange}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>
