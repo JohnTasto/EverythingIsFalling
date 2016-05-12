@@ -5,22 +5,22 @@ import Tooltip from 'rc-tooltip'
 import 'rc-tooltip/assets/bootstrap.css'
 
 
-class RadioButtonGroup extends Component {
+class ButtonGroup extends Component {
   constructor(props) {
     super(props)
     this.renderGroup = this.renderGroup.bind(this)
-    this.renderRadio = this.renderRadio.bind(this)
+    this.renderButton = this.renderButton.bind(this)
   }
 
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
-    checked: PropTypes.string.isRequired,
+    checked: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     stretch: PropTypes.bool,
   }
 
-  renderRadio(option) {
+  renderButton(option) {
     return (
       <Tooltip
         key={option.value}
@@ -34,16 +34,16 @@ class RadioButtonGroup extends Component {
           className={classNames(
             'btn',
             'btn-primary',
-            { active: option.value === this.props.checked },
+            { active: option.checked || option.value === this.props.checked },
           )}
-          style={this.props.stretch ? { flex: '1' } : ''}
+          style={this.props.stretch ? { flex: '1 0 0%' } : ''}
         >
           <input
-            type='radio'
-            name={this.props.name}
-            checked={option.value === this.props.checked}
+            type={this.props.name ? 'radio' : 'checkbox'}
+            name={this.props.name || ''}
+            checked={option.checked || option.value === this.props.checked}
             autoComplete='off'
-            onChange={() => this.props.onChange(option.value)}
+            onChange={() => this.props.onChange(option.value, !option.checked)}
           />
           {option.text}
         </label>
@@ -55,7 +55,7 @@ class RadioButtonGroup extends Component {
     let style = {}
     if (gIndex) style.marginLeft = '1em'
     if (this.props.stretch) {
-      style.flex = '1'
+      style.flex = '1 0 0%'
       style.display = 'flex'
     }
     return (
@@ -65,7 +65,7 @@ class RadioButtonGroup extends Component {
         data-toggle='buttons'
         style={style}
       >
-        {optionGroup.map(this.renderRadio)}
+        {optionGroup.map(this.renderButton)}
       </div>
     )
   }
@@ -79,4 +79,4 @@ class RadioButtonGroup extends Component {
   }
 }
 
-export default RadioButtonGroup
+export default ButtonGroup

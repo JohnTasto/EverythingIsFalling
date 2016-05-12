@@ -14,8 +14,7 @@ import {
 } from '../constants'
 
 import LogSlider from './log-slider'
-import RadioButtonGroup from './radio-button-group'
-import CheckboxButtonGroup from './checkbox-button-group'
+import ButtonGroup from './button-group'
 
 import * as view from '../actions/view'
 import * as options from '../actions/options'
@@ -122,7 +121,7 @@ class MainControl extends Component {
           onChange={this.handleSpeedChange}
         />
         <label>Attraction falloff:</label>
-        <RadioButtonGroup
+        <ButtonGroup
           name='attraction-falloff'
           options={[
             [
@@ -147,14 +146,14 @@ class MainControl extends Component {
           max={10}
           onChange={this.handleRadiiScaleChange}
         />
-        <CheckboxButtonGroup
+        <ButtonGroup
           options={[[
             { text: 'Logarithmicly scale radii', value: SCALE_LOGARITHMIC, checked: false },
           ]]}
           onChange={this.handleCheckboxChange}
           stretch={true}
         />
-        <CheckboxButtonGroup
+        <ButtonGroup
           options={[
             [{ text: 'Bounce off bodies', value: BOUNCE_BODIES, checked: this.props.options.bounceBodies }],
             [{ text: 'Bounce off screen', value: BOUNCE_SCREEN, checked: this.props.options.bounceScreen }],
@@ -162,7 +161,7 @@ class MainControl extends Component {
           onChange={this.handleCheckboxChange}
           stretch={true}
         />
-        <CheckboxButtonGroup
+        <ButtonGroup
           options={[[
             { text: 'Show vectors', value: SHOW_VECTORS, checked: false },
           ]]}
@@ -170,7 +169,7 @@ class MainControl extends Component {
           stretch={true}
         />
         <span style={{ paddingLeft: '1rem' }} />
-        <CheckboxButtonGroup
+        <ButtonGroup
           options={[[
             { text: 'Pause on hover', value: PAUSE_HOVER, checked: true },
           ]]}
