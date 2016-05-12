@@ -36,7 +36,7 @@ class App extends Component {
           height: '100%',
         },
         planetarium: {
-          background: 'url("/img/stars.jpg") center',
+          background: 'url("img/stars.jpg") center',
           backgroundSize: 'cover',
           width: '100%',
           height: '100%',

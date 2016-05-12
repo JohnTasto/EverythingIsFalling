@@ -13,6 +13,7 @@ const FRAMERATE_INDEPENDENT_TIME = false
 
 
 class Planetarium extends Component {
+
   constructor(props) {
     super(props)
     this.state = {

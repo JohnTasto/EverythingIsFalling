@@ -6,11 +6,6 @@ import 'rc-tooltip/assets/bootstrap.css'
 
 
 class ButtonGroup extends Component {
-  constructor(props) {
-    super(props)
-    this.renderGroup = this.renderGroup.bind(this)
-    this.renderButton = this.renderButton.bind(this)
-  }
 
   static propTypes = {
     name: PropTypes.string,
@@ -20,7 +15,7 @@ class ButtonGroup extends Component {
     stretch: PropTypes.bool,
   }
 
-  renderButton(option) {
+  renderButton = (option) => {
     return (
       <Tooltip
         key={option.value}
@@ -51,7 +46,7 @@ class ButtonGroup extends Component {
     )
   }
 
-  renderGroup(optionGroup, gIndex) {
+  renderGroup = (optionGroup, gIndex) => {
     let style = {}
     if (gIndex) style.marginLeft = '1em'
     if (this.props.stretch) {
@@ -78,5 +73,6 @@ class ButtonGroup extends Component {
     )
   }
 }
+
 
 export default ButtonGroup

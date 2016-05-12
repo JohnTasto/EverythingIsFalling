@@ -5,6 +5,7 @@ import 'rc-slider/assets/index.css'
 
 
 class LogSlider extends Component {
+
   static propTypes = {
     defaultValue: PropTypes.number.isRequired,
     min: PropTypes.number.isRequired,
@@ -30,5 +31,6 @@ class LogSlider extends Component {
     )
   }
 }
+
 
 export default LogSlider

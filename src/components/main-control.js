@@ -32,42 +32,24 @@ const SHOW_VECTORS = 'SHOW_VECTORS'
 
 
 class MainControl extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSpeedChange = this.handleSpeedChange.bind(this)
-    this.handleFalloffChange = this.handleFalloffChange.bind(this)
-    this.handleRadiiScaleChange = this.handleRadiiScaleChange.bind(this)
-    this.handleRadiiLogChange = this.handleRadiiLogChange.bind(this)
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
-    this.handleSelectTemplate = this.handleSelectTemplate.bind(this)
-    this.handleSelectBody = this.handleSelectBody.bind(this)
-  }
 
-  static contextTypes = {}
-  static propTypes = {}
-  static defaultProps = {}
-
-  // shouldComponentUpdate() {
-  //   return false
-  // }
-
-  handleSpeedChange(value) {
+  handleSpeedChange = (value) => {
     this.props.set.speed(value)
   }
 
-  handleFalloffChange(value) {
+  handleFalloffChange = (value) => {
     this.props.set.falloff(value)
   }
 
-  handleRadiiScaleChange(value) {
+  handleRadiiScaleChange = (value) => {
     this.props.set.radiiScale(value)
   }
 
-  handleRadiiLogChange(value) {
+  handleRadiiLogChange = (value) => {
     console.log(value)
   }
 
-  handleCheckboxChange(value, checked) {
+  handleCheckboxChange = (value, checked) => {
     switch (value) {
       case PAUSE:
         this.props.set.pause(checked)
@@ -84,11 +66,11 @@ class MainControl extends Component {
     }
   }
 
-  handleSelectTemplate(value) {
+  handleSelectTemplate = (value) => {
     console.log(value)
   }
 
-  handleSelectBody(value) {
+  handleSelectBody = (value) => {
     if (value) this.props.view.select(value.value)
     else this.props.view.deselect()
   }
@@ -207,6 +189,7 @@ class MainControl extends Component {
     )
   }
 }
+
 
 function mapStateToProps(state) {
   return {
