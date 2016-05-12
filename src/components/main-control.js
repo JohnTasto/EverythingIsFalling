@@ -137,6 +137,7 @@ class MainControl extends Component {
           ]}
           checked={this.props.options.falloff}
           onChange={this.handleFalloffChange}
+          stretch={true}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>
         <LogSlider
@@ -147,30 +148,34 @@ class MainControl extends Component {
           onChange={this.handleRadiiScaleChange}
         />
         <CheckboxButtonGroup
-          options={[
+          options={[[
             { text: 'Logarithmicly scale radii', value: SCALE_LOGARITHMIC, checked: false },
-          ]}
+          ]]}
           onChange={this.handleCheckboxChange}
+          stretch={true}
         />
         <CheckboxButtonGroup
           options={[
-            { text: 'Bounce off bodies', value: BOUNCE_BODIES, checked: this.props.options.bounceBodies },
-            { text: 'Bounce off screen', value: BOUNCE_SCREEN, checked: this.props.options.bounceScreen },
+            [{ text: 'Bounce off bodies', value: BOUNCE_BODIES, checked: this.props.options.bounceBodies }],
+            [{ text: 'Bounce off screen', value: BOUNCE_SCREEN, checked: this.props.options.bounceScreen }],
           ]}
           onChange={this.handleCheckboxChange}
+          stretch={true}
         />
         <CheckboxButtonGroup
-          options={[
+          options={[[
             { text: 'Show vectors', value: SHOW_VECTORS, checked: false },
-          ]}
+          ]]}
           onChange={this.handleCheckboxChange}
+          stretch={true}
         />
         <span style={{ paddingLeft: '1rem' }} />
         <CheckboxButtonGroup
-          options={[
+          options={[[
             { text: 'Pause on hover', value: PAUSE_HOVER, checked: true },
-          ]}
+          ]]}
           onChange={this.handleCheckboxChange}
+          stretch={true}
         />
         <Select
           name='select-template'

@@ -8,12 +8,14 @@ import 'rc-tooltip/assets/bootstrap.css'
 class CheckboxButtonGroup extends Component {
   constructor(props) {
     super(props)
+    this.renderGroup = this.renderGroup.bind(this)
     this.renderCheckbox = this.renderCheckbox.bind(this)
   }
 
   static propTypes = {
-    options: PropTypes.arrayOf(PropTypes.object).isRequired,
+    options: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
     onChange: PropTypes.func.isRequired,
+    stretch: PropTypes.bool,
   }
 
   renderCheckbox(option, index) {
@@ -27,7 +29,11 @@ class CheckboxButtonGroup extends Component {
         trigger={option.tip ? ['hover'] : []}
       >
         <label
-          className={classNames('btn', 'btn-primary', { active: option.checked })}
+          className={classNames(
+            'btn',
+            'btn-primary',
+            { active: option.checked })}
+          style={this.props.stretch ? { flex: '1' } : ''}
         >
           <input
             type='checkbox'
@@ -41,10 +47,29 @@ class CheckboxButtonGroup extends Component {
     )
   }
 
+  renderGroup(optionGroup, gIndex) {
+    let style = {}
+    if (gIndex) style.marginLeft = '1em'
+    if (this.props.stretch) {
+      style.flex = '1'
+      style.display = 'flex'
+    }
+    return (
+      <div
+        key={gIndex}
+        className='btn-group'
+        data-toggle='buttons'
+        style={style}
+      >
+        {optionGroup.map(this.renderCheckbox)}
+      </div>
+    )
+  }
+
   render() {
     return (
-      <div className='btn-group' data-toggle='buttons'>
-        {this.props.options.map(this.renderCheckbox)}
+      <div style={this.props.stretch ? { display: 'flex' } : ''}>
+        {this.props.options.map(this.renderGroup)}
       </div>
     )
   }

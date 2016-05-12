@@ -17,6 +17,7 @@ class RadioButtonGroup extends Component {
     options: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
     checked: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
+    stretch: PropTypes.bool,
   }
 
   renderRadio(option) {
@@ -35,6 +36,7 @@ class RadioButtonGroup extends Component {
             'btn-primary',
             { active: option.value === this.props.checked },
           )}
+          style={this.props.stretch ? { flex: '1' } : ''}
         >
           <input
             type='radio'
@@ -50,12 +52,18 @@ class RadioButtonGroup extends Component {
   }
 
   renderGroup(optionGroup, gIndex) {
+    let style = {}
+    if (gIndex) style.marginLeft = '1em'
+    if (this.props.stretch) {
+      style.flex = '1'
+      style.display = 'flex'
+    }
     return (
       <div
         key={gIndex}
         className='btn-group'
         data-toggle='buttons'
-        style={gIndex ? { marginLeft: '1em' } : {} }
+        style={style}
       >
         {optionGroup.map(this.renderRadio)}
       </div>
@@ -64,7 +72,7 @@ class RadioButtonGroup extends Component {
 
   render() {
     return (
-      <div>
+      <div style={this.props.stretch ? { display: 'flex' } : ''}>
         {this.props.options.map(this.renderGroup)}
       </div>
     )

@@ -1,7 +1,7 @@
 General settings:
   select:     preset
 - log slider: speed
-  radio:      square, linear, constant, inverse linear, inverse square
+- radio:      square, linear, constant, inverse linear, inverse square
 - log slider: radii scale
     if bounce-bodies, limit radii scaling so they can't overlap
   checkbox:   logarithmic radii
