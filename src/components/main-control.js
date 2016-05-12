@@ -20,13 +20,15 @@ import * as view from '../actions/view'
 import * as options from '../actions/options'
 
 
+const PAUSE = 'PAUSE'
+const PAUSE_HOVER = 'PAUSE_HOVER'
+
 const SCALE_LOGARITHMIC = 'SCALE_LOGARITHMIC'
 
 const BOUNCE_BODIES = 'BOUNCE_BODIES'
 const BOUNCE_SCREEN = 'BOUNCE_SCREEN'
 
 const SHOW_VECTORS = 'SHOW_VECTORS'
-const PAUSE_HOVER = 'PAUSE_HOVER'
 
 
 class MainControl extends Component {
@@ -67,6 +69,12 @@ class MainControl extends Component {
 
   handleCheckboxChange(value, checked) {
     switch (value) {
+      case PAUSE:
+        this.props.set.pause(checked)
+        break
+      case PAUSE_HOVER:
+        this.props.set.pauseHover(checked)
+        break
       case BOUNCE_BODIES:
         this.props.set.bounceBodies(checked)
         break
@@ -120,6 +128,14 @@ class MainControl extends Component {
           max={10}
           onChange={this.handleSpeedChange}
         />
+        <ButtonGroup
+          options={[
+            [{ text: <div><i className="fa fa-pause" aria-hidden="true"></i>&nbsp;Pause</div>, value: PAUSE, checked: this.props.options.paused }],
+            [{ text: 'Pause on hover', value: PAUSE_HOVER, checked: this.props.options.pauseHover }],
+          ]}
+          onChange={this.handleCheckboxChange}
+          stretch={true}
+        />
         <label>Attraction falloff:</label>
         <ButtonGroup
           name='attraction-falloff'
@@ -169,13 +185,6 @@ class MainControl extends Component {
           stretch={true}
         />
         <span style={{ paddingLeft: '1rem' }} />
-        <ButtonGroup
-          options={[[
-            { text: 'Pause on hover', value: PAUSE_HOVER, checked: true },
-          ]]}
-          onChange={this.handleCheckboxChange}
-          stretch={true}
-        />
         <Select
           name='select-template'
           placeholder='Add a new body...'

@@ -36,7 +36,7 @@ class ButtonGroup extends Component {
             'btn-primary',
             { active: option.checked || option.value === this.props.checked },
           )}
-          style={this.props.stretch ? { flex: '1 0 0%' } : ''}
+          style={this.props.stretch ? { flex: '1 0 0%' } : {}}
         >
           <input
             type={this.props.name ? 'radio' : 'checkbox'}
@@ -72,7 +72,7 @@ class ButtonGroup extends Component {
 
   render() {
     return (
-      <div style={this.props.stretch ? { display: 'flex' } : ''}>
+      <div style={this.props.stretch ? { display: 'flex' } : {}}>
         {this.props.options.map(this.renderGroup)}
       </div>
     )

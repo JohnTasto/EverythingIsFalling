@@ -18,11 +18,14 @@ class Planetarium extends Component {
     this.state = {
       animationFrame: new AnimationFrame(),
       ratio: window.devicePixelRatio || 1,
+      justDragged: false,
+      canvasOffset: undefined,
     }
     if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
   }
 
   handleEvent(e) {
+    let posWindow, posCanvas
     switch (e.type) {
       case 'resize':
         let bounds = this.canvas.getBoundingClientRect()
@@ -33,14 +36,28 @@ class Planetarium extends Component {
         e.preventDefault()
         break
       case 'mousedown':
-        this.props.mouse.mouseDown(new Vector(e.offsetX, e.offsetY))
+        posCanvas = new Vector(e.offsetX, e.offsetY)
+        posWindow = new Vector(e.screenX, e.screenY)
+        this.props.mouse.mouseDown(posCanvas)
+        this.setState({ canvasOffset: posWindow.sub(posCanvas) })
+        this.canvas.removeEventListener('mousemove', this, false)
+        window.addEventListener('mousemove', this, false)
         window.addEventListener('mouseup', this, false)
         break
       case 'mousemove':
-        this.props.mouse.mouseMove(new Vector(e.offsetX, e.offsetY))
+        if (this.state.canvasOffset) {
+          posWindow = new Vector(e.screenX, e.screenY)
+          this.props.mouse.mouseMove(posWindow.sub(this.state.canvasOffset))
+        } else {
+          this.props.mouse.mouseMove(new Vector(e.offsetX, e.offsetY))
+        }
         break
       case 'mouseup':
-        this.props.mouse.mouseUp(new Vector(e.offsetX, e.offsetY))
+        posWindow = new Vector(e.screenX, e.screenY)
+        this.props.mouse.mouseUp(posWindow.sub(this.state.canvasOffset))
+        this.setState({ canvasOffset: undefined })
+        this.canvas.addEventListener('mousemove', this, false)
+        window.removeEventListener('mousemove', this, false)
         window.removeEventListener('mouseup', this, false)
         break
     }
@@ -48,18 +65,18 @@ class Planetarium extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this, false)
-    window.addEventListener('mousemove', this, false)
-    this.canvas.addEventListener('mousedown', this, false)
     this.canvas.addEventListener('wheel', this, false)
+    this.canvas.addEventListener('mousedown', this, false)
+    this.canvas.addEventListener('mousemove', this, false)
     this.requestFrame()
   }
 
   componentWillUnmount() {
     this.cancelFrame()
+    window.removeEventListener('resize', this, false)
     this.canvas.removeEventListener('wheel', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
-    window.removeEventListener('mousemove', this, false)
-    window.removeEventListener('resize', this, false)
+    this.canvas.removeEventListener('mousemove', this, false)
   }
 
   componentWillReceiveProps(props) {
@@ -88,6 +105,7 @@ class Planetarium extends Component {
       this.canvas.style.cursor = '-moz-grabbing'
       this.canvas.style.cursor = '-webkit-grabbing'
       this.canvas.style.cursor = 'grabbing'
+      this.setState({ justDragged: true })
     } else if (this.props.hovering) {
       this.canvas.style.cursor = 'pointer'
       this.canvas.style.cursor = '-moz-grab'
@@ -95,13 +113,18 @@ class Planetarium extends Component {
       this.canvas.style.cursor = 'grab'
     } else {
       this.canvas.style.cursor = 'auto'
+      this.setState({ justDragged: false })
     }
 
-    if (FRAMERATE_INDEPENDENT_TIME) {
-      this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
-      this.props.update.update(this.state.dMs * this.props.options.speed, this.props.bodies)
-    } else {
-      this.props.update.update(16.666666 * this.props.options.speed, this.props.bodies)
+    if (!this.props.options.paused) {
+      if (this.state.justDragged || !(this.props.options.pauseHover && this.props.hovering)) {
+        if (FRAMERATE_INDEPENDENT_TIME) {
+          this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
+          this.props.update.update(this.state.dMs * this.props.options.speed, this.props.bodies)
+        } else {
+          this.props.update.update(16.666666 * this.props.options.speed, this.props.bodies)
+        }
+      }
     }
 
     let ctx = this.canvas.getContext('2d')

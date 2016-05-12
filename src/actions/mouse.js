@@ -93,7 +93,10 @@ export function checkDragging() {
     if (_mousePressed && _justSelected && _dragging) {
       let offset = _cursorVStart.sub(_cursorVPosition)
       _cursorVStart = _cursorVPosition
-      dispatch(view.drag(_justSelected, offset))
+      if (getState().options.paused)
+        dispatch(view.move(_justSelected, offset))
+      else
+        dispatch(view.drag(_justSelected, offset))
     }
   }
 }

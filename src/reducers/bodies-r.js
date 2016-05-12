@@ -36,7 +36,7 @@ export default function(bodies = {}, action) {
     case DRAG_BODY:
       if (action.bodyKey) {
         let position = bodies[action.bodyKey].position.sub(action.offset)
-        let velocity = position.sub(bodies[action.bodyKey].position)
+        let velocity = position.sub(bodies[action.bodyKey].position).scale(.01)
         return {
           ...bodies,
           [action.bodyKey]: {

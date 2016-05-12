@@ -1,5 +1,7 @@
 import {
   SET_SPEED,
+  SET_PAUSE,
+  SET_PAUSE_HOVER,
   SET_FALLOFF,
   SET_RADII_SCALE,
   SET_BOUNCE_BODIES,
@@ -11,6 +13,20 @@ export function speed(s) {
   return {
     type: SET_SPEED,
     speed: s,
+  }
+}
+
+export function pause(pause) {
+  return {
+    type: SET_PAUSE,
+    paused: pause,
+  }
+}
+
+export function pauseHover(pause) {
+  return {
+    type: SET_PAUSE_HOVER,
+    pauseHover: pause,
   }
 }
 

@@ -1,11 +1,11 @@
-// Core variables
-@import "variables";
-
 /*!
  * Bootstrap v4.0.0-alpha.2 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+// Core variables
+@import "variables-bootstrap";
 
 // Mixins
 @import "../../node_modules/bootstrap/scss/mixins";
@@ -19,7 +19,7 @@
 @import "../../node_modules/bootstrap/scss/type";
 // @import "../../node_modules/bootstrap/scss/images";
 // @import "../../node_modules/bootstrap/scss/code";
-@import "../../node_modules/bootstrap/scss/grid";
+// @import "../../node_modules/bootstrap/scss/grid";
 // @import "../../node_modules/bootstrap/scss/tables";
 @import "../../node_modules/bootstrap/scss/forms";
 @import "../../node_modules/bootstrap/scss/buttons";
@@ -66,8 +66,29 @@
  * MIT License: https://github.com/keystonejs/react-select
 */
 
+@import "variables-react-select";
 @import "../../node_modules/react-select/scss/control";
 @import "../../node_modules/react-select/scss/menu";
 @import "../../node_modules/react-select/scss/mixins";
 @import "../../node_modules/react-select/scss/multi";
 @import "../../node_modules/react-select/scss/spinner";
+
+
+/*!
+ *  Font Awesome 4.6.1 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ */
+
+@import "variables-font-awesome";
+@import "../../node_modules/font-awesome/scss/mixins";
+@import "../../node_modules/font-awesome/scss/path";
+@import "../../node_modules/font-awesome/scss/core";
+@import "../../node_modules/font-awesome/scss/larger";
+@import "../../node_modules/font-awesome/scss/fixed-width";
+@import "../../node_modules/font-awesome/scss/list";
+@import "../../node_modules/font-awesome/scss/bordered-pulled";
+@import "../../node_modules/font-awesome/scss/animated";
+@import "../../node_modules/font-awesome/scss/rotated-flipped";
+@import "../../node_modules/font-awesome/scss/stacked";
+@import "../../node_modules/font-awesome/scss/icons";
+@import "../../node_modules/font-awesome/scss/screen-reader";
