@@ -4,6 +4,15 @@ import {
   UPDATE_BODIES
 } from './types'
 
+import {
+  ATTRACTION_INVERSE_SQUARED,
+  ATTRACTION_INVERSE_LINEAR,
+  ATTRACTION_CONSTANT,
+  ATTRACTION_LINEAR,
+  ATTRACTION_SQUARED,
+  ATTRACTION_NONE,
+} from '../constants'
+
 const G = 6.67308e-11
 
 
@@ -11,7 +20,7 @@ export function update(dMs) {
   let bounce = true
 
   return (dispatch, getState) => {
-    let { bodies, screen: { dragging }, options: { radiiScale } } = getState()
+    let { bodies, screen: { dragging }, options: { falloff, radiiScale } } = getState()
     // make new body container
     bodies = { ...bodies }
 
@@ -30,11 +39,31 @@ export function update(dMs) {
         let otherBody = bodies[otherBodyKey]
         if (body !== otherBody && !body.forces[otherBodyKey]) {
           let distanceSquared = body.position.distanceToSquared(otherBody.position)
-          // f = G((m1*m2)/r^2)
-          let force = G * (body.mass * otherBody.mass) / distanceSquared
           let angle = otherBody.position.subtract(body.position).angle()
-          body.forces[otherBodyKey] = Vector.fromPolar(angle,           force)
-          otherBody.forces[bodyKey] = Vector.fromPolar(angle + Math.PI, force)
+
+          if (falloff !== ATTRACTION_NONE) {
+            let force
+            switch (falloff) {
+              case ATTRACTION_INVERSE_SQUARED:
+                // f = G((m1*m2)/r^2)
+                force = G * (body.mass * otherBody.mass) / distanceSquared
+                break
+              case ATTRACTION_INVERSE_LINEAR:
+                force = G * (body.mass * otherBody.mass) / (body.position.distanceTo(otherBody.position)*10000000)
+                break
+              case ATTRACTION_CONSTANT:
+                force = G * (body.mass * otherBody.mass) / 100000000000000
+                break
+              case ATTRACTION_LINEAR:
+                force = G * (body.mass * otherBody.mass) * (body.position.distanceTo(otherBody.position)/1000000000000000000000)
+                break
+              case ATTRACTION_SQUARED:
+                force = G * (body.mass * otherBody.mass) * (body.position.distanceToSquared(otherBody.position)/100000000000000000000000000000)
+                break
+            }
+            body.forces[otherBodyKey] = Vector.fromPolar(angle,           force)
+            otherBody.forces[bodyKey] = Vector.fromPolar(angle + Math.PI, force)
+          }
 
           // bounce
           if (bounce) {

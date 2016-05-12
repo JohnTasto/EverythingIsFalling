@@ -55,7 +55,7 @@ class MainControl extends Component {
   }
 
   handleFalloffChange(value) {
-    console.log(value)
+    this.props.set.falloff(value)
   }
 
   handleRadiiScaleChange(value) {
@@ -129,7 +129,7 @@ class MainControl extends Component {
               { text: 'No gravity', value: ATTRACTION_NONE },
             ],
           ]}
-          defaultChecked={ATTRACTION_INVERSE_SQUARED}
+          defaultChecked={this.props.options.falloff}
           onChange={this.handleFalloffChange}
         />
         <label htmlFor='radii-scale'>Radii scale factor:</label>
