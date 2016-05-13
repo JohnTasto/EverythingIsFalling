@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { init } from '../actions/bodies'
-import Planetarium from './planetarium'
+import Hamburger from './hamburger'
 import MainControl from './main-control'
+import Planetarium from './planetarium'
 
 import { CONTROL_PANEL_WIDTH } from '../constants'
 
@@ -13,7 +14,13 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      style: {
+      menuOpen: false,
+      styles: {
+        hamburger: {
+          position: 'absolute',
+          top: '1.5rem',
+          left: '1.5rem',
+        },
         wrapper: {
           display: 'flex',
           height: '100vh',
@@ -49,15 +56,29 @@ class App extends Component {
     this.props.dispatch(init())
   }
 
+  menuToggle = isOpen => {
+    this.setState({ menuOpen: isOpen })
+  }
+
   render() {
     return (
-      <div style={this.state.style.wrapper}>
-        <div style={this.state.style.mainControlWrapper}>
-          <MainControl style={this.state.style.mainControl}/>
+      <div>
+        <div style={this.state.styles.wrapper}>
+          <div style={this.state.styles.mainControlWrapper}>
+            <MainControl style={this.state.styles.mainControl}/>
+          </div>
+          <div style={this.state.styles.planetariumWrapper}>
+            <Planetarium style={this.state.styles.planetarium} />
+          </div>
         </div>
-        <div style={this.state.style.planetariumWrapper}>
-          <Planetarium style={this.state.style.planetarium} />
-        </div>
+        <Hamburger
+          isOpen={this.state.menuOpen}
+          onClick={this.menuToggle}
+          color='#fff'
+          stroke={4}
+          borderRadius={1.5}
+          style={this.state.styles.hamburger}
+        />
       </div>
     )
   }
