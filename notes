@@ -6,7 +6,7 @@ General settings:
     if bounce-bodies, limit radii scaling so they can't overlap
   checkbox:   logarithmic radii
     disable logarithmic button if bodies will overlap
-  checkbox:   bounce bodies, bounce screen, show vectors, pause on hover
+- checkbox:   bounce bodies, bounce screen, show vectors, pause on hover
   select:     add body
 - select:     edit body
 
@@ -25,6 +25,9 @@ Todo:
   presets
   touch events
   dynamic starfield
+
+Bugs:
+  bodies still seem to speed up
 
 velocity:   v = sqrt[G*M*(2/r - 1/a)]
 perihelion: r = a(1-e)

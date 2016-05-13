@@ -88,6 +88,13 @@ export function checkHovering() {
   }
 }
 
+export function cancelHover() {
+  return {
+    type: HOVER_BODY,
+    bodyKey: undefined,
+  }
+}
+
 export function checkDragging() {
   return (dispatch, getState) => {
     if (_mousePressed && _justSelected && _dragging) {

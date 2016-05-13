@@ -21,6 +21,7 @@ class Planetarium extends Component {
       ratio: window.devicePixelRatio || 1,
       justDragged: false,
       canvasOffset: undefined,
+      isMouseInCanvas: undefined,
     }
     if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
   }
@@ -61,6 +62,13 @@ class Planetarium extends Component {
         window.removeEventListener('mousemove', this, false)
         window.removeEventListener('mouseup', this, false)
         break
+      case 'mouseover':
+        this.setState({ isMouseInCanvas: true })
+        break
+      case 'mouseout':
+        this.props.mouse.cancelHover()
+        this.setState({ isMouseInCanvas: false })
+        break
     }
   }
 
@@ -69,6 +77,8 @@ class Planetarium extends Component {
     this.canvas.addEventListener('wheel', this, false)
     this.canvas.addEventListener('mousedown', this, false)
     this.canvas.addEventListener('mousemove', this, false)
+    this.canvas.addEventListener('mouseover', this, false)
+    this.canvas.addEventListener('mouseout', this, false)
     this.requestFrame()
   }
 
@@ -78,6 +88,8 @@ class Planetarium extends Component {
     this.canvas.removeEventListener('wheel', this, false)
     this.canvas.removeEventListener('mousedown', this, false)
     this.canvas.removeEventListener('mousemove', this, false)
+    this.canvas.removeEventListener('mouseover', this, false)
+    this.canvas.removeEventListener('mouseout', this, false)
   }
 
   componentWillReceiveProps(props) {
@@ -98,8 +110,9 @@ class Planetarium extends Component {
   }
 
   update(currentMs) {
+
     this.props.mouse.checkDragging()
-    this.props.mouse.checkHovering()
+    if (this.state.isMouseInCanvas) this.props.mouse.checkHovering()
 
     if (this.props.dragging) {
       this.canvas.style.cursor = 'pointer'
@@ -195,6 +208,7 @@ class Planetarium extends Component {
     if (bodyKey === this.props.selected) {
       this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
     }
+    // draw hover
     if (bodyKey === this.props.hovering) {
       this.drawCircle(ctx, body.radius, 'rgba(255,255,255,.25)')
     }

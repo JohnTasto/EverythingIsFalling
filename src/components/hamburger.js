@@ -53,7 +53,13 @@ function Hamburger(props) {
 
 	return (
     <div style={style}>
-  		<div style={styles.container} onClick={() => props.onClick(!isOpen)}>
+  		<div
+        style={styles.container}
+        onClick={e => {
+          e.stopPropagation()
+          props.onClick(!isOpen)
+        }}
+      >
   		  <span style={Object.assign({}, styles.line, styles.lineTop)}></span>
   		  <span style={Object.assign({}, styles.line, styles.lineMiddle)}></span>
   		  <span style={Object.assign({}, styles.line, styles.lineBottom)}></span>

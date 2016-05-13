@@ -36,7 +36,7 @@ class App extends Component {
           width: `${CONTROL_PANEL_WIDTH}`,
           right: '0',
           padding: '1.5rem',
-          background: 'rgb(63,95,127)',
+          background: 'rgb(79,95,111)',
         },
         planetariumWrapper: {
           flex: '1 0 0%',
@@ -74,6 +74,7 @@ class App extends Component {
         <Hamburger
           isOpen={this.state.menuOpen}
           onClick={this.menuToggle}
+          height={28}
           color='#fff'
           stroke={4}
           borderRadius={1.5}
