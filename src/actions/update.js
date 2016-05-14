@@ -111,26 +111,24 @@ export function update(dMs) {
         if (bounceScreen) {
           // bounce off window
           let viewport = { ...getState().screen.viewport }
+          let oldVelocity = body.velocity
           if (body.position.x + body.radius * radiiScale > viewport.max.x) {
             body.velocity = new Vector(-Math.abs(body.velocity.x), body.velocity.y)
-            body.bounced = true
             //body.position = new Vector(viewport.max.x - body.radius, body.position.y)
           }
           if (body.position.x - body.radius * radiiScale < viewport.min.x) {
             body.velocity = new Vector(Math.abs(body.velocity.x), body.velocity.y)
-            body.bounced = true
             //body.position = new Vector(viewport.min.x + body.radius, body.position.y)
           }
           if (body.position.y + body.radius * radiiScale > viewport.max.y) {
             body.velocity = new Vector(body.velocity.x, -Math.abs(body.velocity.y))
-            body.bounced = true
             //body.position = new Vector(body.position.x, viewport.max.y - body.radius)
           }
           if (body.position.y - body.radius * radiiScale < viewport.min.y) {
             body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
-            body.bounced = true
             //body.position = new Vector(body.position.x, viewport.min.y + body.radius)
           }
+          if (!body.velocity.equals(oldVelocity)) body.bounced = true
         }
 
         // sum forces
