@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Radium from 'radium'
 
 import { init } from '../actions/bodies'
 import Hamburger from './hamburger'
-import MainControl from './main-control'
+import ControlPanel from './control-panel'
 import Planetarium from './planetarium'
 
-import { CONTROL_PANEL_WIDTH } from '../constants'
+import {
+  CONTROL_PANEL_WIDTH,
+  CONTROL_PANEL_WIDTH_UNITS,
+  CONTROL_PANEL_PADDING,
+  CONTROL_PANEL_PADDING_UNITS,
+} from '../constants'
 
 
 class App extends Component {
@@ -18,34 +24,21 @@ class App extends Component {
       styles: {
         hamburger: {
           position: 'absolute',
-          top: '1.5rem',
-          left: '1.5rem',
+          top: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
+          left: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
+          zIndex: '1000',
         },
         wrapper: {
           display: 'flex',
           height: '100vh',
           width: '100vw',
         },
-        mainControlWrapper: {
-          flex: `0 0 ${CONTROL_PANEL_WIDTH}px`,
+        controlPanelWrapper: {
+          flex: `0 0 ${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
           position: 'relative',
-        },
-        mainControl: {
-          position: 'absolute',
-          height: '100%',
-          width: `${CONTROL_PANEL_WIDTH}`,
-          right: '0',
-          padding: '1.5rem',
-          background: 'rgb(79,95,111)',
         },
         planetariumWrapper: {
           flex: '1 0 0%',
-          height: '100%',
-        },
-        planetarium: {
-          background: 'url("img/stars.jpg") center',
-          backgroundSize: 'cover',
-          width: '100%',
           height: '100%',
         },
       },
@@ -64,11 +57,11 @@ class App extends Component {
     return (
       <div>
         <div style={this.state.styles.wrapper}>
-          <div style={this.state.styles.mainControlWrapper}>
-            <MainControl style={this.state.styles.mainControl}/>
+          <div style={this.state.styles.controlPanelWrapper}>
+            <ControlPanel />
           </div>
           <div style={this.state.styles.planetariumWrapper}>
-            <Planetarium style={this.state.styles.planetarium} />
+            <Planetarium />
           </div>
         </div>
         <Hamburger
@@ -86,4 +79,4 @@ class App extends Component {
 }
 
 
-export default connect()(App)
+export default connect()(Radium(App))

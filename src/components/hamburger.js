@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 
 function Hamburger(props) {
   const style             = props.style             || {}
@@ -60,9 +61,9 @@ function Hamburger(props) {
           props.onClick(!isOpen)
         }}
       >
-  		  <span style={Object.assign({}, styles.line, styles.lineTop)}></span>
-  		  <span style={Object.assign({}, styles.line, styles.lineMiddle)}></span>
-  		  <span style={Object.assign({}, styles.line, styles.lineBottom)}></span>
+  		  <span style={[styles.line, styles.lineTop]}></span>
+  		  <span style={[styles.line, styles.lineMiddle]}></span>
+  		  <span style={[styles.line, styles.lineBottom]}></span>
   		</div>
     </div>
 	)
@@ -80,4 +81,4 @@ Hamburger.PropTypes = {
 	animationDuration: React.PropTypes.number,
 }
 
-export default Hamburger
+export default Radium(Hamburger)

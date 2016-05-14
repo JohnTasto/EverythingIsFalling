@@ -31,7 +31,7 @@ const BOUNCE_SCREEN = 'BOUNCE_SCREEN'
 const SHOW_VECTORS = 'SHOW_VECTORS'
 
 
-class MainControl extends Component {
+class ControlMain extends Component {
 
   handleSpeedChange = (value) => {
     this.props.set.speed(value)
@@ -100,8 +100,7 @@ class MainControl extends Component {
       }
     }
     return (
-      <div style={this.props.style}>
-        <h5>EverythingIsFalling</h5>
+      <div style={this.props.style || {}}>
         <label htmlFor='speed'>Speed:</label>
         <LogSlider
           id='speed'
@@ -209,4 +208,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainControl)
+export default connect(mapStateToProps, mapDispatchToProps)(ControlMain)

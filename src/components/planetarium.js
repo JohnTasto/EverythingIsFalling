@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Radium from 'radium'
 import AnimationFrame from 'animation-frame'
 
 import Vector from '../geometry/vector'
@@ -22,6 +23,13 @@ class Planetarium extends Component {
       justDragged: false,
       canvasOffset: undefined,
       isMouseInCanvas: undefined,
+      styles: {
+        canvas: {
+          background: 'url("img/stars.jpg") center/cover',
+          height: '100%',
+          width: '100%',
+        },
+      }
     }
     if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
   }
@@ -272,7 +280,7 @@ class Planetarium extends Component {
 
   render() {
     return (
-      <canvas style={this.props.style}
+      <canvas style={[this.props.style, this.state.styles.canvas]}
         width={this.props.screen.size.x * this.state.ratio}
         height={this.props.screen.size.y * this.state.ratio}
         ref={(ref) => this.canvas = ref}>
@@ -302,4 +310,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Planetarium)
+export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Radium(Planetarium))
