@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { TransitionMotion, spring } from 'react-motion'
 import Radium from 'radium'
 
 import { init } from '../actions/bodies'
@@ -55,25 +56,44 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div style={this.state.styles.wrapper}>
-          <div style={this.state.styles.controlPanelWrapper}>
-            <ControlPanel />
-          </div>
-          <div style={this.state.styles.planetariumWrapper}>
-            <Planetarium />
-          </div>
-        </div>
-        <Hamburger
-          isOpen={this.state.menuOpen}
-          onClick={this.menuToggle}
-          height={28}
-          color='#fff'
-          stroke={4}
-          borderRadius={1.5}
-          style={this.state.styles.hamburger}
-        />
-      </div>
+      <TransitionMotion
+        defaultStyles={this.state.menuOpen ? [{ key: '0', style: { width: 0 } }] : []}
+        styles={this.state.menuOpen ? [{ key: '0', style: { width: spring(CONTROL_PANEL_WIDTH) } }] : []}
+        willEnter={() => ({ width: 0 })}
+        willLeave={() => ({ width: spring(0) })}
+      >
+        {interpolated => {
+          return (
+            <div>
+              <div style={this.state.styles.wrapper}>
+                {(() => { if (interpolated[0]) {
+                  return (
+                    <div key='0' style={[
+                      this.state.styles.controlPanelWrapper,
+                      { flex: `0 0 ${interpolated[0].style.width + CONTROL_PANEL_WIDTH_UNITS}` },
+                    ]}>
+                      <ControlPanel style={{ left: `${(interpolated[0].style.width - CONTROL_PANEL_WIDTH) + CONTROL_PANEL_WIDTH_UNITS}`}}/>
+                    </div>
+                  )
+                }})()}
+                <div style={this.state.styles.planetariumWrapper}>
+                  <Planetarium />
+                </div>
+              </div>
+              <Hamburger
+                isOpen={this.state.menuOpen}
+                onClick={this.menuToggle}
+                height={28}
+                color='#fff'
+                stroke={4}
+                borderRadius={1.5}
+                animationDuration={0.7}
+                style={this.state.styles.hamburger}
+              />
+            </div>
+          )
+        }}
+      </TransitionMotion>
     )
   }
 }
