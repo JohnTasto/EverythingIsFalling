@@ -12,9 +12,7 @@ import * as options from '../actions/options'
 import { COLOR } from '../constants'
 import {
   CONTROL_PANEL_WIDTH,
-  CONTROL_PANEL_WIDTH_UNITS,
   CONTROL_PANEL_PADDING,
-  CONTROL_PANEL_PADDING_UNITS,
 } from '../constants'
 
 
@@ -27,22 +25,21 @@ class ControlPanel extends Component {
         container: {
           position: 'relative',
           height: '100%',
-          width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
+          width: `${CONTROL_PANEL_WIDTH}px`,
           background: COLOR.clone().desaturate(0.5).clearer(0.5).rgbString(),
-          overflow: 'scroll',
         },
         heading: {
-          position: 'fixed',
-          width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
-          zIndex: '100',
-          fontSize: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
-          padding: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
+          height: `${CONTROL_PANEL_PADDING * 3.5}rem`,
+          width: `${CONTROL_PANEL_WIDTH}px`,
+          fontSize: `${CONTROL_PANEL_PADDING}rem`,
+          padding: `${CONTROL_PANEL_PADDING}rem`,
           textAlign: 'right',
-          background: COLOR.clone().darken(0.5).rgbString(),
+          background: COLOR.clone().darken(0.5).clearer(0.25).rgbString(),
         },
         controls: {
-          marginTop: `${3 * CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
-          padding: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
+          height: `calc(100% - ${CONTROL_PANEL_PADDING * 3.5}rem)`,
+          padding: `${CONTROL_PANEL_PADDING}rem`,
+          overflow: 'scroll',
         },
       }
     }

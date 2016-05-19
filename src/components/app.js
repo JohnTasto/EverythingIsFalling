@@ -9,9 +9,7 @@ import Planetarium from './planetarium'
 
 import {
   CONTROL_PANEL_WIDTH,
-  CONTROL_PANEL_WIDTH_UNITS,
   CONTROL_PANEL_PADDING,
-  CONTROL_PANEL_PADDING_UNITS,
 } from '../constants'
 
 
@@ -24,8 +22,8 @@ class App extends Component {
       styles: {
         hamburger: {
           position: 'absolute',
-          top: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
-          left: `${CONTROL_PANEL_PADDING + CONTROL_PANEL_PADDING_UNITS}`,
+          top: `${CONTROL_PANEL_PADDING}rem`,
+          left: `${CONTROL_PANEL_PADDING}rem`,
           zIndex: '1000',
         },
         wrapper: {
@@ -37,13 +35,13 @@ class App extends Component {
         controlPanelWrapper: {
           position: 'absolute',
           height: '100%',
-          width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
-          left: `-${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
+          width: `${CONTROL_PANEL_WIDTH}px`,
+          left: `-${CONTROL_PANEL_WIDTH}px`,
           transition: `0.5s ease-in-out`,
           zIndex: '1',
         },
         controlPanelWrapperMenuOpen: {
-          transform: `translateX(${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS})`,
+          transform: `translateX(${CONTROL_PANEL_WIDTH}px)`,
         },
         planetariumWrapper: {
           height: '100%',

@@ -2,10 +2,8 @@ import Color from 'color'
 
 export const COLOR = Color().rgb(0, 127, 255)
 
-export const CONTROL_PANEL_WIDTH = 320
-export const CONTROL_PANEL_WIDTH_UNITS = 'px'
-export const CONTROL_PANEL_PADDING = 1.5
-export const CONTROL_PANEL_PADDING_UNITS = 'rem'
+export const CONTROL_PANEL_WIDTH = 320   // px
+export const CONTROL_PANEL_PADDING = 1.5 // rem
 
 export const ATTRACTION_INVERSE_SQUARED = 'ATTRACTION_INVERSE_SQUARED'
 export const ATTRACTION_INVERSE_LINEAR = 'ATTRACTION_INVERSE_LINEAR'
