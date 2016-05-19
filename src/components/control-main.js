@@ -63,6 +63,9 @@ class ControlMain extends Component {
       case BOUNCE_SCREEN:
         this.props.set.bounceScreen(checked)
         break
+      case SHOW_VECTORS:
+        this.props.set.showVectors(checked)
+        break
     }
   }
 
@@ -160,7 +163,7 @@ class ControlMain extends Component {
         />
         <ButtonGroup
           options={[[
-            { text: 'Show vectors', value: SHOW_VECTORS, checked: false },
+            { text: 'Show vectors', value: SHOW_VECTORS, checked: this.props.options.showVectors },
           ]]}
           onChange={this.handleCheckboxChange}
           stretch={true}

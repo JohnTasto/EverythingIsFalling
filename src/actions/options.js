@@ -6,6 +6,7 @@ import {
   SET_RADII_SCALE,
   SET_BOUNCE_BODIES,
   SET_BOUNCE_SCREEN,
+  SET_SHOW_VECTORS,
 } from './types'
 
 
@@ -55,5 +56,12 @@ export function bounceScreen(bounceScreen) {
   return {
     type: SET_BOUNCE_SCREEN,
     bounceScreen,
+  }
+}
+
+export function showVectors(showVectors) {
+  return {
+    type: SET_SHOW_VECTORS,
+    showVectors,
   }
 }

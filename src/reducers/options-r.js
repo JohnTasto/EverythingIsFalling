@@ -6,6 +6,7 @@ import {
   SET_RADII_SCALE,
   SET_BOUNCE_BODIES,
   SET_BOUNCE_SCREEN,
+  SET_SHOW_VECTORS,
 } from '../actions/types'
 
 import {
@@ -38,6 +39,8 @@ export default function(options = INITIAL_STATE, action) {
       return { ...options, bounceBodies: action.bounceBodies }
     case SET_BOUNCE_SCREEN:
       return { ...options, bounceScreen: action.bounceScreen }
+    case SET_SHOW_VECTORS:
+      return { ...options, showVectors: action.showVectors }
   default:
     return options
   }

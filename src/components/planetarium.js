@@ -225,8 +225,7 @@ class Planetarium extends Component {
     ctx.restore()
 
     // draw force and velocity vectors
-    let vectors = true
-    if (vectors) {
+    if (this.props.options.showVectors) {
       this.drawVector(ctx, body.force, 'red', 3, .00000000000000001)
       this.drawVector(ctx, body.velocity, 'green', 3, 100)
       for (let forceKey in body.forces) {
