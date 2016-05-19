@@ -46,14 +46,9 @@ class App extends Component {
           transform: `translateX(${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS})`,
         },
         planetariumWrapper: {
-          position: 'absolute',
-          left: '0',
           height: '100%',
-          transition: `0.5s ease-in-out`,
+          width: '100%',
         },
-        planetariumWrapperMenuOpen: {
-          left: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
-        }
       },
     }
   }
@@ -76,10 +71,7 @@ class App extends Component {
           ]}>
             <ControlPanel />
           </div>
-          <div style={[
-            this.state.styles.planetariumWrapper,
-            this.state.menuOpen ? this.state.styles.planetariumWrapperMenuOpen : {},
-          ]}>
+          <div style={this.state.styles.planetariumWrapper}>
             <Planetarium />
           </div>
         </div>

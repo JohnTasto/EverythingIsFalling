@@ -9,19 +9,15 @@ import {
   DRAG_BODY,
 } from '../actions/types'
 
-import {
-  CONTROL_PANEL_WIDTH,
-} from '../constants'
-
 
 const INITIAL_STATE = {
   screen: {
-    size: new Vector (window.innerWidth - CONTROL_PANEL_WIDTH, window.innerHeight),
+    size: new Vector (window.innerWidth, window.innerHeight),
   },
   viewport: {
-    min: new Vector(-(window.innerWidth - CONTROL_PANEL_WIDTH) * 2500000, -window.innerHeight * 2500000),
-    max: new Vector( (window.innerWidth - CONTROL_PANEL_WIDTH) * 2500000,  window.innerHeight * 2500000),
-    size: new Vector((window.innerWidth - CONTROL_PANEL_WIDTH) * 5000000,  window.innerHeight * 5000000),
+    min: new Vector(-window.innerWidth * 2500000, -window.innerHeight * 2500000),
+    max: new Vector( window.innerWidth * 2500000,  window.innerHeight * 2500000),
+    size: new Vector(window.innerWidth * 5000000,  window.innerHeight * 5000000),
     zoom: 1 / 5000000,
   },
   selected: undefined,

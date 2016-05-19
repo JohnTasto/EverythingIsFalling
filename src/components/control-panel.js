@@ -28,7 +28,7 @@ class ControlPanel extends Component {
           position: 'relative',
           height: '100%',
           width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
-          background: COLOR.clone().desaturate(0.5).rgbString(),
+          background: COLOR.clone().desaturate(0.5).clearer(0.5).rgbString(),
           overflow: 'scroll',
         },
         heading: {
