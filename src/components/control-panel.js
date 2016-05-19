@@ -25,7 +25,7 @@ class ControlPanel extends Component {
     this.state = {
       styles: {
         container: {
-          position: 'absolute',
+          position: 'relative',
           height: '100%',
           width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
           background: COLOR.clone().desaturate(0.5).rgbString(),

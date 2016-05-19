@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { TransitionMotion, spring } from 'react-motion'
 import Radium from 'radium'
 
 import { init } from '../actions/bodies'
@@ -21,7 +20,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      menuOpen: false,
+      menuOpen: true,
       styles: {
         hamburger: {
           position: 'absolute',
@@ -30,18 +29,31 @@ class App extends Component {
           zIndex: '1000',
         },
         wrapper: {
-          display: 'flex',
+          position: 'relative',
           height: '100vh',
           width: '100vw',
+          background: 'black',
         },
         controlPanelWrapper: {
-          flex: `0 0 ${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
-          position: 'relative',
+          position: 'absolute',
+          height: '100%',
+          width: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
+          left: `-${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
+          transition: `0.5s ease-in-out`,
+          zIndex: '1',
+        },
+        controlPanelWrapperMenuOpen: {
+          transform: `translateX(${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS})`,
         },
         planetariumWrapper: {
-          flex: '1 0 0%',
+          position: 'absolute',
+          left: '0',
           height: '100%',
+          transition: `0.5s ease-in-out`,
         },
+        planetariumWrapperMenuOpen: {
+          left: `${CONTROL_PANEL_WIDTH + CONTROL_PANEL_WIDTH_UNITS}`,
+        }
       },
     }
   }
@@ -56,44 +68,31 @@ class App extends Component {
 
   render() {
     return (
-      <TransitionMotion
-        defaultStyles={this.state.menuOpen ? [{ key: '0', style: { width: 0 } }] : []}
-        styles={this.state.menuOpen ? [{ key: '0', style: { width: spring(CONTROL_PANEL_WIDTH) } }] : []}
-        willEnter={() => ({ width: 0 })}
-        willLeave={() => ({ width: spring(0) })}
-      >
-        {interpolated => {
-          return (
-            <div>
-              <div style={this.state.styles.wrapper}>
-                {(() => { if (interpolated[0]) {
-                  return (
-                    <div key='0' style={[
-                      this.state.styles.controlPanelWrapper,
-                      { flex: `0 0 ${interpolated[0].style.width + CONTROL_PANEL_WIDTH_UNITS}` },
-                    ]}>
-                      <ControlPanel style={{ left: `${(interpolated[0].style.width - CONTROL_PANEL_WIDTH) + CONTROL_PANEL_WIDTH_UNITS}`}}/>
-                    </div>
-                  )
-                }})()}
-                <div style={this.state.styles.planetariumWrapper}>
-                  <Planetarium />
-                </div>
-              </div>
-              <Hamburger
-                isOpen={this.state.menuOpen}
-                onClick={this.menuToggle}
-                height={28}
-                color='#fff'
-                stroke={4}
-                borderRadius={1.5}
-                animationDuration={0.7}
-                style={this.state.styles.hamburger}
-              />
-            </div>
-          )
-        }}
-      </TransitionMotion>
+      <div>
+        <div style={this.state.styles.wrapper}>
+          <div style={[
+            this.state.styles.controlPanelWrapper,
+            this.state.menuOpen ? this.state.styles.controlPanelWrapperMenuOpen : {},
+          ]}>
+            <ControlPanel />
+          </div>
+          <div style={[
+            this.state.styles.planetariumWrapper,
+            this.state.menuOpen ? this.state.styles.planetariumWrapperMenuOpen : {},
+          ]}>
+            <Planetarium />
+          </div>
+        </div>
+        <Hamburger
+          isOpen={this.state.menuOpen}
+          onClick={this.menuToggle}
+          height={28}
+          color='#fff'
+          stroke={4}
+          borderRadius={1.5}
+          style={this.state.styles.hamburger}
+        />
+      </div>
     )
   }
 }
