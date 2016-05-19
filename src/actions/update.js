@@ -31,10 +31,13 @@ export function update(dMs) {
 
     for (let bodyKey in bodies) {
       let body = bodies[bodyKey]
+      if (!body.active) continue
 
       // calculate forces  O(n^2) :(
       for (let otherBodyKey in bodies) {
         let otherBody = bodies[otherBodyKey]
+        if (!otherBody.active) continue
+
         if (body !== otherBody && !body.forces[otherBodyKey]) {
           let distanceSquared = body.position.distanceToSquared(otherBody.position)
           let angle = otherBody.position.subtract(body.position).angle()

@@ -2,18 +2,22 @@ import Vector from '../geometry/vector'
 
 import {
   REPLACE_BODIES,
+  ADD_BODY,
   UPDATE_BODIES,
   PLACE_BODY,
   MOVE_BODY,
   DRAG_BODY,
+  ACTIVATE_BODY,
 } from '../actions/types'
 
 
 export default function(bodies = {}, action) {
-  let newBodies
+  let newBodies, position, velocity
   switch (action.type) {
     case REPLACE_BODIES:
       return { ...action.bodies }
+    case ADD_BODY:
+      return { ...bodies, ...action.body }
     case UPDATE_BODIES:
       return { ...bodies, ...action.bodies }
     case PLACE_BODY:
@@ -25,7 +29,7 @@ export default function(bodies = {}, action) {
         }
       }
     case MOVE_BODY:
-      let position = bodies[action.bodyKey].position.sub(action.offset)
+      position = bodies[action.bodyKey].position.sub(action.offset)
       return {
         ...bodies,
         [action.bodyKey]: {
@@ -35,8 +39,8 @@ export default function(bodies = {}, action) {
       }
     case DRAG_BODY:
       if (action.bodyKey) {
-        let position = bodies[action.bodyKey].position.sub(action.offset)
-        let velocity = position.sub(bodies[action.bodyKey].position).scale(.01)
+        position = bodies[action.bodyKey].position.sub(action.offset)
+        velocity = position.sub(bodies[action.bodyKey].position).scale(.01)
         return {
           ...bodies,
           [action.bodyKey]: {
@@ -44,6 +48,15 @@ export default function(bodies = {}, action) {
             position,
             velocity,
           }
+        }
+      }
+      return bodies
+    case ACTIVATE_BODY:
+      return {
+        ...bodies,
+        [action.bodyKey]: {
+          ...bodies[action.bodyKey],
+          active: true,
         }
       }
     default:

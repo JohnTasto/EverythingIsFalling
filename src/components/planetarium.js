@@ -166,6 +166,12 @@ class Planetarium extends Component {
       this.renderBody(ctx, bodyKey)
     }
 
+    if (this.props.options.showVectors) {
+      for (let bodyKey in this.props.bodies) {
+        this.renderVectors(ctx, bodyKey)
+      }
+    }
+
     // // draw box in very center for debugging
     // ctx.fillStyle = 'white'
     // ctx.fillRect(-1000000,-1000000,2000000,2000000)
@@ -176,14 +182,12 @@ class Planetarium extends Component {
   }
 
   renderBody(ctx, bodyKey) {
-    ctx.save()
-
     let body = this.props.bodies[bodyKey]
 
+    ctx.save()
     ctx.translate(body.position.x, body.position.y)
 
     // scale radii
-    ctx.save()
     ctx.scale(this.props.options.radiiScale, this.props.options.radiiScale)
 
     // scale images
@@ -194,7 +198,9 @@ class Planetarium extends Component {
     )
 
     // draw body
+    if (!body.active) ctx.globalAlpha = 0.5
     this.drawImageCentered(ctx, body.bodyImage)
+    ctx.globalAlpha = 1
 
     // draw shadow
     if (body.shadowAngle !== undefined) {
@@ -221,16 +227,24 @@ class Planetarium extends Component {
       this.drawCircle(ctx, body.radius, 'rgba(255,255,255,.25)')
     }
 
-    // undo scale radii
     ctx.restore()
+  }
+
+  renderVectors(ctx, bodyKey) {
+    let body = this.props.bodies[bodyKey]
+
+    if (!body.active) return
+
+    ctx.save()
+    ctx.translate(body.position.x, body.position.y)
 
     // draw force and velocity vectors
-    if (this.props.options.showVectors) {
+    if (body.force)
       this.drawVector(ctx, body.force, 'red', 3, .00000000000000001)
+    if (body.velocity)
       this.drawVector(ctx, body.velocity, 'green', 3, 100)
-      for (let forceKey in body.forces) {
-        this.drawVector(ctx, body.forces[forceKey], 'blue', 2, .00000000000000001)
-      }
+    for (let forceKey in body.forces) {
+      this.drawVector(ctx, body.forces[forceKey], 'blue', 2, .00000000000000001)
     }
 
     ctx.restore()

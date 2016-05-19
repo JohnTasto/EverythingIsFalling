@@ -1,5 +1,7 @@
 export const REPLACE_BODIES = 'REPLACE_BODIES'
+export const ADD_BODY = 'ADD_BODY'
 export const UPDATE_BODIES = 'UPDATE_BODIES'
+export const ACTIVATE_BODY = 'ACTIVATE_BODY'
 
 export const RESIZE_WINDOW = 'RESIZE_WINDOW'
 export const ZOOM_WINDOW = 'ZOOM_WINDOW'

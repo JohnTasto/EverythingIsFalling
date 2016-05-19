@@ -73,7 +73,7 @@ export function mouseUp(cursor) {
       dispatch(view.deselect())
     }
     if (_justSelected) {
-      dispatch(view.dragend())
+      dispatch(view.dragend(_justSelected))
     }
   }
 }

@@ -18,6 +18,7 @@ import ButtonGroup from './button-group'
 
 import * as view from '../actions/view'
 import * as options from '../actions/options'
+import * as bodies from '../actions/bodies'
 
 
 const PAUSE = 'PAUSE'
@@ -69,8 +70,8 @@ class ControlMain extends Component {
     }
   }
 
-  handleSelectTemplate = (value) => {
-    console.log(value)
+  handleAddBody = (value) => {
+    this.props.body.addBody(this.props.templates[value.value])
   }
 
   handleSelectBody = (value) => {
@@ -173,7 +174,7 @@ class ControlMain extends Component {
           name='select-template'
           placeholder='Add a new body...'
           options={templateOptions}
-          onChange={this.handleSelectTemplate}
+          onChange={this.handleAddBody}
           optionRenderer={this.selectBodyRenderer}
           valueRenderer={this.selectBodyRenderer}
         />
@@ -208,6 +209,7 @@ function mapDispatchToProps(dispatch) {
   return {
     view: bindActionCreators(view, dispatch),
     set: bindActionCreators(options, dispatch),
+    body: bindActionCreators(bodies, dispatch),
   }
 }
 

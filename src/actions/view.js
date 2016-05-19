@@ -8,6 +8,7 @@ import {
   PLACE_BODY,
   MOVE_BODY,
   DRAG_BODY,
+  ACTIVATE_BODY,
 } from './types'
 
 
@@ -103,9 +104,15 @@ export function drag(bodyKey, offset) {
   }
 }
 
-export function dragend() {
-  return {
-    type: DRAG_BODY,
+export function dragend(bodyKey) {
+  return (dispatch, getState) => {
+    dispatch({ type: DRAG_BODY })
+    if (!getState().bodies[bodyKey].active) {
+      dispatch ({
+        type: ACTIVATE_BODY,
+        bodyKey,
+      })
+    }
   }
 }
 
