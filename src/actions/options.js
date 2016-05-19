@@ -9,51 +9,51 @@ import {
 } from './types'
 
 
-export function speed(s) {
+export function speed(speed) {
   return {
     type: SET_SPEED,
-    speed: s,
+    speed,
   }
 }
 
-export function pause(pause) {
+export function pause(paused) {
   return {
     type: SET_PAUSE,
-    paused: pause,
+    paused,
   }
 }
 
-export function pauseHover(pause) {
+export function pauseHover(pauseHover) {
   return {
     type: SET_PAUSE_HOVER,
-    pauseHover: pause,
+    pauseHover,
   }
 }
 
-export function falloff(f) {
+export function falloff(falloff) {
   return {
     type: SET_FALLOFF,
-    falloff: f,
+    falloff,
   }
 }
 
-export function radiiScale(scale) {
+export function radiiScale(radiiScale) {
   return {
     type: SET_RADII_SCALE,
-    radiiScale: scale,
+    radiiScale,
   }
 }
 
-export function bounceBodies(b) {
+export function bounceBodies(bounceBodies) {
   return {
     type: SET_BOUNCE_BODIES,
-    bounceBodies: b,
+    bounceBodies,
   }
 }
 
-export function bounceScreen(b) {
+export function bounceScreen(bounceScreen) {
   return {
     type: SET_BOUNCE_SCREEN,
-    bounceScreen: b,
+    bounceScreen,
   }
 }
