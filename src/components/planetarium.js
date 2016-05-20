@@ -138,7 +138,8 @@ class Planetarium extends Component {
       this.setState({ justDragged: false })
     }
 
-    if (!this.props.options.paused) {
+    // update bodies
+    if (!this.props.options.paused || (this.props.dragging && this.props.options.showVectors)) {
       if (this.state.justDragged || !(this.props.options.pauseHover && this.props.hovering)) {
         if (FRAMERATE_INDEPENDENT_TIME) {
           this.setState({ lastMs: currentMs, dMs: currentMs - this.state.lastMs })
@@ -240,11 +241,11 @@ class Planetarium extends Component {
 
     // draw force and velocity vectors
     if (body.force)
-      this.drawVector(ctx, body.force, 'red', 3, .00000000000000001)
+      this.drawVector(ctx, body.force, 'red', 3, .000000000000000005)
     if (body.velocity)
-      this.drawVector(ctx, body.velocity, 'green', 3, 100)
+      this.drawVector(ctx, body.velocity, 'green', 3, 1000)
     for (let forceKey in body.forces) {
-      this.drawVector(ctx, body.forces[forceKey], 'blue', 2, .00000000000000001)
+      this.drawVector(ctx, body.forces[forceKey], 'blue', 2, .000000000000000005)
     }
 
     ctx.restore()
@@ -284,6 +285,7 @@ class Planetarium extends Component {
     ctx.strokeStyle = color
     ctx.lineWidth = width
     ctx.lineCap = 'round'
+    ctx.globalAlpha = 0.5
     ctx.beginPath()
     ctx.moveTo(0, 0)
     ctx.lineTo(v.x, v.y)

@@ -7,6 +7,7 @@ import {
   SELECT_BODY,
   HOVER_BODY,
   DRAG_BODY,
+  MOVE_BODY,
 } from '../actions/types'
 
 
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
     zoom: 1 / 5000000,
   },
   selected: undefined,
+  hovering: undefined,
   dragging: undefined,
 }
 
@@ -37,6 +39,7 @@ export default function(screen = INITIAL_STATE, action) {
     case HOVER_BODY:
       return { ...screen, hovering: action.bodyKey }
     case DRAG_BODY:
+    case MOVE_BODY:
       return { ...screen, dragging: action.bodyKey }
   default:
     return screen

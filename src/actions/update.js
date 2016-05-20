@@ -18,15 +18,26 @@ const G = 6.67308e-11
 
 export function update(dMs) {
   return (dispatch, getState) => {
-    let { bodies, screen: { dragging }, options: { falloff, radiiScale, bounceBodies, bounceScreen } } = getState()
+    let {
+      bodies,
+      screen: { dragging },
+      options: { paused, falloff, radiiScale, bounceBodies, bounceScreen }
+    } = getState()
+
     // make new body container
     bodies = { ...bodies }
 
     for (let bodyKey in bodies) {
       // make new body objects
-      bodies[bodyKey] = { ...bodies[bodyKey] }
+      let body = { ...bodies[bodyKey] }
+      // move body
+      if (dragging !== bodyKey && !paused) {
+        body.position = body.position.add(body.velocity.scale(dMs))
+      }
       // clear forces
-      bodies[bodyKey].forces = {}
+      body.forces = {}
+      // put body back into bodies
+      bodies[bodyKey] = body
     }
 
     for (let bodyKey in bodies) {
@@ -50,16 +61,16 @@ export function update(dMs) {
                 force = G * (body.mass * otherBody.mass) / distanceSquared
                 break
               case ATTRACTION_INVERSE_LINEAR:
-                force = G * (body.mass * otherBody.mass) / (body.position.distanceTo(otherBody.position)*10000000)
+                force = G * (body.mass * otherBody.mass) / (Math.sqrt(distanceSquared)*4e7)
                 break
               case ATTRACTION_CONSTANT:
-                force = G * (body.mass * otherBody.mass) / 100000000000000
+                force = G * (body.mass * otherBody.mass) / 8e14
                 break
               case ATTRACTION_LINEAR:
-                force = G * (body.mass * otherBody.mass) * (body.position.distanceTo(otherBody.position)/1000000000000000000000)
+                force = G * (body.mass * otherBody.mass) * (Math.sqrt(distanceSquared)/16e21)
                 break
               case ATTRACTION_SQUARED:
-                force = G * (body.mass * otherBody.mass) * (body.position.distanceToSquared(otherBody.position)/100000000000000000000000000000)
+                force = G * (body.mass * otherBody.mass) * (distanceSquared/32e28)
                 break
             }
             body.forces[otherBodyKey] = Vector.fromPolar(angle,           force)
@@ -67,7 +78,7 @@ export function update(dMs) {
           }
 
           // bounce
-          if (bounceBodies) {
+          if (bounceBodies && !paused) {
             // bounce off planets
             let overlap = (body.radius * radiiScale + otherBody.radius * radiiScale) - Math.sqrt(distanceSquared)
             if (overlap > 0 && Math.abs(otherBody.velocity.subtract(body.velocity).angle() - angle) > Math.PI / 2) {
@@ -98,8 +109,8 @@ export function update(dMs) {
 
               // skip adding gravitational forces, replacing this update
               // no velocity loss
-              body.bounced = true
-              otherBody.bounced = true
+              body.skipAcceleration = true
+              otherBody.skipAcceleration = true
 
               // add velocity seperately, as though this were an extra update
               // small velocity loss
@@ -108,6 +119,12 @@ export function update(dMs) {
             }
           }
         }
+      }
+
+      // sum forces
+      body.force = Vector.zero()
+      for (let forceKey in body.forces) {
+        body.force = body.force.add(body.forces[forceKey])
       }
 
       if (dragging !== bodyKey) {
@@ -131,28 +148,17 @@ export function update(dMs) {
             body.velocity = new Vector(body.velocity.x, Math.abs(body.velocity.y))
             //body.position = new Vector(body.position.x, viewport.min.y + body.radius)
           }
-          if (!body.velocity.equals(oldVelocity)) body.bounced = true
+          if (!body.velocity.equals(oldVelocity)) body.skipAcceleration = true
         }
 
-        // sum forces
-        body.force = new Vector(0, 0)
-        for (let forceKey in body.forces) {
-          body.force = body.force.add(body.forces[forceKey])
-        }
-
-        if (!body.bounced) {
-
+        if (!body.skipAcceleration && !paused) {
           // F = ma  or  a = F/m  or  a = F(1/m)
           let acceleration = body.force.scale(1 / body.mass)
-
           // v = v0 + at
           body.velocity = body.velocity.add(acceleration.scale(dMs))
-
         } else {
-          body.bounced = false
+          body.skipAcceleration = undefined
         }
-
-        body.position = body.position.add(body.velocity.scale(dMs))
       }
     }
 

@@ -21,6 +21,7 @@ const INITIAL_STATE = {
   radiiScale: 1,
   bounceBodies: true,
   bounceScreen: true,
+  showVectors: false,
 }
 
 export default function(options = INITIAL_STATE, action) {
