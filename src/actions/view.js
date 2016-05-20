@@ -1,5 +1,7 @@
 import Vector from '../geometry/vector'
 
+import * as bodies from './bodies'
+
 import {
   RESIZE_WINDOW,
   ZOOM_WINDOW,
@@ -108,10 +110,11 @@ export function dragend(bodyKey) {
   return (dispatch, getState) => {
     dispatch({ type: DRAG_BODY })
     if (!getState().bodies[bodyKey].active) {
-      dispatch ({
+      dispatch({
         type: ACTIVATE_BODY,
         bodyKey,
       })
+      dispatch(bodies.deoverlap())
     }
   }
 }

@@ -1,6 +1,7 @@
 import Vector from '../geometry/vector'
 
 import {
+  UPDATE_BODIES,
   REPLACE_BODIES,
   ADD_BODY,
 } from './types'
@@ -12,60 +13,30 @@ export function init() {
     dispatch({
       type: REPLACE_BODIES,
       bodies: {
-        // sun: {
-        //   ...templates['sun'],
-        //   position: new Vector(-1e9, -1e9),
-        //   velocity: Vector.zero(),
-        //   active: true,
-        // },
         mercury: {
           ...templates['mercury'],
-          position: new Vector(9e7, 6e7),
+          position: new Vector(0e7, -2e7),
           velocity: Vector.zero(),
           active: true,
         },
         venus: {
           ...templates['venus'],
-          position: new Vector(1.1e8, 8e7),
+          position: new Vector(2e7, 0e7),
           velocity: Vector.zero(),
           active: true,
         },
         earth: {
           ...templates['earth'],
-          position: new Vector(7e7, 8e7),
+          position: new Vector(-2e7, 0e7),
           velocity: Vector.zero(),
           active: true,
         },
         mars: {
           ...templates['mars'],
-          position: new Vector(1e8, 1e8),
+          position: new Vector(1e7, 2e7),
           velocity: Vector.zero(),
           active: true,
         },
-        // jupiter: {
-        //   ...templates['jupiter'],
-        //   position: new Vector(-1e8, -1e8),
-        //   velocity: Vector.zero(),
-        //   active: true,
-        // },
-        // saturn: {
-        //   ...templates['saturn'],
-        //   position: new Vector(2e8, 2e8),
-        //   velocity: Vector.zero(),
-        //   active: true,
-        // },
-        // uranus: {
-        //   ...templates['uranus'],
-        //   position: new Vector(-1e8, 2e8),
-        //   velocity: Vector.zero(),
-        //   active: true,
-        // },
-        // neptune: {
-        //   ...templates['neptune'],
-        //   position: new Vector(2e8, -1e8),
-        //   velocity: Vector.zero(),
-        //   active: true,
-        // },
       }
     })
   }
@@ -84,6 +55,63 @@ export function addBody(template) {
           active: false,
         }
       },
+    })
+  }
+}
+
+export function deoverlap() {
+  return (dispatch, getState) => {
+    let { bodies, options: { radiiScale } } = getState()
+
+    // clone bodies
+    bodies = { ...bodies }
+    for (let bodyKey in bodies) {
+      bodies[bodyKey] = { ...bodies[bodyKey] }
+    }
+
+    let overlapped = true
+
+    while (overlapped) {
+      overlapped = false
+
+      let deoverlapped = {}
+      for (let bodyKey in bodies) {
+        deoverlapped[bodyKey] = {}
+      }
+
+      for (let bodyKey in bodies) {
+        let body = bodies[bodyKey]
+        if (!body.active) continue
+
+        for (let otherBodyKey in bodies) {
+          let otherBody = bodies[otherBodyKey]
+          if (!otherBody.active) continue
+
+          if (body !== otherBody && !deoverlapped[bodyKey][otherBodyKey]) {
+            deoverlapped[bodyKey][otherBodyKey] = true
+            deoverlapped[otherBodyKey][bodyKey] = true
+            let distance = body.position.distanceTo(otherBody.position)
+            let angle = otherBody.position.subtract(body.position).angle()
+            let overlap = (body.radius*radiiScale + otherBody.radius*radiiScale) - distance
+            if (overlap > 0) {
+              overlapped = true
+              body.position = body.position.add(Vector.fromPolar(
+                angle + Math.PI,
+                overlap * (otherBody.mass / (body.mass + otherBody.mass)) + 1
+              ))
+              otherBody.position = otherBody.position.add(Vector.fromPolar(
+                angle,
+                overlap * (body.mass / (body.mass + otherBody.mass)) + 1
+              ))
+            }
+          }
+        }
+      }
+    }
+
+    dispatch({
+      type: UPDATE_BODIES,
+      bodies
     })
   }
 }

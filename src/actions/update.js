@@ -93,6 +93,7 @@ export function update(dMs) {
               // https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
               let bodyVelocity      = v1.subtract(x1sx2.scale((2*m2 / (m1+m2)) * (v1.subtract(v2).dot(x1sx2) / x1sx2.lengthSquared())))
               let otherBodyVelocity = v2.subtract(x2sx1.scale((2*m1 / (m1+m2)) * (v2.subtract(v1).dot(x2sx1) / x2sx1.lengthSquared())))
+
               if (dragging === bodyKey)
                 otherBody.velocity = otherBodyVelocity.sub(bodyVelocity)
               else if (dragging === otherBodyKey)
@@ -102,20 +103,8 @@ export function update(dMs) {
                 otherBody.velocity = otherBodyVelocity
               }
 
-              // de-overlap bodies
-              // large velocity loss
-              body.position =      x1.add(Vector.fromPolar(angle + Math.PI, overlap * (     body.radius*radiiScale / (body.radius*radiiScale + otherBody.radius*radiiScale))))
-              otherBody.position = x2.add(Vector.fromPolar(angle,           overlap * (otherBody.radius*radiiScale / (body.radius*radiiScale + otherBody.radius*radiiScale))))
-
-              // skip adding gravitational forces, replacing this update
-              // no velocity loss
               body.skipAcceleration = true
               otherBody.skipAcceleration = true
-
-              // add velocity seperately, as though this were an extra update
-              // small velocity loss
-              // body.position = body.position.add(body.velocity)
-              // otherBody.position = otherBody.position.add(otherBody.velocity)
             }
           }
 
