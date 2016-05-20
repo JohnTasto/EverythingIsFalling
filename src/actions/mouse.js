@@ -1,6 +1,7 @@
 import Vector from '../geometry/vector'
 
 import * as view from './view'
+import sumDiameters from '../selectors/sumDiameters'
 
 import {
   HOVER_BODY,
@@ -21,9 +22,10 @@ let _bodyStart
 export function wheel(dY, cursor) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
-    let dZoom = Math.pow(2, (-dY / 100))
+    let percent = Math.pow(2, (dY / 100))
     let point = viewport.min.lerp(viewport.max, cursor.div(screen.size))
-    dispatch(view.zoom(dZoom, point))
+    dispatch(view.zoomPercent(percent, point))
+    dispatch(view.zoomMinSize(sumDiameters(getState()), point))
   }
 }
 

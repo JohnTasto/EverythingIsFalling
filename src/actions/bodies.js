@@ -1,5 +1,8 @@
 import Vector from '../geometry/vector'
 
+import * as view from './view'
+import sumDiameters from '../selectors/sumDiameters'
+
 import {
   UPDATE_BODIES,
   REPLACE_BODIES,
@@ -56,6 +59,7 @@ export function addBody(template) {
         }
       },
     })
+    dispatch(view.zoomMinSize(sumDiameters(getState())))
   }
 }
 

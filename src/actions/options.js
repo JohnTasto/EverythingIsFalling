@@ -1,3 +1,7 @@
+import * as bodies from './bodies'
+import * as view from './view'
+import sumDiameters from '../selectors/sumDiameters'
+
 import {
   SET_SPEED,
   SET_PAUSE,
@@ -39,9 +43,13 @@ export function falloff(falloff) {
 }
 
 export function radiiScale(radiiScale) {
-  return {
-    type: SET_RADII_SCALE,
-    radiiScale,
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_RADII_SCALE,
+      radiiScale,
+    })
+    dispatch(bodies.deoverlap())
+    dispatch(view.zoomMinSize(sumDiameters(getState())))
   }
 }
 

@@ -48,25 +48,46 @@ export function pan(offset) {
   }
 }
 
-export function zoom(dZoom, point) {
+export function zoomPercent(percent, point) {
   return (dispatch, getState) => {
     let { screen: { screen, viewport } } = getState()
     let pointPercent = point.sub(viewport.min).div(viewport.size)
-    // (dZoom * viewport.size) - viewport.size
-    let viewportDZoom = viewport.size.scale(dZoom).sub(viewport.size)
-    let min = viewport.min.add(viewportDZoom.mult(pointPercent))
-    let max = viewport.max.sub(viewportDZoom.mult(Vector.one().sub(pointPercent)))
+    let size = viewport.size.scale(percent)
+    let viewportDZoom = size.sub(viewport.size)
+    let min = viewport.min.sub(viewportDZoom.mult(pointPercent))
+    let max = viewport.max.add(viewportDZoom.mult(Vector.one().sub(pointPercent)))
     let zoom = screen.size.x / (max.x - min.x)
     dispatch({
       type: ZOOM_WINDOW,
-      viewport: {
-        min,
-        max,
-        size: max.subtract(min),
-        zoom,
-      },
+      viewport: { size, min, max, zoom },
     })
   }
+}
+
+export function zoomMinSize(minSize, point) {
+  return (dispatch, getState) => {
+    let { screen: { screen, viewport } } = getState()
+    if (viewport.size.x < minSize || viewport.size.y < minSize) {
+      let size = (viewport.size.x > viewport.size.y) ?
+        new Vector(viewport.size.x * (minSize / viewport.size.y), minSize) :
+        new Vector(minSize, viewport.size.y * (minSize / viewport.size.x))
+      let pointPercent = point ?
+        point.sub(viewport.min).div(viewport.size) :
+        new Vector(0.5, 0.5)
+      let viewportDZoom = size.sub(viewport.size)
+      let min = viewport.min.sub(viewportDZoom.mult(pointPercent))
+      let max = viewport.max.add(viewportDZoom.mult(Vector.one().sub(pointPercent)))
+      let zoom = screen.size.x / (max.x - min.x)
+      dispatch({
+        type: ZOOM_WINDOW,
+        viewport: { size, min, max, zoom },
+      })
+    }
+  }
+}
+
+function zoom(size, pointPercent) {
+
 }
 
 export function select(bodyKey) {
