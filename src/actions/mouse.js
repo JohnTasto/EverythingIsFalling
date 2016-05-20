@@ -35,8 +35,8 @@ export function mouseDown(cursor) {
   _cursorSStart = _cursorSPosition
   _cursorVStart = _cursorVPosition
   return (dispatch, getState) => {
-    let bodies = getState().bodies
-    _justSelected = view.checkHit(_cursorVPosition, bodies)
+    let { bodies, options: { radiiScale } } = getState()
+    _justSelected = view.checkHit(_cursorVPosition, bodies, radiiScale)
     if (_justSelected) {
       _shouldDeselect = false
       _bodyStart = bodies[_justSelected].position
@@ -82,7 +82,8 @@ export function mouseUp(cursor) {
 
 export function checkHovering() {
   return (dispatch, getState) => {
-    let hovered = view.checkHit(_cursorVPosition, getState().bodies)
+    let { bodies, options: { radiiScale } } = getState()
+    let hovered = view.checkHit(_cursorVPosition, bodies, radiiScale)
     dispatch({
       type: HOVER_BODY,
       bodyKey: hovered,

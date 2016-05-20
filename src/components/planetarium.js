@@ -221,7 +221,7 @@ class Planetarium extends Component {
 
     // draw selection
     if (bodyKey === this.props.selected) {
-      this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10, false)
+      this.drawCircle(ctx, body.radius, null, 'rgba(0,127,255,.5)', 10 / this.props.options.radiiScale, false)
     }
     // draw hover
     if (bodyKey === this.props.hovering) {

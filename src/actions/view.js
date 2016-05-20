@@ -140,12 +140,12 @@ export function dragend(bodyKey) {
   }
 }
 
-export function checkHit(point, bodies) {
+export function checkHit(point, bodies, radiiScale) {
   let hit
   if (point) {
     for (let bodyKey in bodies) {
       let body = bodies[bodyKey]
-      if (body.position.distanceToSquared(point) < body.radius * body.radius) {
+      if (body.position.distanceToSquared(point) < body.radius * body.radius * radiiScale * radiiScale) {
         hit = bodyKey
       }
     }
