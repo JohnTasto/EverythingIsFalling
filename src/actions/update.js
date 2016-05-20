@@ -118,6 +118,13 @@ export function update(dMs) {
               // otherBody.position = otherBody.position.add(otherBody.velocity)
             }
           }
+
+          if (bodyKey === 'sun') {
+            otherBody.shadowAngle = angle + Math.PI
+          }
+          if (otherBodyKey === 'sun') {
+            body.shadowAngle = angle
+          }
         }
       }
 

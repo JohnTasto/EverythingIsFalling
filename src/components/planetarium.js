@@ -206,7 +206,7 @@ class Planetarium extends Component {
     // draw shadow
     if (body.shadowAngle !== undefined) {
       ctx.save()
-      ctx.rotate(shadowAngle)
+      ctx.rotate(body.shadowAngle)
       this.drawImageCentered(ctx, body.shadowImage)
       ctx.restore()
     }
