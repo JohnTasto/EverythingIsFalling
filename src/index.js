@@ -9,8 +9,7 @@ import reducers from './reducers'
 
 import './scss/index'
 
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore)
-const store = createStoreWithMiddleware(reducers)
+const store = createStore(reducers, applyMiddleware(reduxThunk))
 
 ReactDOM.render(
   <Provider store={store}>
