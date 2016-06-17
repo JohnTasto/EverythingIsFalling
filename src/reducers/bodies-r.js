@@ -1,4 +1,4 @@
-import Vector from '../geometry/vector'
+import initialState from './initialState'
 
 import {
   REPLACE_BODIES,
@@ -11,7 +11,7 @@ import {
 } from '../actions/types'
 
 
-export default function(bodies = {}, action) {
+export default function(bodies = initialState.bodies, action) {
   let newBodies, position, velocity
   switch (action.type) {
     case REPLACE_BODIES:

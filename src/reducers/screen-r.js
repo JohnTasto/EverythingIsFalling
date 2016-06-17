@@ -1,4 +1,4 @@
-import Vector from '../geometry/vector'
+import initialState from './initialState'
 
 import {
   RESIZE_WINDOW,
@@ -11,22 +11,7 @@ import {
 } from '../actions/types'
 
 
-const INITIAL_STATE = {
-  screen: {
-    size: new Vector (window.innerWidth, window.innerHeight),
-  },
-  viewport: {
-    min: new Vector(-window.innerWidth * 100000, -window.innerHeight * 100000),
-    max: new Vector( window.innerWidth * 100000,  window.innerHeight * 100000),
-    size: new Vector(window.innerWidth * 200000,  window.innerHeight * 200000),
-    zoom: 1 / 200000,
-  },
-  selected: undefined,
-  hovering: undefined,
-  dragging: undefined,
-}
-
-export default function(screen = INITIAL_STATE, action) {
+export default function(screen = initialState.screen, action) {
   switch (action.type) {
     case RESIZE_WINDOW:
       return { ...screen, screen: action.screen, viewport: action.viewport }
