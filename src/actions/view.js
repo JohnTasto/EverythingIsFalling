@@ -86,9 +86,9 @@ export function zoomMinSize(minSize, point) {
   }
 }
 
-function zoom(size, pointPercent) {
-
-}
+// function zoom(size, pointPercent) {
+//
+// }
 
 export function select(bodyKey) {
   return {

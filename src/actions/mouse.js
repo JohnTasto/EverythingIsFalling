@@ -29,7 +29,7 @@ export function wheel(dY, cursor) {
   }
 }
 
-export function mouseDown(cursor) {
+export function mouseDown() {
   _mousePressed = true
   _dragging = false
   _cursorSStart = _cursorSPosition
@@ -49,7 +49,7 @@ export function mouseDown(cursor) {
 
 export function mouseMove(cursor) {
   return (dispatch, getState) => {
-    let { screen: { screen, viewport }, bodies } = getState()
+    let { screen: { screen, viewport } } = getState()
     _cursorSPosition = cursor
     _cursorVPosition = viewport.min.lerp(viewport.max, cursor.div(screen.size))
     if (_mousePressed) {
@@ -68,9 +68,9 @@ export function mouseMove(cursor) {
   }
 }
 
-export function mouseUp(cursor) {
+export function mouseUp() {
   _mousePressed = false
-  return (dispatch, getState) => {
+  return (dispatch) => {
     if (_shouldDeselect) {
       dispatch(view.deselect())
     }

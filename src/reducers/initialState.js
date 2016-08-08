@@ -10,15 +10,15 @@ import templates from '../body-templates.json'
 function getTemplates() {
 
   let shadowImage = new Image()
-  shadowImage.src = 'img/shadow.png'
+  shadowImage.src = require('../img/shadow.png')
 
   for (let body in templates) {
     templates[body].shadowImage = shadowImage
     templates[body].bodyImage = new Image()
-    templates[body].bodyImage.src = `img/${body}.png`
+    templates[body].bodyImage.src = require(`../img/${body}.png`)
     if (templates[body].rings) {
       templates[body].ringImage = new Image()
-      templates[body].ringImage.src = `img/${body}-rings.png`
+      templates[body].ringImage.src = require(`../img/${body}-rings.png`)
     }
   }
 

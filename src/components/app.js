@@ -55,7 +55,7 @@ class App extends Component {
     this.props.dispatch(init())
   }
 
-  menuToggle = isOpen => {
+  menuToggle = (isOpen) => {
     this.setState({ menuOpen: isOpen })
   }
 
