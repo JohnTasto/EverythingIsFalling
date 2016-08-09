@@ -1,3 +1,5 @@
+/* eslint react/prop-types: [1, {ignore: [view, mouse, dragging, hovering, options, update, bodies, screen, viewport, selected]}]*/
+
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -29,55 +31,9 @@ class Planetarium extends Component {
           height: '100%',
           width: '100%',
         },
-      }
+      },
     }
-    if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0
-  }
-
-  handleEvent(e) {
-    let posWindow, posCanvas
-    switch (e.type) {
-      case 'resize':
-        let bounds = this.canvas.getBoundingClientRect()
-        this.props.view.resize(new Vector(bounds.width, bounds.height))
-        break
-      case 'wheel':
-        this.props.mouse.wheel(e.deltaY, new Vector(e.offsetX, e.offsetY))
-        e.preventDefault()
-        break
-      case 'mousedown':
-        posCanvas = new Vector(e.offsetX, e.offsetY)
-        posWindow = new Vector(e.screenX, e.screenY)
-        this.props.mouse.mouseDown(posCanvas)
-        this.setState({ canvasOffset: posWindow.sub(posCanvas) })
-        this.canvas.removeEventListener('mousemove', this, false)
-        window.addEventListener('mousemove', this, false)
-        window.addEventListener('mouseup', this, false)
-        break
-      case 'mousemove':
-        if (this.state.canvasOffset) {
-          posWindow = new Vector(e.screenX, e.screenY)
-          this.props.mouse.mouseMove(posWindow.sub(this.state.canvasOffset))
-        } else {
-          this.props.mouse.mouseMove(new Vector(e.offsetX, e.offsetY))
-        }
-        break
-      case 'mouseup':
-        posWindow = new Vector(e.screenX, e.screenY)
-        this.props.mouse.mouseUp(posWindow.sub(this.state.canvasOffset))
-        this.setState({ canvasOffset: undefined })
-        this.canvas.addEventListener('mousemove', this, false)
-        window.removeEventListener('mousemove', this, false)
-        window.removeEventListener('mouseup', this, false)
-        break
-      case 'mouseover':
-        this.setState({ isMouseInCanvas: true })
-        break
-      case 'mouseout':
-        this.props.mouse.cancelHover()
-        this.setState({ isMouseInCanvas: false })
-        break
-    }
+    if (FRAMERATE_INDEPENDENT_TIME) this.state.lastMs = 0  // eslint-disable-line react/no-direct-mutation-state
   }
 
   componentDidMount() {
@@ -90,6 +46,13 @@ class Planetarium extends Component {
     this.requestFrame()
   }
 
+  componentWillReceiveProps(props) {
+    this.canvas.width = props.screen.size.x * this.state.ratio
+    this.canvas.height = props.screen.size.y * this.state.ratio
+  }
+
+  shouldComponentUpdate() { return false }
+
   componentWillUnmount() {
     this.cancelFrame()
     window.removeEventListener('resize', this, false)
@@ -100,16 +63,62 @@ class Planetarium extends Component {
     this.canvas.removeEventListener('mouseout', this, false)
   }
 
-  componentWillReceiveProps(props) {
-    this.canvas.width = props.screen.size.x * this.state.ratio
-    this.canvas.height = props.screen.size.y * this.state.ratio
+  handleEvent(e) {
+    let posWindow, posCanvas
+    switch (e.type) {
+      case 'resize': {
+        let bounds = this.canvas.getBoundingClientRect()
+        this.props.view.resize(new Vector(bounds.width, bounds.height))
+        break
+      }
+      case 'wheel': {
+        this.props.mouse.wheel(e.deltaY, new Vector(e.offsetX, e.offsetY))
+        e.preventDefault()
+        break
+      }
+      case 'mousedown': {
+        posCanvas = new Vector(e.offsetX, e.offsetY)
+        posWindow = new Vector(e.screenX, e.screenY)
+        this.props.mouse.mouseDown(posCanvas)
+        this.setState({ canvasOffset: posWindow.sub(posCanvas) })
+        this.canvas.removeEventListener('mousemove', this, false)
+        window.addEventListener('mousemove', this, false)
+        window.addEventListener('mouseup', this, false)
+        break
+      }
+      case 'mousemove': {
+        if (this.state.canvasOffset) {
+          posWindow = new Vector(e.screenX, e.screenY)
+          this.props.mouse.mouseMove(posWindow.sub(this.state.canvasOffset))
+        } else {
+          this.props.mouse.mouseMove(new Vector(e.offsetX, e.offsetY))
+        }
+        break
+      }
+      case 'mouseup': {
+        posWindow = new Vector(e.screenX, e.screenY)
+        this.props.mouse.mouseUp(posWindow.sub(this.state.canvasOffset))
+        this.setState({ canvasOffset: undefined })
+        this.canvas.addEventListener('mousemove', this, false)
+        window.removeEventListener('mousemove', this, false)
+        window.removeEventListener('mouseup', this, false)
+        break
+      }
+      case 'mouseover': {
+        this.setState({ isMouseInCanvas: true })
+        break
+      }
+      case 'mouseout': {
+        this.props.mouse.cancelHover()
+        this.setState({ isMouseInCanvas: false })
+        break
+      }
+    }
   }
-
-  shouldComponentUpdate() { return false }
 
   requestFrame() {
     this.setState({
-      frame: this.state.animationFrame.request(this.update.bind(this))
+      frame: this.state.animationFrame.request(this.update.bind(this)),
     })
   }
 
@@ -298,8 +307,8 @@ class Planetarium extends Component {
       <canvas style={[this.props.style, this.state.styles.canvas]}
         width={this.props.screen.size.x * this.state.ratio}
         height={this.props.screen.size.y * this.state.ratio}
-        ref={(ref) => this.canvas = ref}>
-      </canvas>
+        ref={(ref) => this.canvas = ref}
+      />
     )
   }
 }
@@ -323,6 +332,10 @@ function mapDispatchToProps(dispatch) {
     update: bindActionCreators(update, dispatch),
     mouse: bindActionCreators(mouse, dispatch),
   }
+}
+
+Planetarium.prototype.propTypes = {
+  style: React.PropTypes.object,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Radium(Planetarium))

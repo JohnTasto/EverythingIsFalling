@@ -40,7 +40,7 @@ export function init() {
           velocity: Vector.zero(),
           active: true,
         },
-      }
+      },
     })
   }
 }
@@ -56,7 +56,7 @@ export function addBody(template) {
           position: viewport.min.add(viewport.size.scale(0.5)),
           velocity: Vector.zero(),
           active: false,
-        }
+        },
       },
     })
     dispatch(view.zoomMinSize(sumDiameters(getState())))
@@ -115,7 +115,7 @@ export function deoverlap() {
 
     dispatch({
       type: UPDATE_BODIES,
-      bodies
+      bodies,
     })
   }
 }

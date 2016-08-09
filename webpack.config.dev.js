@@ -10,17 +10,17 @@ export default {
     // must be first entry to properly set public path
     './src/webpack-public-path',
     'webpack-hot-middleware/client?reload=true',
-    './src/index'
+    './src/index',
   ],
   target: 'web', // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
   output: {
     path: `${__dirname}/src`, // Note: Physical files are only output by the production build task `npm run build`.
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)
-      __DEV__: true
+      __DEV__: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
@@ -28,10 +28,10 @@ export default {
       template: 'src/index.ejs',
       minify: {
         removeComments: true,
-        collapseWhitespace: true
+        collapseWhitespace: true,
       },
-      inject: true
-    })
+      inject: true,
+    }),
   ],
   module: {
     loaders: [
@@ -43,11 +43,11 @@ export default {
       {test: /\.(jpe?g|png|gif)$/i, loader: 'file?name=[name].[ext]'},
       {test: /\.ico$/, loader: 'file?name=[name].[ext]'},
       {test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'postcss', 'sass?sourceMap']},
-      {test: /\.json$/, exclude: /node_modules/, loader: 'json'}
-    ]
+      {test: /\.json$/, exclude: /node_modules/, loader: 'json'},
+    ],
   },
   postcss: ()=> [autoprefixer],
   resolve: {
     extensions: ['', '.js', '.jsx', '.css', '.scss'],
-  }
+  },
 }

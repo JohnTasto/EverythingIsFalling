@@ -1,7 +1,7 @@
 import Vector from '../geometry/vector'
 
 import {
-  UPDATE_BODIES
+  UPDATE_BODIES,
 } from './types'
 
 import {
@@ -21,7 +21,7 @@ export function update(dMs) {
     let {
       bodies,
       screen: { dragging },
-      options: { paused, falloff, radiiScale, bounceBodies, bounceScreen }
+      options: { paused, falloff, radiiScale, bounceBodies, bounceScreen },
     } = getState()
 
     // make new body container
@@ -160,7 +160,7 @@ export function update(dMs) {
 
     dispatch({
       type: UPDATE_BODIES,
-      bodies
+      bodies,
     })
   }
 }

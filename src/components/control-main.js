@@ -1,3 +1,5 @@
+/* eslint react/prop-types: [1, {ignore: [set, body, templates, view, bodies, options, selected]}]*/
+
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -47,7 +49,7 @@ class ControlMain extends Component {
   }
 
   handleRadiiLogChange = (value) => {
-    console.log(value)
+    console.log(value)  // eslint-disable-line no-console
   }
 
   handleCheckboxChange = (value, checked) => {
@@ -105,9 +107,9 @@ class ControlMain extends Component {
     }
     return (
       <div style={this.props.style || {}}>
-        <label htmlFor='speed'>Speed:</label>
+        <label htmlFor="speed">Speed:</label>
         <LogSlider
-          id='speed'
+          id="speed"
           defaultValue={this.props.options.speed}
           min={0.1}
           max={10}
@@ -115,7 +117,7 @@ class ControlMain extends Component {
         />
         <ButtonGroup
           options={[
-            [{ text: <div><i className="fa fa-pause" aria-hidden="true"></i>&nbsp;Pause</div>, value: PAUSE, checked: this.props.options.paused }],
+            [{ text: <div><i className="fa fa-pause" aria-hidden="true" />&nbsp;Pause</div>, value: PAUSE, checked: this.props.options.paused }],
             [{ text: 'Pause on hover', value: PAUSE_HOVER, checked: this.props.options.pauseHover }],
           ]}
           onChange={this.handleCheckboxChange}
@@ -123,7 +125,7 @@ class ControlMain extends Component {
         />
         <label>Attraction falloff:</label>
         <ButtonGroup
-          name='attraction-falloff'
+          name="attraction-falloff"
           options={[
             [
               { text: <div>r<sup>-2</sup></div>, value: ATTRACTION_INVERSE_SQUARED, tip: 'Inverse squared (gravity)' },
@@ -139,9 +141,9 @@ class ControlMain extends Component {
           onChange={this.handleFalloffChange}
           stretch={true}
         />
-        <label htmlFor='radii-scale'>Radii scale factor:</label>
+        <label htmlFor="radii-scale">Radii scale factor:</label>
         <LogSlider
-          id='radii-scale'
+          id="radii-scale"
           defaultValue={this.props.options.radiiScale}
           min={0.1}
           max={10}
@@ -171,8 +173,8 @@ class ControlMain extends Component {
         />
         <span style={{ paddingLeft: '1rem' }} />
         <Select
-          name='select-template'
-          placeholder='Add a new body...'
+          name="select-template"
+          placeholder="Add a new body..."
           options={templateOptions}
           onChange={this.handleAddBody}
           optionRenderer={this.selectBodyRenderer}
@@ -180,8 +182,8 @@ class ControlMain extends Component {
         />
         <label>Selection:</label>
         <Select
-          name='select-body'
-          placeholder='Select a body to adjust...'
+          name="select-body"
+          placeholder="Select a body to adjust..."
           value={this.props.selected}
           options={bodyOptions}
           onChange={this.handleSelectBody}
@@ -191,6 +193,10 @@ class ControlMain extends Component {
       </div>
     )
   }
+}
+
+ControlMain.prototype.propTypes = {
+  style: React.PropTypes.object,
 }
 
 

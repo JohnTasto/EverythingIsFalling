@@ -12,7 +12,7 @@ import {
 
 
 export default function(bodies = initialState.bodies, action) {
-  let newBodies, position, velocity
+  let position, velocity
   switch (action.type) {
     case REPLACE_BODIES:
       return { ...action.bodies }
@@ -26,7 +26,7 @@ export default function(bodies = initialState.bodies, action) {
         [action.bodyKey]: {
           ...bodies[action.bodyKey],
           position: action.position,
-        }
+        },
       }
     case MOVE_BODY:
       position = bodies[action.bodyKey].position.sub(action.offset)
@@ -35,7 +35,7 @@ export default function(bodies = initialState.bodies, action) {
         [action.bodyKey]: {
           ...bodies[action.bodyKey],
           position,
-        }
+        },
       }
     case DRAG_BODY:
       if (action.bodyKey) {
@@ -47,7 +47,7 @@ export default function(bodies = initialState.bodies, action) {
             ...bodies[action.bodyKey],
             position,
             velocity,
-          }
+          },
         }
       }
       return bodies
@@ -57,7 +57,7 @@ export default function(bodies = initialState.bodies, action) {
         [action.bodyKey]: {
           ...bodies[action.bodyKey],
           active: true,
-        }
+        },
       }
     default:
       return bodies

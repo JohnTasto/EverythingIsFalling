@@ -400,10 +400,10 @@ class Vector {
    */
   transform(scaleX = 1, skewX = 0, skewY = 0, scaleY = 1, translateX = 0, translateY = 0) {
     return (scaleX instanceof Array) ?
-      new Vector(scaleX[0]*x + scaleX[2]*y + scaleX[4],
-                 scaleX[1]*x + scaleX[3]*y + scaleX[5]) :
-      new Vector(scaleX[0]*x +  skewY[2]*y + translateX[4],
-                  skewX[1]*x + scaleY[3]*y + translateY[5])
+      new Vector(scaleX[0]*this.x + scaleX[2]*this.y + scaleX[4],
+                 scaleX[1]*this.x + scaleX[3]*this.y + scaleX[5]) :
+      new Vector(scaleX[0]*this.x +  skewY[2]*this.y + translateX[4],
+                  skewX[1]*this.x + scaleY[3]*this.y + translateY[5])
   }
 
   /**
@@ -515,7 +515,7 @@ class Vector {
 	 */
 	equals(other) {
 		return (other instanceof Vector && this.x === other.x && this.y === other.y) ?
-		  true : false
+      true : false
 	}
 
   toString() {

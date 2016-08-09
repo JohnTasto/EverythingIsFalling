@@ -1,5 +1,3 @@
-import Vector from '../geometry/vector'
-
 import * as view from './view'
 import sumDiameters from '../selectors/sumDiameters'
 

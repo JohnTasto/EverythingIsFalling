@@ -1,16 +1,11 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Radium from 'radium'
-import Color from 'color'
 
 import ControlMain from './control-main'
 
-import * as view from '../actions/view'
-import * as options from '../actions/options'
-
-import { COLOR } from '../constants'
 import {
+  COLOR,
   CONTROL_PANEL_WIDTH,
   CONTROL_PANEL_PADDING,
 } from '../constants'
@@ -41,7 +36,7 @@ class ControlPanel extends Component {
           padding: `${CONTROL_PANEL_PADDING}rem`,
           overflow: 'scroll',
         },
-      }
+      },
     }
   }
 
@@ -55,8 +50,12 @@ class ControlPanel extends Component {
   }
 }
 
+ControlPanel.prototype.propTypes = {
+  style: React.PropTypes.object,
+}
 
-function mapStateToProps(state) {
+
+function mapStateToProps(state) {  // eslint-disable-line no-unused-vars
   return {
     // screen: state.screen.screen,
     // viewport: state.screen.viewport,
@@ -67,7 +66,7 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {  // eslint-disable-line no-unused-vars
   return {
     // view: bindActionCreators(view, dispatch),
     // set: bindActionCreators(options, dispatch),

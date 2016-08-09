@@ -19,7 +19,7 @@ class ButtonGroup extends Component {
     return (
       <Tooltip
         key={option.value}
-        placement='top'
+        placement="top"
         mouseEnterDelay={0}
         mouseLeaveDelay={0}
         overlay={option.tip || ''}
@@ -37,7 +37,7 @@ class ButtonGroup extends Component {
             type={this.props.name ? 'radio' : 'checkbox'}
             name={this.props.name || ''}
             checked={option.checked || option.value === this.props.checked}
-            autoComplete='off'
+            autoComplete="off"
             onChange={() => this.props.onChange(option.value, !option.checked)}
           />
           {option.text}
@@ -56,8 +56,8 @@ class ButtonGroup extends Component {
     return (
       <div
         key={gIndex}
-        className='btn-group'
-        data-toggle='buttons'
+        className="btn-group"
+        data-toggle="buttons"
         style={style}
       >
         {optionGroup.map(this.renderButton)}

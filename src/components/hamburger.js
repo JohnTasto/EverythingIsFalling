@@ -29,7 +29,7 @@ function Hamburger(props) {
       height: `${stroke}px`,
       width: '100%',
       background: color,
-      borderRadius: `${props.borderRadius}px`,
+      borderRadius: `${borderRadius}px`,
       opacity: '1',
       left: '0',
       transition: `${animationDuration}s ease-in-out`,
@@ -61,15 +61,15 @@ function Hamburger(props) {
           props.onClick(!isOpen)
         }}
       >
-        <span style={[styles.line, styles.lineTop]}></span>
-        <span style={[styles.line, styles.lineMiddle]}></span>
-        <span style={[styles.line, styles.lineBottom]}></span>
+        <span style={[styles.line, styles.lineTop]} />
+        <span style={[styles.line, styles.lineMiddle]} />
+        <span style={[styles.line, styles.lineBottom]} />
       </div>
     </div>
   )
 }
 
-Hamburger.PropTypes = {
+Hamburger.prototype.propTypes = {
   onClick: React.PropTypes.func.isRequired,
   style: React.PropTypes.object,
   isOpen: React.PropTypes.bool,

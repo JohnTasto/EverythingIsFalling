@@ -16,22 +16,22 @@ const pathsToRemove = [
   './src/store/store.spec.js',
   './src/styles',
   './src/routes.js',
-  './src/index.js'
+  './src/index.js',
 ]
 
 const filesToCreate = [
   {
     path: './src/components/emptyTest.spec.js',
-    content: '// Must have at least one test file in this directory or Mocha will throw an error.'
+    content: '// Must have at least one test file in this directory or Mocha will throw an error.',
   },
   {
     path: './src/index.js',
-    content: '// Set up your application entry point here...'
+    content: '// Set up your application entry point here...',
   },
   {
     path: './src/reducers/index.js',
-    content: '// Set up your root reducer here...\n import { combineReducers } from \'redux\'\n export default combineReducers'
-  }
+    content: '// Set up your root reducer here...\n import { combineReducers } from \'redux\'\n export default combineReducers',
+  },
 ]
 
 function removePath(path, callback) {

@@ -4,7 +4,7 @@ import {
   ATTRACTION_INVERSE_SQUARED,
 } from '../constants'
 
-import templates from '../body-templates.json'
+import templates from '../body-templates.json'  // eslint-disable-line
 
 
 function getTemplates() {

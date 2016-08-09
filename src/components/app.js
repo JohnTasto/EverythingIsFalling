@@ -1,3 +1,5 @@
+/* eslint react/prop-types: [1, {ignore: [dispatch]}]*/
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
@@ -77,7 +79,7 @@ class App extends Component {
           isOpen={this.state.menuOpen}
           onClick={this.menuToggle}
           height={28}
-          color='#fff'
+          color="#fff"
           stroke={4}
           borderRadius={1.5}
           style={this.state.styles.hamburger}

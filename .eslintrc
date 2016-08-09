@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
@@ -23,6 +24,7 @@
     "mocha": true
   },
   "rules": {
+    "comma-dangle": [1, "always-multiline"],
     "quotes": 0,
     "no-console": 1,
     "no-debugger": 1,
@@ -33,7 +35,7 @@
     "no-underscore-dangle": 0,
     "no-alert": 0,
     "no-lone-blocks": 0,
-    "import/namespace": [2, { "allowComputed": true }],
+    "import/namespace": [0, { "allowComputed": true }],
     "jsx-quotes": 1,
     "react/display-name": [1, { "ignoreTranspilerName": false }],
     "react/forbid-prop-types": [1, { "forbid": ["any"] }],
