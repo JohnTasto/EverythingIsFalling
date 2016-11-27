@@ -41,7 +41,7 @@ function Hamburger(props) {
     },
     lineMiddle: {
       opacity:   !isOpen ?    '1' : '0',
-      top:       `${halfHeight - halfStroke}`,
+      top:       `${halfHeight - halfStroke}px`,
       width:     !isOpen ? '100%' : '0',
       left:      !isOpen ?    '0' : '50%',
       transform: !isOpen ? 'none' : 'rotate(180deg)',
