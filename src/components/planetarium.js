@@ -27,7 +27,6 @@ class Planetarium extends Component {
       isMouseInCanvas: undefined,
       styles: {
         canvas: {
-          background: 'url("img/stars.jpg") center/cover',
           height: '100%',
           width: '100%',
         },
