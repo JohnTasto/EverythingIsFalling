@@ -17,6 +17,10 @@ const FRAMERATE_INDEPENDENT_TIME = false
 
 class Planetarium extends Component {
 
+  static propTypes = {
+    style: React.PropTypes.object,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -331,10 +335,6 @@ function mapDispatchToProps(dispatch) {
     update: bindActionCreators(update, dispatch),
     mouse: bindActionCreators(mouse, dispatch),
   }
-}
-
-Planetarium.prototype.propTypes = {
-  style: React.PropTypes.object,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Radium(Planetarium))

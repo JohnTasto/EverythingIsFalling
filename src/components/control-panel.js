@@ -13,6 +13,10 @@ import {
 
 class ControlPanel extends Component {
 
+  static propTypes = {
+    style: React.PropTypes.object,
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -48,10 +52,6 @@ class ControlPanel extends Component {
       </div>
     )
   }
-}
-
-ControlPanel.prototype.propTypes = {
-  style: React.PropTypes.object,
 }
 
 

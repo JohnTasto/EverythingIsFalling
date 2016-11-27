@@ -36,6 +36,10 @@ const SHOW_VECTORS = 'SHOW_VECTORS'
 
 class ControlMain extends Component {
 
+  static propTypes = {
+    style: React.PropTypes.object,
+  }
+
   handleSpeedChange = (value) => {
     this.props.set.speed(value)
   }
@@ -193,10 +197,6 @@ class ControlMain extends Component {
       </div>
     )
   }
-}
-
-ControlMain.prototype.propTypes = {
-  style: React.PropTypes.object,
 }
 
 
